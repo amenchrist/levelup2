@@ -7,8 +7,6 @@ function Main() {
     <>
         <div className='home-container'>
             <Outlet />
-            {/* <Home db={db} /> */}
-            {/* <Main /> */}
         </div>
         <NavBar />
     </>

@@ -1,4 +1,4 @@
-import { TASK, LOW, DAILY } from "./constants";
+import { TASK, LOW, DAILY } from "../constants";
 
 export const TaskList = [
     {
@@ -21,7 +21,8 @@ export const TaskList = [
             id: 1589657001530
         },
         requirements: '£1 minimum',
-        exp: 10
+        exp: 10,
+        isTrashed: false
     },
     {
         type: TASK,
@@ -43,7 +44,8 @@ export const TaskList = [
             id: 1589657001530
         },
         requirements: '£1 minimum',
-        exp: 10
+        exp: 10,
+        isTrashed: false
     },
     {
         type: TASK,
@@ -65,7 +67,8 @@ export const TaskList = [
             id: 1589657001531
         },
         requirements: '£1 minimum',
-        exp: 10
+        exp: 10,
+        isTrashed: false
     },
     {
         type: TASK,
@@ -87,7 +90,8 @@ export const TaskList = [
             id: 1589657001532
         },
         requirements: '£1 minimum',
-        exp: 10
+        exp: 10,
+        isTrashed: false
     },
     {
         type: TASK,
@@ -109,7 +113,8 @@ export const TaskList = [
             id: 1589657001533
         },
         requirements: '£1 minimum',
-        exp: 10
+        exp: 10,
+        isTrashed: false
     }
 ]
 

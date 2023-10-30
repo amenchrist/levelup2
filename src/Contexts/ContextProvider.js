@@ -1,27 +1,16 @@
 import React, { createContext, useContext, useState } from 'react';
+import {db} from '../data/db'
 
 const StateContext = createContext();
 
 
 export const ContextProvider = ({ children }) => {
 
-  const [ isLoggedIn, setIsLoggedIn ] = useState(false);
-
-//   const setMode = (e) => {
-//     setCurrentMode(e.target.value);
-//     localStorage.setItem('themeMode', e.target.value);
-//     setThemeSettings(false);
-//   };
-
-//   const setColor = (color) => {
-//     setCurrentColor(color);
-//     localStorage.setItem('colorMode', color);
-//     setThemeSettings(false);
-//   };
+  const [ isLoggedIn, setIsLoggedIn ] = useState(true);
+  const [ content ] = useState(db);
 
   const contextStateVars = {
-    isLoggedIn,
-    setIsLoggedIn
+    isLoggedIn, setIsLoggedIn, content
   }
 
   return (

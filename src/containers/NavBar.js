@@ -1,6 +1,7 @@
 import React from 'react';
 import { HOME, INBOX, LIST, MISSIONS, OVERVIEW, STATS, TASKS } from '../constants';
 import { Home, Inbox, List, PieChart, Target } from 'react-feather';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function NavBar() {
@@ -9,13 +10,15 @@ export default function NavBar() {
         // setNavValues(e, changeNav, state);
     }
 
+    const navigate = useNavigate()
+
     function NavButton({Icon, title, view, endpoint}) {
         return (
-            <div className='w-20 center bg-white b--black-10 ba flex items-center justify-center' data-view={view}  title={title}>
+            <div className='w-20 center bg-white b--black-10 ba flex items-center justify-center' data-view={view}  title={title} onClick={() => navigate(endpoint)}>
                 {/* <h3 className='tc'>H</h3> */}
-                <a href={endpoint}>
                     <Icon />
-                </a>
+                {/* <a href={endpoint}>
+                </a> */}
             </div>       
         )
     }
@@ -23,11 +26,11 @@ export default function NavBar() {
     return (
         <div className='navbar center flex'>
             {/* <HomeButton touchFunction={handleEvent} /> */}
-            <NavButton Icon={Home} data-view={OVERVIEW}  title={HOME} endpoint={''}/>
-            <NavButton Icon={Inbox} data-view={LIST}  title={INBOX} endpoint={'inbox'}/>
+            <NavButton Icon={Home} data-view={OVERVIEW}  title={HOME} endpoint={'/'}/>
+            <NavButton Icon={Inbox} data-view={LIST}  title={INBOX} endpoint={'/inbox'}/>
             <NavButton Icon={List} data-view={LIST}  title={TASKS} endpoint={'tasks'}/>
-            <NavButton Icon={Target} data-view={LIST}  title={MISSIONS} endpoint={'missions'}/>
-            <NavButton Icon={PieChart} data-view={OVERVIEW}  title={STATS} endpoint={'stats'}/>
+            <NavButton Icon={Target} data-view={LIST}  title={MISSIONS} endpoint={'/missions'}/>
+            <NavButton Icon={PieChart} data-view={OVERVIEW}  title={STATS} endpoint={'/stats'}/>
         </div>       
     )
 }

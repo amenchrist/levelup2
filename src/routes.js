@@ -3,6 +3,8 @@ import { useStateContext } from './Contexts/ContextProvider';
 import './App.css';
 import Main from './containers/Main';
 import SplashPage from './pages/SplashPage';
+import Home from './containers/Home';
+import ListContainer from './containers/ListContainer';
 
 export default function Router() {
 
@@ -10,16 +12,18 @@ export default function Router() {
     //   const { user, currentPage, setCurrentPage } = useMyStore();
 
     const { isLoggedIn } = useStateContext();
+
+    
   
   const routes = [
     { 
       path: '/', 
       element: isLoggedIn? <Main /> : <SplashPage/>,
       children: [
-        { path: '', element: <h1>Home</h1> },
-        { path: 'inbox', element: <h1>Inbox</h1> },
-        { path: 'tasks', element: <h1>Tasks</h1> },
-        { path: 'missions', element: <h1>Missions</h1>},
+        { path: '', element: <Home /> },
+        { path: 'inbox', element: <ListContainer title={'Inbox'} /> },
+        { path: 'tasks', element: <ListContainer title={'Tasks'} /> },
+        { path: 'missions', element: <ListContainer title={'Missions'} />},
         { path: 'stats', element: <h1>Stats</h1> },
       ],
     },

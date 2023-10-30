@@ -1,4 +1,4 @@
-import InboxItems from './InboxItems';
+import { InboxItems } from './InboxItems';
 import { MissionsList } from './MissionsList';
 import { TaskList } from './TaskList';
 

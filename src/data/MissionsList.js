@@ -1,4 +1,4 @@
-import { MISSION, UNPLANNED } from "./constants";
+import { MISSION, UNPLANNED } from "../constants";
 
 export const MissionsList = [
     {
@@ -19,7 +19,8 @@ export const MissionsList = [
             task: 'First physical action',
             output: 'recordable product of task completion' //information, document etc
         },
-        taskList: [ 1589657001522, 1589657001523 ]
+        taskList: [ 1589657001522, 1589657001523 ],
+        isTrashed: false
     },
     {
         type: MISSION,
@@ -38,7 +39,8 @@ export const MissionsList = [
             id: 17,
             task: 'First physical action'
         },
-        taskList: [ 1589657001524 ]
+        taskList: [ 1589657001524 ],
+        isTrashed: false
     },
     {
         type: MISSION,
@@ -57,7 +59,8 @@ export const MissionsList = [
             id: 16,
             task: 'First physical action'
         },
-        taskList: [ 1589657001525 ]
+        taskList: [ 1589657001525 ],
+        isTrashed: false
     },
     {
         type: MISSION,
@@ -76,7 +79,8 @@ export const MissionsList = [
             id: 16,
             task: 'First physical action'
         },
-        taskList: [ 1589657001526 ]
+        taskList: [ 1589657001526 ],
+        isTrashed: false
     },
     {
         type: MISSION,
@@ -95,6 +99,7 @@ export const MissionsList = [
             id: 16,
             task: 'First physical action'
         },
-        taskList: []
+        taskList: [],
+        isTrashed: false
     }
 ]
