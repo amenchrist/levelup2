@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import introQuote from '../assets/GAMER INTRO.png';
+import { useStateContext } from '../Contexts/ContextProvider';
 
 const SplashPage = () => {
 
-    const [ ,setIsLoggedIn ] = useState(false);
+    const { setIsLoggedIn } = useStateContext();
+
     const [ password, setPassword ] = useState('');
     const [ incorrect, setIncorrect ] = useState(false);
-
-    //console.log(localStorage.getItem('LoggedIn'))
 
     function handleSubmit(e){
         e.preventDefault();
@@ -37,17 +37,20 @@ const SplashPage = () => {
     }
 
   return (
-    <div className='bg-black w-100 h-100 flex justify-center items-center'>
-        <div className='pa2'>
-            <h2 className='bold white tc pb2'>SOLO LEVELING</h2>
-            <img alt='Intro Quote' src={introQuote} width={250} />
-        <form onSubmit={e => handleSubmit(e)} className='pa2'>
-        <input type='password' className='pa2 w-100 tc' placeholder='Enter Password' 
-        value={password} onChange={(e) => {setIncorrect(false); setPassword(e.target.value)}}  />
-        </form>
-        {incorrect ? <p className='red bold tc pa2'>DENIED</p> : <p className='pa2'>------------ </p> }
+    <div className='app'>
+        <div className='bg-black w-100 h-100 flex justify-center items-center'>
+            <div className='pa2'>
+                <h2 className='bold white tc pb2'>SOLO LEVELING</h2>
+                <img alt='Intro Quote' src={introQuote} width={250} />
+                <form onSubmit={e => handleSubmit(e)} className='pa2'>
+                <input type='password' className='pa2 w-100 tc' placeholder='Enter Password' 
+                value={password} onChange={(e) => {setIncorrect(false); setPassword(e.target.value)}}  />
+                </form>
+                {incorrect ? <p className='red bold tc pa2'>DENIED</p> : <p className='pa2'>------------ </p> }
+            </div>
         </div>
     </div>
+    
   )
 }
 
