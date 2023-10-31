@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import ListItem from './ListItem';
 import Scroll from './Scroll';
 import { TASK, TASKS, MISSIONS, MISSION, INBOX_ITEM, TODAY, DAILY, DONE, REFERENCE, REFERENCES, COMPLETED, INBOX, ASAP, CALENDAR, TRASH, EVENT, PROCESSED, SOMEDAY, DETAILS } from '../constants';
-// import { setNavValues  } from '../functions';
-import { useStateContext } from '../Contexts/ContextProvider';
+import { useMyStore } from '../store';
 
 export default function List({ title, view }) {
 
-    const { content } = useStateContext();
+    const content = useMyStore(store => store.tasks.concat(store.missions, store.inbox));
 
     function handleEvent(e) {
         // setNavValues(e, changeNav, state);

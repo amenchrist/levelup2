@@ -6,10 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function NavBar() {
 
-    function handleEvent(e){
-        // setNavValues(e, changeNav, state);
-    }
-
     const navigate = useNavigate()
 
     function NavButton({Icon, title, view, endpoint}) {
@@ -27,10 +23,10 @@ export default function NavBar() {
         <div className='navbar center flex'>
             {/* <HomeButton touchFunction={handleEvent} /> */}
             <NavButton Icon={Home} data-view={OVERVIEW}  title={HOME} endpoint={'/'}/>
-            <NavButton Icon={Inbox} data-view={LIST}  title={INBOX} endpoint={'/inbox'}/>
-            <NavButton Icon={List} data-view={LIST}  title={TASKS} endpoint={'tasks'}/>
-            <NavButton Icon={Target} data-view={LIST}  title={MISSIONS} endpoint={'/missions'}/>
-            <NavButton Icon={PieChart} data-view={OVERVIEW}  title={STATS} endpoint={'/stats'}/>
+            <NavButton Icon={Inbox} data-view={LIST}  title={INBOX} endpoint={'/Inbox'}/>
+            <NavButton Icon={List} data-view={LIST}  title={TASKS} endpoint={'Tasks'}/>
+            <NavButton Icon={Target} data-view={LIST}  title={MISSIONS} endpoint={'/Missions'}/>
+            <NavButton Icon={PieChart} data-view={OVERVIEW}  title={STATS} endpoint={'/Stats'}/>
         </div>       
     )
 }

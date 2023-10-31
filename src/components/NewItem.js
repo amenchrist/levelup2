@@ -3,40 +3,11 @@ import { INBOX, MISSIONS, TASKS, DETAILS, REFERENCES, EVENTS, REFERENCE, ADD, CA
 import { Item } from '../classes';
 import NewTask from './NewTask';
 import NewMission from './NewMission';
-import { selectItem, ShipItems, selectTitle, ChangeNav } from '../actions';
-import { connect } from 'react-redux';
 import NewReference from './NewReference';
 import NewEvent from './NewEvent';
 import { amendList } from '../functions';
 
-const mapStateToProps = state => {
-    return {
-        view: state.values.view,
-        title: state.values.title,
-        itemID: state.values.itemID,
-        db: state.items.record.items,
-        exp: state.UpdateExpReducer.exp
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        changeTitle: (title) => {
-            return dispatch(selectTitle(title))
-        },
-        changeItemID: (id) => {
-            return dispatch(selectItem(id))
-        },
-        shipItems: (items, agent, record) => {
-            return dispatch(ShipItems(items, agent, record))
-        },
-        changeNav: (navObj) => {
-            return dispatch(ChangeNav(navObj))
-        }
-    }
-}
-
-function NewItem({ submitFunction, title, updateExp, changeItemID, shipItems, db, changeTitle, itemID, changeNav, exp }) {
+export default function NewItem({ submitFunction, title, updateExp, changeItemID, shipItems, db, changeTitle, itemID, changeNav, exp }) {
 
     // const [ type, setType ] = useState(title);
     const [ name, setName ] = useState('Enter item name');
@@ -116,5 +87,3 @@ function NewItem({ submitFunction, title, updateExp, changeItemID, shipItems, db
         </div>
     )
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewItem);

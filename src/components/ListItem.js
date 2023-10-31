@@ -1,11 +1,15 @@
 import React from 'react';
 import { MISSION, TASK, INBOX_ITEM, TASKS, DONE, COMPLETED, DETAILS, MISSIONS, INBOX, TRASH, CALENDAR, MISSION_TASKS, SOMEDAY, EVENT, EVENTS, REFERENCES, REFERENCE, PROCESSED } from '../constants';
 import { displayDays } from '../functions';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 export default function ListItem( { touchFunction, item, title }){
     
     let nextTitle;
+    const navigate = useNavigate();
+    const { category } = useParams();
+    
 
     switch(true){
         case item.type === MISSION && !item.isTrashed:
@@ -15,7 +19,7 @@ export default function ListItem( { touchFunction, item, title }){
             //let days = (item.dueDate / (1000*60*60*24)) % 7;
             //console.log('days: ', days);
             return (
-                <div className='ba pa2 listItem w-100 flex justify-between h-20 items-center b--grey min-h-50' title={item.isTrashed ? TRASH : nextTitle} data-view={DETAILS}  id={item.id} onClick={touchFunction}>
+                <div className='ba pa2 listItem w-100 flex justify-between h-20 items-center b--grey min-h-50' title={item.isTrashed ? TRASH : nextTitle} data-view={DETAILS}  id={item.id} onClick={() => navigate(`/${category}/${item.id}`)}>
                     <div className='w-80 '>
                         <p className='fw7 b white pb2'>{item.name}</p>
                         <p className='fw3 white'>{displayDays(item.dueDate)}, Tasks: {item.taskList.length}</p>
@@ -31,7 +35,7 @@ export default function ListItem( { touchFunction, item, title }){
             if(title === SOMEDAY){
                 nextTitle = SOMEDAY;
                 return (
-                    <div className='ba pa2 listItem w-100 flex justify-between items-center b--grey min-h-50' data-view={DETAILS}  title={nextTitle} id={item.id} onClick={touchFunction}>
+                    <div className='ba pa2 listItem w-100 flex justify-between items-center b--grey min-h-50' data-view={DETAILS}  title={nextTitle} id={item.id} onClick={() => {}}>
                         <div className='w-80'>
                         <p className='fw7 b white pb2'>{item.name}</p>
                         {/* <p className='fw3 white'>{title === CALENDAR ? new Date(item.dueDate).toDateString() : item.requiredContext}</p> */}
@@ -44,7 +48,7 @@ export default function ListItem( { touchFunction, item, title }){
                 )
             } else {
                 return (
-                    <div className='ba pa2 listItem w-100 flex justify-between items-center b--grey min-h-50' data-view={DETAILS}  title={nextTitle} id={item.id} onClick={touchFunction}>
+                    <div className='ba pa2 listItem w-100 flex justify-between items-center b--grey min-h-50' data-view={DETAILS}  title={nextTitle} id={item.id} onClick={() => navigate(`/${category}/${item.id}`)}>
                         <div className='w-80'>
                         <p className='fw7 b white pb2'>{item.name}</p>
                         {/* <p className='fw3 white'>{title === CALENDAR ? new Date(item.dueDate).toDateString() : item.requiredContext}</p> */}
@@ -100,7 +104,7 @@ export default function ListItem( { touchFunction, item, title }){
         case item.type === INBOX_ITEM && !item.isTrashed:
             return (
                 <div className='ba pa2 listItem w-100 flex justify-between h-20 items-center b--grey min-h-50' 
-                title={item.isTrashed ? TRASH : INBOX} data-view={DETAILS}  id={item.id} onClick={touchFunction}>
+                title={item.isTrashed ? TRASH : INBOX} data-view={DETAILS}  id={item.id} onClick={() => navigate(`/${category}/${item.id}`)}>
                     <div className='w-80'>
                     <p className='fw7 b white pb2'>{item.name}</p>
                     <p className='fw3 white'>Entered: {(new Date(item.entryDate)).toLocaleString()}</p>

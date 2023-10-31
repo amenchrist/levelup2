@@ -1,15 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
 import Router from './routes';
 
 
 export default function App() {
-
-    // const { isLoggedIn } = useStateContext();
-    
-    useEffect(() => {
-        // localStorage.getItem('LoggedIn') === 'true' ? setIsLoggedIn(true) : setIsLoggedIn(false)
-    }, [])
 
     return (
         <div className='app'>

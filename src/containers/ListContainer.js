@@ -1,7 +1,11 @@
-import React from 'react'
-import List from '../components/List'
+import React from 'react';
+import List from '../components/List';
+import { useParams } from 'react-router-dom';
 
-function ListContainer({title}) {
+function ListContainer() {
+
+    const title = useParams().category;
+    console.log(title)
     return (
         <div className='h-100 pa2'>
             <div className='h-10'>

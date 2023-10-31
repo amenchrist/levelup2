@@ -1,20 +1,30 @@
 import React, {useState} from 'react';
 import introQuote from '../assets/GAMER INTRO.png';
-import { useStateContext } from '../Contexts/ContextProvider';
+import { useMyStore } from '../store';
 
 const SplashPage = () => {
 
-    const { setIsLoggedIn } = useStateContext();
+    const { setUser, setIsLoggedIn } = useMyStore()
 
     const [ password, setPassword ] = useState('');
     const [ incorrect, setIncorrect ] = useState(false);
 
     function handleSubmit(e){
+        
         e.preventDefault();
+
+        const user1 = {
+            name: "The Christ Amen",
+            rank: 'F',
+            job: 'Engineer',
+            exp: 100
+        }
 
         if (password === "levelup"){
             localStorage.setItem('LoggedIn', 'true')
             setIsLoggedIn(true)
+            setUser(user1)
+
         } else {
             setIncorrect(true)
             setPassword('')
