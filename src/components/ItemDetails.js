@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import Processor from '../containers/Processor'
+import Processor from '../containers/Processor'
 import PrevItemButton from '../components/PrevItemButton';
 import NextItemButton from '../components/NextItemButton';
 import NewItemButton from '../components/NewItemButton';
@@ -23,6 +23,7 @@ export default function ItemDetails({ id, touchFunction, selectAnother, prevID, 
 
         if (InboxItems[i].id === id){
            item = InboxItems[i];
+
            indx = i;
            if (InboxItems[i+1]) {
                nextItemID = InboxItems[i+1].id;
@@ -53,7 +54,7 @@ export default function ItemDetails({ id, touchFunction, selectAnother, prevID, 
                     <h5 className='white b pb2'>Name: {item.name}</h5>
                     <h5 className='white pb2'>Entry Date: {(new Date(item.entryDate)).toISOString().substr(0, 10)} </h5>
                     <br />
-                    {/* <Processor item={item} nextItemID={nextItemID} touchFunction={touchFunction} itemIndex={indx} /> */}
+                    <Processor item={item} nextItemID={nextItemID} touchFunction={touchFunction} itemIndex={indx} />
                 </div>
             );
         }

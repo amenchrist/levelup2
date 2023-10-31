@@ -65,12 +65,12 @@ export default function Details( { touchFunction, updateExp, missionID  }){
 
     for (let i=0; i<content.length; i++){
         
-        if (content[i].id.toString() === id){
+        if (content[i].id === id){
             item = content[i];
 
             // ASSIGN THE PREV AND NEXT ITEM IDS
-            i === 0 ? prev = content[i].id.toString() : prev = content[i-1].id.toString();
-            i === (content.length-1) ? next = content[i].id.toString() : next = content[i+1].id.toString();
+            i === 0 ? prev = content[i].id : prev = content[i-1].id;
+            i === (content.length-1) ? next = content[i].id : next = content[i+1].id;
         }
 
     }
@@ -105,19 +105,19 @@ export default function Details( { touchFunction, updateExp, missionID  }){
         case title === TASKS:
             return (
                 <DetailsContainer category={title} >
-                    <TaskDetails id={parseInt(itemID)} />
+                    <TaskDetails id={itemID} />
                 </DetailsContainer>
             )
         case title === MISSION_TASKS:
             return (
                 <DetailsContainer category={title} >
-                    <TaskDetails id={parseInt(itemID)} />
+                    <TaskDetails id={itemID} />
                 </DetailsContainer>
             )
         case title === INBOX:
             return (
                 <DetailsContainer category={title} >
-                    <ItemDetails id={parseInt(itemID)} />
+                    <ItemDetails id={itemID} />
                 </DetailsContainer>
             )
         case title === PROCESSED:
@@ -130,13 +130,13 @@ export default function Details( { touchFunction, updateExp, missionID  }){
         case title === REFERENCES:
             return (
                 <DetailsContainer category={title} >
-                    <ReferenceDetails id={parseInt(itemID)} reference={item} />
+                    <ReferenceDetails id={itemID} reference={item} />
                 </DetailsContainer>
             )
         case title === EVENTS:
             return (
                 <DetailsContainer category={title} >
-                    <EventDetails id={parseInt(itemID)} item={item} />
+                    <EventDetails id={itemID} item={item} />
                 </DetailsContainer>
             )
         case title === COMPLETED:
@@ -155,7 +155,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
             if (item.type === TASK){
                 return (
                     <DetailsContainer category={TASK} >
-                        <TaskDetails id={parseInt(itemID)} />
+                        <TaskDetails id={itemID} />
                     </DetailsContainer>
                 )
             } else if (item.type === MISSION) {
@@ -169,7 +169,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
         case title === DAILY:
             return (
                 <DetailsContainer category={title} >
-                    <TaskDetails id={parseInt(itemID)} />
+                    <TaskDetails id={itemID} />
                 </DetailsContainer>
             )
         default:

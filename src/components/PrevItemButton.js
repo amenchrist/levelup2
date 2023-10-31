@@ -6,7 +6,7 @@ export default function PrevItemButton({ prevID, currentID }){
     const navigate = useNavigate();
     const { category } = useParams()
 
-    if(currentID.toString() !== prevID.toString()){
+    if(currentID !== prevID){
         return (
             <div className='whiteB w3 h3 flex items-center justify-center' onClick={() => navigate(`/${category}/${prevID}`)}>
                 <h2 className=' white b f8 fw9 ma0'>Prev</h2>

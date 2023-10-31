@@ -4,10 +4,13 @@ import { TaskList } from "./data/TaskList";
 import { MissionsList } from "./data/MissionsList";
 import { InboxItems } from "./data/InboxItems";
 import { ASAP, DAILY, DONE, PROCESSED, SOMEDAY } from "./constants";
+import { db } from "./firebase";
+import { getDocs, collection } from "firebase/firestore";
 
 function store(set) {
 
     let trash = InboxItems.concat(TaskList, MissionsList).filter(item => item.isTrashed);
+    // let inbox = inb.filter((entry) => (entry.isTrashed === false) && entry.status !== PROCESSED );
     let inbox = InboxItems.filter((entry) => (entry.isTrashed === false) && entry.status !== PROCESSED );
     let missions = MissionsList.filter(entry => !entry.isTrashed);
     let tasks = TaskList.filter(entry => !entry.isTrashed);
@@ -38,6 +41,7 @@ function store(set) {
         addMission: item => set((store) => ({missions: [item, ...store.missions]})),
         addReference: item => set((store) => ({references: [item, ...store.references]})),
         addEvent: item => set((store) => ({events: [item, ...store.events]})),
+        addItems: items => set(() => ({inbox: [...items]})),
     }
 }
 

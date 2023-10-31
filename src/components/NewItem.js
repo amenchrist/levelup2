@@ -7,6 +7,7 @@ import NewReference from './NewReference';
 import NewEvent from './NewEvent';
 import { useNavigate } from 'react-router-dom';
 import { useMyStore } from '../store';
+import { uploadNewItem } from '../api';
 
 export default function NewItem({  updateExp }) {
 
@@ -27,12 +28,17 @@ export default function NewItem({  updateExp }) {
             event.preventDefault();
             let i = new Item(name);
             addItem(i);
+            uploadNewItem(i);
             reset();
             // updateExp(5);
 
             navigate(`/Inbox/${i.id}`);
         }
         event.preventDefault();
+    }
+
+    function uploadItem(item){
+
     }
 
     function displayTypeForm(){

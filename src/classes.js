@@ -5,7 +5,7 @@ export class Item{
         const d= new Date();
 
         this.type = INBOX_ITEM;
-        this.id = d.getTime();
+        this.id = d.getTime().toString();
         this.entryDate = d.getTime();
         this.name = name;
         this.description = '';

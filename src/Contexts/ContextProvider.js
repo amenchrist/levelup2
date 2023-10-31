@@ -6,7 +6,7 @@ const StateContext = createContext();
 
 export const ContextProvider = ({ children }) => {
 
-  const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+  const [ isLoggedIn, setIsLoggedIn ] = useState(true);
   const [ content ] = useState(db);
 
   const contextStateVars = {
