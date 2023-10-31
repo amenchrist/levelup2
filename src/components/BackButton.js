@@ -1,9 +1,15 @@
 import React from 'react';
 import { DETAILS, LIST, MISSION_TASKS, MISSIONS } from '../constants';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function BackButton({ changeItemID, changeNav, missionID, title, previousTitle, previousView, previousItemID }) {
+export default function BackButton({  missionID, title }) {
+
+    const navigate = useNavigate();
+    const { category } = useParams();
 
     function goBack(){
+
+        navigate(`/${category}`)
 
         let navID = 0;
         let navView = LIST;
@@ -14,14 +20,7 @@ export default function BackButton({ changeItemID, changeNav, missionID, title, 
             navView = DETAILS;
         };
 
-        let nav = {
-            title: title,
-            view: navView,
-            ID: navID
-        }
-        //changeItemID(id);
-        // changeNav(nav);
-        
+      
     }
     return (
         <div className='whiteB w3 h3 flex items-center justify-center' onClick={goBack}>

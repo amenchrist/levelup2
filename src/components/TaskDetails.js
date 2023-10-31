@@ -53,7 +53,6 @@ export default function TaskDetails({ id , title, updateExp, activeSince, active
         setoutcome(task.outcome);
         setnote(task.note);
         setdueDate(task.dueDate);
-        console.log("Last Updated: ", db?.lastUpdated)
     }, [task.name, task.requiredContext, task.outcome, task.note, task.dueDate, task.timeSpent, activeSince, activeTask, task.id, db?.lastUpdated ])
 
 

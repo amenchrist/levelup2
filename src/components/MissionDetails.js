@@ -1,37 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import List from './List';
-import { ADD, ASAP, MISSION, MISSIONS, TASKS, UNPLANNED, PENDING } from '../constants';
+import { ADD, ASAP, MISSIONS, UNPLANNED, PENDING } from '../constants';
 import { displayDays, amendList, pushChanges  } from '../functions';
 import { UPDATE } from '../constants';
 import DatePicker from './DatePicker';
 import NewItemButton from './NewItemButton';
 import Scroll from './Scroll';
 import { Task } from '../classes';
+import { useMyStore } from '../store';
 
-export default function MissionDetails({ mission, view, changeItemID, db, shipItems, exp }) {
+export default function MissionDetails({ mission, db, shipItems, exp }) {
 
-    const TaskList = []//db.Tasks.concat(db.Completed);
+    const TaskList = useMyStore(store => store.tasks);
     let tasks = [];
-
-    function passKey(e) {
-        //Takes the events target and checks for title attribute 
-        //If no title attribute, check parent node for title attribute
-        //If not found, repeat step 2
-        let targ = e.target;
-        checkForID(targ);
-        function checkForID (t) {
-            if (t.id) {
-                changeItemID(t.id);
-            } else {
-                t = t.parentNode;
-                checkForID (t);   
-            }
-        }
-    }
     
     function getTasks(){
         
-        //console.log("from get tasks ", mission)
+        // console.log("from get tasks ", mission)
         if(mission.taskList.length !== 0){
             for(let i=0; i<mission.taskList.length; i++){
                 for(let j=0; j<TaskList.length; j++){
@@ -199,7 +184,7 @@ export default function MissionDetails({ mission, view, changeItemID, db, shipIt
                                 <NewItemButton />
                             </div> 
                             <div className='pa2'>
-                                <List content={missionTasks} filter={MISSION} touchFunction={passKey} />
+                                <List content={missionTasks} />
                             </div>
                         </div>
                     </Scroll>                    
@@ -259,8 +244,8 @@ export default function MissionDetails({ mission, view, changeItemID, db, shipIt
                                 <h5 className='bb b--white pa2 fw3 white b' >TASKS</h5>
                                 <NewItemButton />
                             </div> 
-                            <div className='pa2 h-30'>
-                                <List content={missionTasks} filter={MISSION} touchFunction={passKey} />
+                            <div className='pa2'>
+                                <List content={missionTasks}  />
                             </div>
                         </div>
                         
@@ -273,7 +258,7 @@ export default function MissionDetails({ mission, view, changeItemID, db, shipIt
                     <div className='pa2 h-100'>
                         <button onClick={()=> setShowTasks(false)}>CLOSE TASKS</button>
                         <Scroll>
-                            <List content={missionTasks} filter={MISSION} touchFunction={passKey} />
+                            <List content={missionTasks} />
                         </Scroll>
                     </div>)
                 } else {
