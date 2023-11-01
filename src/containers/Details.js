@@ -80,7 +80,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
             <div className='w-100 h-100 center br1 pa2 bw2 ba b--black-10'>
                 <div className='flex justify-between items-center'>
                     <BackButton id={0} />
-                    <TrashButton title={category} />
+                    <TrashButton id={itemID} title={category} />
                 </div>
                 <h2 className='tc b gold f3'>{category}</h2>
                 <div className='h-70'>

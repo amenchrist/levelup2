@@ -1,15 +1,19 @@
 import React from 'react';
 import trashCan from '../assets/trash1600.png';
-import { INBOX, MISSIONS, REMOVE, TASKS, REFERENCES, SOMEDAY, ADD, PROCESSED, COMPLETED, MISSION_TASKS, EVENTS, UPDATE, DONE, PAUSED, TASK, MISSION, EVENT, TODAY, DAILY } from '../constants';
-import { pushChanges } from '../functions';
+import { INBOX, MISSIONS, REMOVE, TASKS, REFERENCES, SOMEDAY, ADD, PROCESSED, COMPLETED, MISSION_TASKS, EVENTS, UPDATE, DONE, PAUSED, TASK, MISSION, EVENT, TODAY, DAILY, REFERENCE } from '../constants';
+import { inboxFilter, pushChanges } from '../functions';
 import { useMyStore } from '../store';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function TrashButton({ shipItems, changeNav, db, ID }) {
+export default function TrashButton({ shipItems, changeNav, id }) {
 
-    const title = useParams().category.toUpperCase()
+    const { category } = useParams();
+    const title = category.toUpperCase();
     const currentList = useMyStore(store => store[title.toLowerCase()]);
-    
+    const { updateItem, updateTask, updateMission, updateEvent, updateReference, setDbUpdatePending, inbox, setInbox } = useMyStore();
+
+    const navigate = useNavigate();
+
     let  indx, currentItem, list;
 
     // const InboxItems = inbox;
@@ -53,7 +57,7 @@ export default function TrashButton({ shipItems, changeNav, db, ID }) {
 
     for (let i=0; i<currentList.length; i++){
 
-        if (currentList[i].id === parseInt(ID)){
+        if (currentList[i].id === id){
             currentItem = currentList[i];
             indx = i;
             break;
@@ -61,37 +65,40 @@ export default function TrashButton({ shipItems, changeNav, db, ID }) {
 
     }
 
-    //Change Nav to List
-    const nav = {
-        title: title,
-        view: "LIST",
-        ID: 0
-    }
+    console.log("current trash item: ", currentItem)
+
 
     function trashItem() {
         console.log('trash button clicked');
         console.log("current trash item: ", currentItem)
         if (currentItem.status === "ACTIVE"){currentItem.status = PAUSED }
-        switch (currentItem.type){
-            case TASK:
-                list = "Tasks";
-            break;
-            case MISSION:
-                list = "Missions";
-            break;
-            case EVENT:
-                list = "Events";
-            break;
-            default:
-        }
         currentItem.isTrashed = true;
-        currentItem.trashedDate = new Date().toISOString().substr(0, 10);;
+        currentItem.trashedDate = new Date().toISOString().substr(0, 10);
 
-        //amendList(REMOVE, currentList, currentItem, indx);
-        //Trash.unshift(currentItem);
-        pushChanges(UPDATE, currentItem, list, shipItems);
-        // amendList(ADD, Trash, currentItem, indx);
-        changeNav(nav);
+        switch(title){
+            case INBOX:
+                updateItem(currentItem);
+                setInbox(inboxFilter(inbox));
+            break
+            case TASK:
+                updateTask(currentItem)
+            break
+            case MISSION:
+                updateMission(currentItem)
+            break
+            case EVENT:
+                updateEvent(currentItem)
+            break
+            case REFERENCE:
+                updateReference(currentItem)
+            break
+            default:            
+        }
+
+        setDbUpdatePending(currentItem)
+
+  
+        navigate(`/${category}`);
     }
 
 

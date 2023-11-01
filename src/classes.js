@@ -1,11 +1,12 @@
 import {TASK, PENDING, MISSION, UNPLANNED, ASAP, UNPROCESSED, INBOX_ITEM, EVENT, REFERENCE, SOMEDAY } from './constants';
+import { v4 as uuid } from 'uuid';
 
 export class Item{
     constructor(name,description='None') {
         const d= new Date();
 
         this.type = INBOX_ITEM;
-        this.id = d.getTime().toString();
+        this.id = uuid();
         this.entryDate = d.getTime();
         this.name = name;
         this.description = '';
@@ -22,7 +23,7 @@ export class Task{
     constructor(name,outcome, requiredContext, associatedMissionID = 0, dueDate = SOMEDAY, order = 0) {
         const d = new Date();
         this.type = TASK;
-        this.id = d.getTime()+Math.ceil(Math.random()*1000).toString();
+        this.id = uuid();
         this.entryDate = d.getTime();
         this.status = PENDING;
         this.priority = 'NONE';
@@ -51,10 +52,9 @@ export class Mission{
     constructor(outcome ='', purpose ='', dueDate = ASAP, requirements = '', priority = "", frequency = '' ) {
         const d = new Date();
         this.type = MISSION;        
-        this.id = d.getTime().toString();
+        this.id = uuid();
         this.entryDate = d.getTime();
         this.status = UNPLANNED;
-
         this.name = outcome;
         this.purpose = purpose;
         this.vision = '';
@@ -65,23 +65,18 @@ export class Mission{
         this.abilityRequired = "";
         this.dueDate = dueDate //(new Date(parseInt((d.getTime() + 7776000000)))).toISOString().substr(0, 10); // 3 months from the date the MISSION is planned 
         this.taskList = [];
-
         this.backStory = ""
         this.outputRef = 0;
         this.outputRecordUrl = ""
-        
         this.timeRequired = 7776000000;
         this.timeSpent = 0;
-        
         this.requirements = requirements;
         this.priority = priority;
         this.frequency = frequency;
         this.note = '';
-        
         this.isTrashed = false;
         this.trashedDate = "";
         this.doneDate = "";
-
         this.exp = 100;
     }
 }
@@ -90,7 +85,7 @@ export class Reference{
     constructor(name, details='') {
         const d= new Date();
         this.type = REFERENCE;
-        this.id = d.getTime().toString();
+        this.id = uuid();
         this.entryDate = d.getTime();
         this.name = name;
         this.details = details;
@@ -103,7 +98,7 @@ export class Event{
     constructor(name, date = new Date().toISOString().substr(0, 10), time = "", location ='', frequency = "") {
         const d= new Date();
         this.type = EVENT;
-        this.id = d.getTime().toString();
+        this.id = uuid();
         this.entryDate = d.getTime();
         this.name = name;
         this.date = date;

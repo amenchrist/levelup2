@@ -7,77 +7,101 @@ import { completedFilter, dailyFilter, inboxFilter, processedFilter, removeTrash
 
 export default function App() {
 
-    const [ inboxFS, setInbox ] = useState([]);
-    const [ tasksFS, setTasks ] = useState([]);
-    const [ missionsFS, setMissions ] = useState([]);
-    const [ eventsFS, setEvents ] = useState([]);
-    const [ referencesFS, setReferences ] = useState([]);
+    const [ inboxFS, setInboxFS ] = useState([]);
+    const [ tasksFS, setTasksFS ] = useState([]);
+    const [ missionsFS, setMissionsFS ] = useState([]);
+    const [ eventsFS, setEventsFS ] = useState([]);
+    const [ referencesFS, setReferencesFS ] = useState([]);
 
-    const { addItems, addTasks, addMissions, addEvents, addReferences } = useMyStore();
-    const { addTodaysMission, addDailyExercises, addCompleted, addProcessed, addSomeday, addTrash } = useMyStore();
+    const { setInbox, setTasks, setMissions, setEvents, setReferences } = useMyStore();
+    const { setTodaysMission, setDailyExercises, setCompleted, setProcessed, setSomeday, setTrash } = useMyStore();
     const { inbox, tasks, missions, events, references } = useMyStore();
 
 
 
     useEffect(() => {
-        getInbox(setInbox);
-        getTasks(setTasks);
-        getMissions(setMissions);
-        getEvents(setEvents);
-        getReferences(setReferences);
+        getInbox(setInboxFS);
+        getTasks(setTasksFS);
+        getMissions(setMissionsFS);
+        getEvents(setEventsFS);
+        getReferences(setReferencesFS);
     }, []);
 
     useEffect(() => {
-        addItems(inboxFilter(inboxFS));
-    }, [inboxFS, addItems]);
+        setInbox(inboxFilter(inboxFS));
+    }, [inboxFS, setInbox]);
 
     useEffect(() => {
-        addTasks(removeTrash(tasksFS));
-    }, [tasksFS, addTasks]);
+        setTasks(removeTrash(tasksFS));
+    }, [tasksFS, setTasks]);
 
     useEffect(() => {
-        addMissions(removeTrash(missionsFS));
-    }, [missionsFS, addMissions]);
+        setMissions(removeTrash(missionsFS));
+    }, [missionsFS, setMissions]);
 
     useEffect(() => {
-        addEvents(removeTrash(eventsFS));
-    }, [eventsFS, addEvents]);
+        setEvents(removeTrash(eventsFS));
+    }, [eventsFS, setEvents]);
 
     useEffect(() => {
-        addReferences(removeTrash(referencesFS));
-    }, [referencesFS, addReferences]);
+        setReferences(removeTrash(referencesFS));
+    }, [referencesFS, setReferences]);
 
 //---------------------------------------//
 
     //Today's Mission
     useEffect(() => {
-        addTodaysMission(todayFilter(tasks.concat(missions)));
-    }, [tasks, missions, addTodaysMission]);
+        setTodaysMission(todayFilter(tasks.concat(missions)));
+    }, [tasks, missions, setTodaysMission]);
 
     //Daily Exercises
     useEffect(() => {
-        addDailyExercises(dailyFilter(tasks));
-    }, [tasks, addDailyExercises]);
+        setDailyExercises(dailyFilter(tasks));
+    }, [tasks, setDailyExercises]);
 
     //Completed
     useEffect(() => {
-        addCompleted(completedFilter(tasks.concat(missions)));
-    }, [tasks, missions, addCompleted]);
+        setCompleted(completedFilter(tasks.concat(missions)));
+    }, [tasks, missions, setCompleted]);
 
     //Processed
     useEffect(() => {
-        addProcessed(processedFilter(inbox));
-    }, [inbox, addProcessed]);
+        setProcessed(processedFilter(inbox));
+    }, [inbox, setProcessed]);
 
     //Someday
     useEffect(() => {
-        addSomeday(somedayFilter(tasks.concat(missions)));
-    }, [tasks, missions, addSomeday]);
+        setSomeday(somedayFilter(tasks.concat(missions)));
+    }, [tasks, missions, setSomeday]);
 
     //Trash
     useEffect(() => {
-        addTrash(trashFilter(inbox.concat(tasks, missions, events, references)));
-    }, [inbox, tasks, missions, events, references, addTrash]);
+        setTrash(trashFilter(inbox.concat(tasks, missions, events, references)));
+    }, [inbox, tasks, missions, events, references,  setTrash]);
+
+    //HANDLING LOCAL UPDATES
+
+    // useEffect(() => {
+    //     setInbox(inboxFilter(inbox));
+    // }, [inbox, setInbox]);
+
+    // useEffect(() => {
+    //     setTasks(removeTrash(tasks));
+    // }, [tasks, setTasks]);
+
+    // useEffect(() => {
+    //     setMissions(removeTrash(missions));
+    // }, [missions, setMissions]);
+
+    // useEffect(() => {
+    //     setEvents(removeTrash(events));
+    // }, [events, setEvents]);
+
+    // useEffect(() => {
+    //     setReferences(removeTrash(references));
+    // }, [references, setReferences]);
+
+    
 
 
     return (

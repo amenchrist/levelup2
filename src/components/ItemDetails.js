@@ -32,8 +32,6 @@ export default function ItemDetails({ id, touchFunction }) {
         }    
     }
 
-    console.log(item)
-
     if (item.name) {
         switch(readyToProcess){
         case false:

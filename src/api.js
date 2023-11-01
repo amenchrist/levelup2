@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { getDocs, collection, addDoc } from "firebase/firestore";
+import { getDocs, collection, addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 
 //INBOX
 const inboxCollectionRef = collection(db, 'inbox');
@@ -17,11 +17,12 @@ export async function getInbox(setFunc) {
 //Upload Inbox item
 export async function uploadNewItem(item){
     try{
-        await addDoc(inboxCollectionRef, {...item})
+        await setDoc(doc(db, 'inbox', item.id), {...item})
     } catch(e){
-        console.log('Something went wrong UPLOADING firestore INBOX data', e)
+        console.log(`Something went wrong UPLOADING firestore INBOX data`, e)
     }
 }
+
 
 //TASKS
 const taskCollectionRef = collection(db, 'task');
@@ -108,5 +109,20 @@ export async function uploadNewReference(item){
         await addDoc(referenceCollectionRef, {...item})
     } catch(e){
         console.log('Something went wrong UPLOADING firestore REFERENCE data', e)
+    }
+}
+
+
+
+///////-------------////////
+
+//Update Item
+export async function updateItem(collection, id, item){
+
+    const itemRef = doc(db, collection, item.id )
+    try{
+        await updateDoc(itemRef, {...item})
+    } catch(e){
+        console.log('Something went wrong UPDATING item in firestore', e)
     }
 }
