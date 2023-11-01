@@ -12,7 +12,7 @@ export default function TaskDetails({ id , title, activeSince, activeTask, db, s
     const { tasks, missions } = useMyStore()
     const MissionsList = missions;
     let task = {};
-    let position, relevantList;
+    let relevantList;
 
     title === SOMEDAY ? relevantList = tasks.concat(missions) : relevantList = tasks;
 
@@ -20,7 +20,6 @@ export default function TaskDetails({ id , title, activeSince, activeTask, db, s
 
         if (relevantList[i].id === id){
            task = relevantList[i];
-           position = i;
            break;
         }
     }

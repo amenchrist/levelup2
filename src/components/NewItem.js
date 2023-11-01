@@ -71,8 +71,8 @@ export default function NewItem({  updateExp }) {
                 <button className="f7 button w-20" onClick={(e)=> setForm(INBOX)}>INBOX</button>
                 <button className="f7 button w-20" onClick={(e)=> setForm(TASK)}>TASK</button>
                 <button className="f7 button w-20" onClick={(e)=> setForm(MISSION)}>MISSION</button>
-                <button className="f7 button w-20" onClick={(e)=> setForm(REFERENCE)}>REFERENCE</button>
                 <button className="f7 button w-20" onClick={(e)=> setForm(EVENT)}>EVENT</button>
+                <button className="f7 button w-20" onClick={(e)=> setForm(REFERENCE)}>REFERENCE</button>
                 {/* <button className="button w-20" onClick={(e)=> changeTitle(e.target.value)}>FINANCE</button> */}
             </div>
                 {displayTypeForm()}

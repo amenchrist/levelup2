@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { REFERENCES, UPDATE } from '../constants';
-import { amendList  } from '../functions';
+import { useMyStore } from '../store';
 
-export default function ReferenceDetails({ id , changeItemID, updateExp, db, shipItems, reference, exp }) {
+export default function ReferenceDetails({ id  }) {
 
-    const ReferenceList = db.Reference;
-    // let reference = {};
-    //let position;
+    const { references } = useMyStore()
+    const ReferenceList = references;
+    let reference = {};
 
-    // for (let i=0; i<ReferenceList.length; i++){
+    for (let i=0; i<ReferenceList.length; i++){
 
-    //     if (ReferenceList[i].id === id){
-    //        reference = ReferenceList[i];
-    //        //position = i;
-    //        break;
-    //     }
-    // }
+        if (ReferenceList[i].id === id){
+           reference = ReferenceList[i];
+           break;
+        }
+    }
 
-    console.log("reference: ", reference)
+    // console.log("reference: ", reference)
 
     const [ name, setName ] = useState(reference.name);
     const [ details, setDetails ] = useState(reference.details);
@@ -30,14 +28,14 @@ export default function ReferenceDetails({ id , changeItemID, updateExp, db, shi
 
     function updateDB( obj, property, newVal) {
 
-        if (obj[property] !== newVal){
+        // if (obj[property] !== newVal){
 
-            console.log(`old value (${obj[property]}) !== new value (${newVal})`)
+        //     console.log(`old value (${obj[property]}) !== new value (${newVal})`)
 
-            obj[property] = newVal;
-            amendList(db, REFERENCES, reference, UPDATE, shipItems, exp)
+        //     obj[property] = newVal;
+        //     amendList(db, REFERENCES, reference, UPDATE, shipItems, exp)
           
-        }
+        // }
 
     }
 

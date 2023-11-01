@@ -1,5 +1,4 @@
 import React from 'react';
-import { INBOX_ITEM, LIST, PROCESSED } from '../constants';
 import { useNavigate } from 'react-router-dom';
 import { useMyStore } from '../store';
 

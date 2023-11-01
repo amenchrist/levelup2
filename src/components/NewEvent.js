@@ -3,13 +3,14 @@ import { ADD, DAILY, DETAILS, EVENTS, MONTHLY, NONE, WEEKLY, YEARLY } from '../c
 import {  Event } from '../classes';
 import { pushChanges, convertDateToMilliseconds  } from '../functions';
 import { useMyStore } from '../store';
+import { useNavigate } from 'react-router-dom';
+import { uploadNewEvent } from '../api';
 
 
 export default function NewEvent({ updateExp, shipItems, changeNav, db }) {
 
-    const { events } = useMyStore();
-    
-    const Events = events;
+    const { addEvent } = useMyStore();
+    const navigate = useNavigate();
 
     let today = new Date().toISOString().substr(0, 10);
 
@@ -23,21 +24,15 @@ export default function NewEvent({ updateExp, shipItems, changeNav, db }) {
 
 
     function submitNewItem(event) {
+        event.preventDefault();
         
         let e = new Event( name, date, time, location, frequency );
         console.log(e);
-        //Events.unshift(e);
-        pushChanges(ADD, e, "Events", shipItems);
-        updateExp(5);
-        event.preventDefault();
+        addEvent(e);
+        uploadNewEvent(e)
+        // updateExp(5);
 
-        const nav = {
-            title: EVENTS,
-            view: DETAILS,
-            ID: e.id
-        }
-
-        changeNav(nav);
+        navigate(`/Events/${e.id}`);
     }
 
     return (

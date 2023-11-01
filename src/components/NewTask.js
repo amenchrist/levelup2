@@ -5,12 +5,11 @@ import { pushChanges } from '../functions';
 import DatePicker from './DatePicker';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
+import { uploadNewTask } from '../api';
 
 export default function NewTask({  shipItems, itemID, db, title }) {
 
-    
-    const { tasks, addTask } = useMyStore();
-    const TaskList = tasks;
+    const { addTask } = useMyStore();
     const navigate = useNavigate();
 
 
@@ -37,12 +36,12 @@ export default function NewTask({  shipItems, itemID, db, title }) {
 
         // updateExp(5);
         addTask(t);
+        uploadNewTask(t);
         if(title === MISSIONS){
            addToMissionTasks(t, associatedMissionID);
         }
     
-        navigate(`/Tasks/${t.id}`);
-        
+        navigate(`/Tasks/${t.id}`);        
     }
 
     function addToMissionTasks(task, projID){

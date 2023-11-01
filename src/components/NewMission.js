@@ -6,11 +6,11 @@ import DatePicker from './DatePicker';
 import Scroll from './Scroll';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
+import { uploadNewMission } from '../api';
 
 export default function NewMission({ updateExp, shipItems, changeNav, db }) {
 
-    const { missions, addMission } = useMyStore();
-    const MissionsList = missions;
+    const { addMission } = useMyStore();
 
     const navigate = useNavigate();
 
@@ -38,6 +38,7 @@ export default function NewMission({ updateExp, shipItems, changeNav, db }) {
 
 
     function submitNewItem() {
+        // event.preventDefault();
         
         let m = new Mission(outcome.trim(), purpose, dueDate, requirements, priority);
         m.vision = vision;
@@ -50,9 +51,9 @@ export default function NewMission({ updateExp, shipItems, changeNav, db }) {
         m.timeRequired = timeRequired;
         m.status = status;
 
-        addMission(m)
+        addMission(m);
+        uploadNewMission(m);
         // updateExp(5);
-        // event.preventDefault();
 
         navigate(`/Missions/${m.id}`);
     }  

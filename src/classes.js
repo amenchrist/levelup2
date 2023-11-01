@@ -22,7 +22,7 @@ export class Task{
     constructor(name,outcome, requiredContext, associatedMissionID = 0, dueDate = SOMEDAY, order = 0) {
         const d = new Date();
         this.type = TASK;
-        this.id = d.getTime()+Math.ceil(Math.random()*1000);
+        this.id = d.getTime()+Math.ceil(Math.random()*1000).toString();
         this.entryDate = d.getTime();
         this.status = PENDING;
         this.priority = 'NONE';
@@ -51,7 +51,7 @@ export class Mission{
     constructor(outcome ='', purpose ='', dueDate = ASAP, requirements = '', priority = "", frequency = '' ) {
         const d = new Date();
         this.type = MISSION;        
-        this.id = d.getTime();
+        this.id = d.getTime().toString();
         this.entryDate = d.getTime();
         this.status = UNPLANNED;
 
@@ -90,7 +90,7 @@ export class Reference{
     constructor(name, details='') {
         const d= new Date();
         this.type = REFERENCE;
-        this.id = d.getTime();
+        this.id = d.getTime().toString();
         this.entryDate = d.getTime();
         this.name = name;
         this.details = details;
@@ -103,7 +103,7 @@ export class Event{
     constructor(name, date = new Date().toISOString().substr(0, 10), time = "", location ='', frequency = "") {
         const d= new Date();
         this.type = EVENT;
-        this.id = d.getTime();
+        this.id = d.getTime().toString();
         this.entryDate = d.getTime();
         this.name = name;
         this.date = date;

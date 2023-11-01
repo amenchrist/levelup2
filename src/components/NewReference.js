@@ -3,11 +3,15 @@ import { ADD, DETAILS, REFERENCES, REFERENCE } from '../constants';
 import { Reference } from '../classes';
 import { pushChanges, convertDateToMilliseconds  } from '../functions';
 import { useMyStore } from '../store';
+import { uploadNewReference } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 export default function NewReference({ updateExp, shipItems, changeNav, db }) {
 
-    const { references } = useMyStore();
-    const References = references;
+    const { addReference } = useMyStore();
+
+    const navigate = useNavigate();
+
 
     let today = new Date().toISOString().substr(0, 10);
 
@@ -17,21 +21,15 @@ export default function NewReference({ updateExp, shipItems, changeNav, db }) {
 
 
     function submitNewItem(event) {
+        event.preventDefault();
         
         let r = new Reference(name, details );
         console.log(r);
-        //References.unshift(r);
-        pushChanges(ADD, r, "References", shipItems);
-        updateExp(5);
-        event.preventDefault();
+        addReference(r);
+        uploadNewReference(r)
+        // updateExp(5);
 
-        const nav = {
-            title: REFERENCES,
-            view: DETAILS,
-            ID: r.id
-        }
-
-        changeNav(nav);
+        navigate(`/References/${r.id}`);
     }
 
     return (

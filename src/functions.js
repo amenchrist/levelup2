@@ -1,11 +1,42 @@
 /// For all the extra functions required in multiple places
 
 // import { ShipItems } from "./actions";
-import { ADD, ASAP, COMPLETED, INBOX, PROCESSED, MISSIONS, REFERENCES, EVENTS, REMOVE, SOMEDAY, TASKS, TRASH, UPDATE } from "./constants";
+import { ADD, ASAP, COMPLETED, INBOX, PROCESSED, MISSIONS, REFERENCES, EVENTS, REMOVE, SOMEDAY, TASKS, TRASH, UPDATE, DONE, DAILY } from "./constants";
 
 
-let ShipItems;
+export function removeTrash(arr){
+    return arr.filter(item => !item.isTrashed)
+}
 
+export function inboxFilter(array) {
+    return removeTrash(array).filter(entry => entry.status !== PROCESSED)
+}
+
+export function todayFilter(array){
+    return removeTrash(array).filter((entry) => (((entry.dueDate === ASAP) || ( entry.dueDate === new Date().toISOString().substr(0, 10) )) && entry.status !== DONE ))
+}
+
+export function dailyFilter(array){
+    return removeTrash(array).filter((entry) => (entry.frequency === DAILY ))
+}
+
+export function completedFilter(array){
+    return removeTrash(array).filter( e => e.status === DONE)
+}
+
+export function processedFilter(array){
+    return removeTrash(array).filter( e => e.status === PROCESSED)
+}
+
+export function somedayFilter(array){
+    return removeTrash(array).filter( e => e.dueDate === SOMEDAY )
+}
+
+export function trashFilter(array){
+    return array.filter( item => item.isTrashed )
+}
+
+//////////////////////
 export function passTitleAndID(e, ChangeTitleFunction, changeIDFunction) {
     let targ = e.target;
     checkForTitle(targ)
