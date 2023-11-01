@@ -1,7 +1,5 @@
 import React from 'react';
-import { DONE, LIST, MISSION, MISSIONS, SOMEDAY } from '../constants';
 import { useNavigate } from 'react-router-dom';
-import { useStateContext } from '../Contexts/ContextProvider';
 import { useMyStore } from '../store';
 
 export default function MissionsOverview() {

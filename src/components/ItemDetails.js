@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import Processor from '../containers/Processor'
-import PrevItemButton from '../components/PrevItemButton';
-import NextItemButton from '../components/NextItemButton';
 import NewItemButton from '../components/NewItemButton';
 import { useMyStore } from '../store';
 
 
-export default function ItemDetails({ id, touchFunction, selectAnother, prevID, nextID, db }) {
+export default function ItemDetails({ id, touchFunction }) {
 
     const { inbox } = useMyStore()
 
@@ -33,6 +31,8 @@ export default function ItemDetails({ id, touchFunction, selectAnother, prevID, 
            break;
         }    
     }
+
+    console.log(item)
 
     if (item.name) {
         switch(readyToProcess){

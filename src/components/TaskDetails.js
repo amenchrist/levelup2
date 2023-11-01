@@ -7,7 +7,7 @@ import { COMPLETED, DETAILS, DONE, MISSIONS, SOMEDAY, TASKS, UPDATE } from '../c
 import Scroll from './Scroll';
 import { useMyStore } from '../store';
 
-export default function TaskDetails({ id , title, updateExp, activeSince, activeTask, db, shipItems, changeNav, exp }) {
+export default function TaskDetails({ id , title, activeSince, activeTask, db, shipItems, changeNav, exp }) {
 
     const { tasks, missions } = useMyStore()
     const MissionsList = missions;
@@ -30,7 +30,7 @@ export default function TaskDetails({ id , title, updateExp, activeSince, active
         associatedMission.name = "Getting Things Done";
     } else if (task.associatedMissionID > 0){
         for(let i=0; i<MissionsList.length; i++){
-            if(parseInt(task.associatedMissionID) === parseInt(MissionsList[i].id)){
+            if(task.associatedMissionID === MissionsList[i].id){
                 associatedMission = MissionsList[i];
                 //console.log('associated project name: ', associatedMission.name)
                 break;

@@ -17,7 +17,7 @@ export default function MissionDetails({ mission, db, shipItems, exp }) {
     function getTasks(){
         
         // console.log("from get tasks ", mission)
-        if(mission.taskList.length !== 0){
+        if(mission?.taskList?.length !== 0){
             for(let i=0; i<mission.taskList.length; i++){
                 for(let j=0; j<TaskList.length; j++){
                     if(mission.taskList[i] === TaskList[j].id ){

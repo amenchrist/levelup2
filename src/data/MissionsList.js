@@ -3,7 +3,7 @@ import { MISSION, UNPLANNED } from "../constants";
 export const MissionsList = [
     {
         type: MISSION,
-        id: 1589657001530,
+        id: "1589657001530",
         exp: 50,
         name: "Upload Church service",
         note: 'About MISSION 1',
@@ -24,7 +24,7 @@ export const MissionsList = [
     },
     {
         type: MISSION,
-        id: 1589657001531,
+        id: "1589657001531",
         exp: 50,
         name: 'MISSION 2',
         note: 'About MISSION 2',
@@ -39,12 +39,12 @@ export const MissionsList = [
             id: 17,
             task: 'First physical action'
         },
-        taskList: [ 1589657001524 ],
+        taskList: [ "1589657001524" ],
         isTrashed: false
     },
     {
         type: MISSION,
-        id: 1589657001532,
+        id: "1589657001532",
         exp: 50,
         name: 'MISSION 3',
         note: 'About MISSION 3',
@@ -59,12 +59,12 @@ export const MissionsList = [
             id: 16,
             task: 'First physical action'
         },
-        taskList: [ 1589657001525 ],
+        taskList: [ "1589657001525" ],
         isTrashed: false
     },
     {
         type: MISSION,
-        id: 1589657001533,
+        id: "1589657001533",
         exp: 50,
         name: 'MISSION 4',
         note: 'About MISSION 4',
@@ -79,12 +79,12 @@ export const MissionsList = [
             id: 16,
             task: 'First physical action'
         },
-        taskList: [ 1589657001526 ],
+        taskList: [ "1589657001526" ],
         isTrashed: false
     },
     {
         type: MISSION,
-        id: 1589657001534,
+        id: "1589657001534",
         exp: 50,
         name: 'MISSION 5',
         note: 'About MISSION 5',
