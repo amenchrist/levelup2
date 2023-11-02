@@ -76,7 +76,7 @@ export default function App() {
 
     //Trash
     useEffect(() => {
-        setTrash(trashFilter(inbox.concat(tasks, missions, events, references)));
+        // setTrash(trashFilter(inbox.concat(tasks, missions, events, references)));
     }, [inbox, tasks, missions, events, references,  setTrash]);
 
     //HANDLING LOCAL UPDATES

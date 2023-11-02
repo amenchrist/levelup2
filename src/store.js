@@ -57,6 +57,7 @@ function store(set) {
         setEvents: items => set(() => ({events: [...items]})),
         setReferences: items => set(() => ({references: [...items]})),
         setTrash: items => set(() => ({trash: [...items]})),
+        updateTrash: () => set(store => ({trash: store.inbox.concat(store.tasks, store.missions, store.events, store.references)})),
         setCompleted: items => set(() => ({completed: [...items]})),
         setDailyExercises: items => set(() => ({daily: [...items]})),
         setTodaysMission: items => set(() => ({today: [...items]})),

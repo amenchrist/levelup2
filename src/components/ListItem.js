@@ -23,6 +23,8 @@ export default function ListItem( { item, title }){
             </div>
         )
     } 
+
+    console.log(item)
     
     switch(true){
         case item.type === MISSION && !item.isTrashed:

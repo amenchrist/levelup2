@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import trashCan from '../assets/trash1600.png';
 import { INBOX, MISSIONS, REMOVE, TASKS, REFERENCES, SOMEDAY, ADD, PROCESSED, COMPLETED, MISSION_TASKS, EVENTS, UPDATE, DONE, PAUSED, TASK, MISSION, EVENT, TODAY, DAILY, REFERENCE } from '../constants';
 import { inboxFilter, pushChanges } from '../functions';
@@ -10,7 +10,8 @@ export default function TrashButton({ shipItems, changeNav, id }) {
     const { category } = useParams();
     const title = category.toUpperCase();
     const currentList = useMyStore(store => store[title.toLowerCase()]);
-    const { updateItem, updateTask, updateMission, updateEvent, updateReference, setDbUpdatePending, inbox, setInbox } = useMyStore();
+    const { updateItem, updateTask, updateMission, updateEvent, updateReference, setDbUpdatePending, inbox, setInbox, updateTrash } = useMyStore();
+    const store = useMyStore()
 
     const navigate = useNavigate();
 
@@ -94,12 +95,16 @@ export default function TrashButton({ shipItems, changeNav, id }) {
             break
             default:            
         }
-
+        // updateTrash();
+        console.log(inbox)
+        console.log(store)
+        console.log("just updated trats");
+        
         setDbUpdatePending(currentItem)
-
-  
+        
         navigate(`/${category}`);
     }
+    
 
 
     return (
