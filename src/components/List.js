@@ -69,9 +69,12 @@ export default function List({ content, title, view }) {
             }
         default:
             return (
-                <Scroll>
-                    {listItems}
-                </Scroll>
+                <>
+                    <p className='white'>Total: {content.length}</p>
+                    <Scroll>
+                        {listItems}
+                    </Scroll>
+                </>
             );
     }
 }

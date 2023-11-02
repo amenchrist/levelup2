@@ -24,7 +24,7 @@ export default function ListItem( { item, title }){
         )
     } 
 
-    console.log(item)
+    // console.log(item)
     
     switch(true){
         case item.type === MISSION && !item.isTrashed:

@@ -15,6 +15,7 @@ export class Item{
         this.isTrashed = false;
         this.trashedDate = "";
         this.processedDate = "";
+        this.collection = "inbox";
 
     }
 }
@@ -45,6 +46,8 @@ export class Task{
         this.activeSince = 0;
         this.doneDate = "N/A";
         this.order = order;
+        this.collection = "task";
+
     }
 }
 
@@ -78,6 +81,8 @@ export class Mission{
         this.trashedDate = "";
         this.doneDate = "";
         this.exp = 100;
+        this.collection = "mission";
+
     }
 }
 
@@ -91,6 +96,9 @@ export class Reference{
         this.details = details;
         this.exp = 5;
         this.isTrashed = false;
+
+        this.collection = "reference";
+
     }
 }
 
@@ -109,5 +117,8 @@ export class Event{
         this.note = "";
         this.isTrashed = false;
         this.trashedDate = "";
+
+        this.collection = "event";
+
     }
 }

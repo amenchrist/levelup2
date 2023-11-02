@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Router from './routes';
 import { useMyStore } from './store';
-import { getInbox, getTasks, getMissions, getEvents, getReferences } from './api';
-import { completedFilter, dailyFilter, inboxFilter, processedFilter, removeTrash, somedayFilter, todayFilter, trashFilter } from './functions';
+import { getInbox, getTasks, getMissions, getEvents, getReferences, UpdateItem } from './api';
+import { completedFilter, dailyFilter, inboxFilter, missionFilter, processedFilter, removeTrash, somedayFilter, taskFilter, todayFilter, trashFilter } from './functions';
+import useDbSyncer from './hooks/useDbSyncer';
 
 export default function App() {
 
@@ -13,12 +14,15 @@ export default function App() {
     const [ eventsFS, setEventsFS ] = useState([]);
     const [ referencesFS, setReferencesFS ] = useState([]);
 
+    const { setAllInbox, setAllTasks, setAllMissions, setAllEvents, setAllReferences } = useMyStore();
     const { setInbox, setTasks, setMissions, setEvents, setReferences } = useMyStore();
     const { setTodaysMission, setDailyExercises, setCompleted, setProcessed, setSomeday, setTrash } = useMyStore();
-    const { inbox, tasks, missions, events, references } = useMyStore();
 
-
-
+    const { allInbox, allTasks, allMissions, allEvents, allReferences,  } = useMyStore();
+    const { inbox, tasks, missions, events, references, dbUpdatePending, updateDbUpdatePending } = useMyStore();
+    
+    const store = useMyStore();
+    console.log(store)
     useEffect(() => {
         getInbox(setInboxFS);
         getTasks(setTasksFS);
@@ -28,26 +32,48 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        setInbox(inboxFilter(inboxFS));
+        setAllInbox(inboxFS);
     }, [inboxFS, setInbox]);
 
     useEffect(() => {
-        setTasks(removeTrash(tasksFS));
+        setAllTasks(tasksFS);
     }, [tasksFS, setTasks]);
 
     useEffect(() => {
-        setMissions(removeTrash(missionsFS));
+        setAllMissions(missionsFS);
     }, [missionsFS, setMissions]);
 
     useEffect(() => {
-        setEvents(removeTrash(eventsFS));
+        setAllEvents(eventsFS);
     }, [eventsFS, setEvents]);
 
     useEffect(() => {
-        setReferences(removeTrash(referencesFS));
+        setAllReferences(referencesFS);
     }, [referencesFS, setReferences]);
 
 //---------------------------------------//
+
+    //HANDLING LOCAL UPDATES
+
+    useEffect(() => {
+        setInbox(inboxFilter(allInbox));
+    }, [allInbox, setInbox]);
+
+    useEffect(() => {
+        setTasks(taskFilter(allTasks));
+    }, [allTasks, setTasks]);
+
+    useEffect(() => {
+        setMissions(missionFilter(allMissions));
+    }, [allMissions, setMissions]);
+
+    useEffect(() => {
+        setEvents(removeTrash(allEvents));
+    }, [allEvents, setEvents]);
+
+    useEffect(() => {
+        setReferences(removeTrash(allReferences));
+    }, [allReferences, setReferences]);
 
     //Today's Mission
     useEffect(() => {
@@ -76,32 +102,28 @@ export default function App() {
 
     //Trash
     useEffect(() => {
-        // setTrash(trashFilter(inbox.concat(tasks, missions, events, references)));
+        setTrash(trashFilter(allInbox.concat(tasks, missions, events, references)));
     }, [inbox, tasks, missions, events, references,  setTrash]);
 
-    //HANDLING LOCAL UPDATES
+    //---------------------------------------///
 
-    // useEffect(() => {
-    //     setInbox(inboxFilter(inbox));
-    // }, [inbox, setInbox]);
+    // const lastUpdated = useDbSyncer();
 
-    // useEffect(() => {
-    //     setTasks(removeTrash(tasks));
-    // }, [tasks, setTasks]);
+    // console.log(lastUpdated)
 
-    // useEffect(() => {
-    //     setMissions(removeTrash(missions));
-    // }, [missions, setMissions]);
+    useEffect(() => {        
+       if (dbUpdatePending.length > 0) {
+            console.log('running db syncer')
+          //find and update current item
+          if(UpdateItem(dbUpdatePending[0])){
+            const tempArray = [...dbUpdatePending]
+            console.log(tempArray.shift())
 
-    // useEffect(() => {
-    //     setEvents(removeTrash(events));
-    // }, [events, setEvents]);
-
-    // useEffect(() => {
-    //     setReferences(removeTrash(references));
-    // }, [references, setReferences]);
-
+            updateDbUpdatePending(tempArray)
+          }
+        }
     
+      }, [dbUpdatePending]);
 
 
     return (

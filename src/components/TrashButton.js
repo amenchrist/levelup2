@@ -11,8 +11,6 @@ export default function TrashButton({ shipItems, changeNav, id }) {
     const title = category.toUpperCase();
     const currentList = useMyStore(store => store[title.toLowerCase()]);
     const { updateItem, updateTask, updateMission, updateEvent, updateReference, setDbUpdatePending, inbox, setInbox, updateTrash, trash } = useMyStore();
-    const [ localTrash, setLocal ] = useState([])
-
 
     const navigate = useNavigate();
 
@@ -80,7 +78,8 @@ export default function TrashButton({ shipItems, changeNav, id }) {
         switch(title){
             case INBOX:
                 updateItem(currentItem);
-                setInbox(inboxFilter(inbox));
+                //setInbox(inboxFilter(inbox));
+                // setLocalInbox(inboxFilter(inbox))
             break
             case TASK:
                 updateTask(currentItem)
@@ -96,16 +95,10 @@ export default function TrashButton({ shipItems, changeNav, id }) {
             break
             default:            
         }
-        updateTrash();
-        console.log(inbox)
-        console.log(trash)
-        console.log("just updated trats");
-        
         setDbUpdatePending(currentItem)
         
         navigate(`/${category}`);
     }
-    
 
 
     return (

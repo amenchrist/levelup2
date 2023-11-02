@@ -12,6 +12,14 @@ export function inboxFilter(array) {
     return removeTrash(array).filter(entry => entry.status !== PROCESSED)
 }
 
+export function taskFilter(array) {
+    return removeTrash(array).filter(entry => entry.status !== DONE)
+}
+
+export function missionFilter(array) {
+    return removeTrash(array).filter(entry => entry.status !== COMPLETED)
+}
+
 export function todayFilter(array){
     return removeTrash(array).filter((entry) => (((entry.dueDate === ASAP) || ( entry.dueDate === new Date().toISOString().substr(0, 10) )) && entry.status !== DONE ))
 }
@@ -33,7 +41,7 @@ export function somedayFilter(array){
 }
 
 export function trashFilter(array){
-    return array.filter( item => item.isTrashed )
+    return array.filter( item => item.isTrashed === true )
 }
 
 //////////////////////

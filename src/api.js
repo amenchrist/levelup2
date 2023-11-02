@@ -117,12 +117,13 @@ export async function uploadNewReference(item){
 ///////-------------////////
 
 //Update Item
-export async function updateItem(collection, id, item){
-
-    const itemRef = doc(db, collection, item.id )
+export async function UpdateItem(item){
+    const itemRef = doc(db, item.collection, item.id )
     try{
         await updateDoc(itemRef, {...item})
+        return true
     } catch(e){
-        console.log('Something went wrong UPDATING item in firestore', e)
+        console.log('Something went wrong UPDATING item in firestore', e);
+        return false
     }
 }

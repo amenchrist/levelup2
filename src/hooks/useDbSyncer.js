@@ -1,30 +1,51 @@
 import React, { useEffect } from 'react'
 import { useMyStore } from '../store'
+import { UpdateItem } from '../api';
 
 const useDbSyncer = () => {
 
-  const { inbox, tasks, missions, events, references, setLastUpdated, lastUpdated  } = useMyStore();
+  const { setLastUpdated, dbUpdatePending  } = useMyStore();
 
   //Whenever there's a change in the store, sync with db
+
+  console.log('db sync online')
+
   useEffect(() => {
+
+    console.log('running db syncer')
+
+    if (dbUpdatePending.length > 0) {
+
+      //find and update current item
+      if(UpdateItem(dbUpdatePending[0])){
+        // dbUpdatePending.shift()
+      }
+
+    }
+
     
-  }, [inbox]);
+  }, [dbUpdatePending]);
 
-  useEffect(() => {
+  
 
-  }, [tasks]);
+  // useEffect(() => {
 
-  useEffect(() => {
+  // }, [tasks]);
 
-  }, [missions]);
+  // useEffect(() => {
 
-  useEffect(() => {
+  // }, [missions]);
 
-  }, [events]);
+  // useEffect(() => {
 
-  useEffect(() => {
+  // }, [events]);
 
-  }, [references])
+  // useEffect(() => {
+
+  // }, [references])
+
+  const lastUpdated = new Date().getTime();
+  setLastUpdated(lastUpdated)
 
   return lastUpdated
 }

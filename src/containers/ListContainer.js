@@ -2,16 +2,17 @@ import React from 'react';
 import List from '../components/List';
 import { useParams } from 'react-router-dom';
 import { useMyStore } from '../store';
+import { removeTrash } from '../functions';
 
 function ListContainer() {
 
     const title = useParams().category;
-    const content = useMyStore(store => store[title.toLowerCase()]);
+    let content = useMyStore(store => store[title.toLowerCase()]);
 
     return (
         <div className='h-100 pa2'>
             <div className='h-10'>
-                <h5 className='fw3 white'>EXP: {20}</h5>
+                <h5 className='fw3 white'>EXP: {0}</h5>
             </div>
             <div className='h-90 pa1'>
                 <div className='h-100 w-100 center pa1'>
