@@ -52,7 +52,7 @@ export default function ItemDetails({ id, touchFunction }) {
                     <h5 className='white b pb2'>Name: {item.name}</h5>
                     <h5 className='white pb2'>Entry Date: {(new Date(item.entryDate)).toISOString().substr(0, 10)} </h5>
                     <br />
-                    <Processor item={item} nextItemID={nextItemID} touchFunction={touchFunction} itemIndex={indx} />
+                    <Processor item={item} nextItemID={nextItemID} itemIndex={indx} />
                 </div>
             );
         }

@@ -6,7 +6,7 @@ import DatePicker from './DatePicker';
 import Scroll from './Scroll';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
-import { uploadNewMission } from '../api';
+import { UploadItem, uploadNewMission } from '../api';
 
 export default function NewMission({ updateExp, shipItems, changeNav, db }) {
 
@@ -52,7 +52,7 @@ export default function NewMission({ updateExp, shipItems, changeNav, db }) {
         m.status = status;
 
         addMission(m);
-        uploadNewMission(m);
+        UploadItem(m);
         // updateExp(5);
 
         navigate(`/Missions/${m.id}`);

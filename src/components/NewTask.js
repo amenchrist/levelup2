@@ -5,7 +5,7 @@ import { pushChanges } from '../functions';
 import DatePicker from './DatePicker';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
-import { uploadNewTask } from '../api';
+import { UploadItem, uploadNewTask } from '../api';
 
 export default function NewTask({  shipItems, itemID, db, title }) {
 
@@ -36,7 +36,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
 
         // updateExp(5);
         addTask(t);
-        uploadNewTask(t);
+        UploadItem(t);
         if(title === MISSIONS){
            addToMissionTasks(t, associatedMissionID);
         }

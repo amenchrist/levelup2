@@ -1,22 +1,7 @@
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
-import { TaskList } from "./data/TaskList";
-import { MissionsList } from "./data/MissionsList";
-import { InboxItems } from "./data/InboxItems";
-import { ASAP, DAILY, DONE, PROCESSED, SOMEDAY } from "./constants";
-import { completedFilter, dailyFilter, inboxFilter, processedFilter, somedayFilter, todayFilter, trashFilter } from "./functions";
 
 function store(set) {
-
-    // let trash = InboxItems.concat(TaskList, MissionsList).filter(item => item.isTrashed);
-    // // let inbox = InboxItems.filter((entry) => (entry.isTrashed === false) && entry.status !== PROCESSED );
-    // let missions = MissionsList.filter(entry => !entry.isTrashed);
-    // let tasks = TaskList.filter(entry => !entry.isTrashed);
-    // let today = TaskList;
-    // let daily = TaskList;
-    // let completed = tasks.concat(missions);
-    // let processed = InboxItems;
-    // let someday = tasks.concat(missions);
 
     return {
         lastUpdated: 0,
@@ -31,7 +16,6 @@ function store(set) {
         allMissions: [],
         allReferences: [],
         allEvents: [],
-
         setAllInbox: items => set(() => ({allInbox: [...items]})),
         setAllTasks: items => set(() => ({allTasks: [...items]})),
         setAllMissions: items => set(() => ({allMissions: [...items]})),
@@ -56,7 +40,6 @@ function store(set) {
         processed: [],
         someday: [],
         trash: [],
-
         setTodaysMission: items => set(() => ({today: [...items]})),
         setDailyExercises: items => set(() => ({daily: [...items]})),
         setCompleted: items => set(() => ({completed: [...items]})),
@@ -68,23 +51,22 @@ function store(set) {
         addItem: item => set((store) => ({allInbox: [item, ...store.allInbox]})),
         updateItem: item => set((store) => ({allInbox: store.allInbox.map( i => i.id === item.id ? item : i )})),
 
-        addTask: task => set(store => ({tasks: [...store.allTasks, task]})),
-        updateTask: item => set((store) => ({tasks: store.allTasks.map( i => i.id === item.id ? item : i )})),
+        addTask: task => set(store => ({allTasks: [...store.allTasks, task]})),
+        updateTask: item => set((store) => ({allTasks: store.allTasks.map( i => i.id === item.id ? item : i )})),
 
-        addMission: item => set((store) => ({missions: [item, ...store.allMissions]})),
-        updateMission: item => set((store) => ({missions: store.allMissions.map( i => i.id === item.id ? item : i )})),
+        addMission: item => set((store) => ({allMissions: [item, ...store.allMissions]})),
+        updateMission: item => set((store) => ({allMissions: store.allMissions.map( i => i.id === item.id ? item : i )})),
 
-        addEvent: item => set((store) => ({events: [item, ...store.allEvents]})),
-        updateEvent: item => set((store) => ({events: store.allEvents.map( i => i.id === item.id ? item : i )})),
+        addEvent: item => set((store) => ({allEvents: [item, ...store.allEvents]})),
+        updateEvent: item => set((store) => ({allEvents: store.allEvents.map( i => i.id === item.id ? item : i )})),
 
-        addReference: item => set((store) => ({references: [item, ...store.allReferences]})),
-        updateReference: item => set((store) => ({references: store.allReferences.map( i => i.id === item.id ? item : i )})),
-        
+        addReference: item => set((store) => ({allReferences: [item, ...store.allReferences]})),
+        updateReference: item => set((store) => ({allReferences: store.allReferences.map( i => i.id === item.id ? item : i )})),
         
 
         dbUpdatePending: [],
         setDbUpdatePending: item => set(store => ({dbUpdatePending: [...store.dbUpdatePending, item]})),
-        updateDbUpdatePending: items => set(store => ({dbUpdatePending: [...items]})),
+        updateDbUpdatePending: items => set(() => ({dbUpdatePending: [...items]})),
     }
 }
 

@@ -6,16 +6,25 @@ import {  PROCESSED, TASK, PENDING, UNPROCESSED, REFERENCE, ADD, UPDATE, REMOVE,
 import DatePicker from '../components/DatePicker';
 import { pushChanges  } from '../functions';
 import TaskControls from '../components/TaskControls';
+import { useMyStore } from '../store';
+import { useNavigate } from 'react-router-dom';
 
 
-export default function Processor({ nextItemID, item, touchFunction, changeItemID, itemIndex, db, shipItems, changeNav }) {
+export default function Processor({ nextItemID, item }) {
 
-    const InboxItems = db.Inbox;
-    const MissionList = db.Missions;
-    const TaskList = db.Tasks;
-    const SomedayList = db.Someday;
-    const References = db.References;
-    const Events = db.Events;
+    const { inbox, tasks, missions, someday, events, references } = useMyStore();
+    const { addTask, addMission, addEvent, addReference } = useMyStore();
+    const { setDbUpdatePending, updateItem, updateReference, updateMission } = useMyStore();
+
+    const navigate = useNavigate();
+
+
+    const InboxItems = inbox;
+    const TaskList = tasks;
+    const MissionList = missions;
+    const Events = events;
+    const References = references;
+    const SomedayList = someday;
 
     
 
@@ -46,8 +55,10 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
         let proj = new Mission( outcome );
         setNewMission(proj);
         setNewMissionID(proj.id);
-        //MissionList.unshift(proj);
-        // pushChanges(ADD, proj, "Missions");
+
+        addMission(proj);
+        setDbUpdatePending(proj);
+
         updateStatus();
         //InboxItems.splice(itemIndex,1);
         // pushChanges(REMOVE, item, "Inbox");
@@ -70,7 +81,8 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
 
         //ADD TASK TO TASK LIST AND 
         //TaskList.unshift(task);
-        pushChanges(ADD, task, "Tasks", shipItems);
+        addTask(task)
+        setDbUpdatePending(task)
 
         // InboxItems.splice(itemIndex,1);
         // pushChanges(REMOVE, item, "Inbox");
@@ -81,6 +93,10 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
 
         let ref = new Reference(name);
         setNewReference(ref);
+        
+        addReference(ref);
+        setDbUpdatePending(ref);
+
         console.log("new ref = ", ref);
         setNextID(ref.id); 
 
@@ -90,61 +106,58 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
 
         let ev = new Event(name);
         setNewEvent(ev);
+
+        addEvent(ev);
+        setDbUpdatePending(ev);
+
         console.log("new event = ", ev);
         setNextID(ev.id); 
 
     }
 
-    function amendList(action, list, item, itemndx){
-        let dbList;
-        switch (list) {
-            case MissionList:
-                dbList = "Missions"
-            break;
-            case InboxItems:
-                dbList = "Inbox"
-            break;
-            case References:
-                dbList = "References"
-            break;
-            case Events:
-                dbList = "Events"
-            break;
-            case TaskList:
-                dbList = "Tasks"
-            break;
-            default:
-        }
-        switch (action) {
-            case REMOVE:
-                //list.splice(itemndx, 1);
-                //pushChanges(REMOVE, item, dbList, shipItems);
-            break;
-            case ADD:
-                list.unshift(item);
-                //pushChanges(ADD, item, dbList, shipItems);
-            break;
-            default:
-        }
+    // function amendList(action, list, item, itemndx){
+    //     let dbList;
+    //     switch (list) {
+    //         case MissionList:
+    //             dbList = "Missions"
+    //         break;
+    //         case InboxItems:
+    //             dbList = "Inbox"
+    //         break;
+    //         case References:
+    //             dbList = "References"
+    //         break;
+    //         case Events:
+    //             dbList = "Events"
+    //         break;
+    //         case TaskList:
+    //             dbList = "Tasks"
+    //         break;
+    //         default:
+    //     }
+    //     switch (action) {
+    //         case REMOVE:
+    //             //list.splice(itemndx, 1);
+    //             //pushChanges(REMOVE, item, dbList, shipItems);
+    //         break;
+    //         case ADD:
+    //             list.unshift(item);
+    //             //pushChanges(ADD, item, dbList, shipItems);
+    //         break;
+    //         default:
+    //     }
 
-    }
+    // }
 
     function updateStatus() {
         item.status = PROCESSED;
         item.processedDate = new Date().toISOString().substr(0, 10);
-        pushChanges(UPDATE, item, "Inbox", shipItems);
+        updateItem(item)
     }
     
     function processNextItem(e){
         setStep(0);
-        //touchFunction(e);
-        let nav = { 
-            title: INBOX,
-            view: DETAILS,
-            ID: nextItemID
-        }
-
-        changeNav(nav);
+        navigate(`/Inbox/${nextItemID}`);
     }
 
     function proceed() {
@@ -152,7 +165,7 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
     }
 
     function refresh(){
-        changeItemID(item.id);
+        navigate(`/Inbox/${item.id}`);
     }
 
     
@@ -176,22 +189,11 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
     }
 
     function viewNewReference(id) {
-        nav = {
-            title: REFERENCES,
-            view: DETAILS,
-            ID: id
-        }
-        changeNav(nav);
+        navigate(`/Reference/${id}`);
     }
 
     function viewNewEvent(id) {
-        nav = {
-            title: EVENTS,
-            view: DETAILS,
-            ID: id
-        }
-
-        changeNav(nav);
+        navigate(`/Event/${id}`);
     }
 
     function saveDate(date){
@@ -230,8 +232,8 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
                     <h2 className='white tc pb2'>Any details to add?</h2>
                     <form onSubmit={(e) => { 
                         newReference.details = refDetails; 
-                        console.log(newReference); 
-                        pushChanges(UPDATE, newReference, "References", shipItems);
+                        updateReference(newReference);
+                        setDbUpdatePending(newReference)
                         updateStatus(); 
                         e.preventDefault(); 
                         proceed() 
@@ -252,8 +254,8 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
                 <DatePicker item={newEvent} dueDate={newEvent.date} updateFunc={saveEventDate}/>
                 <div>
                     <button className="button" onClick={() => { 
-                        pushChanges(ADD, newEvent, "Events", shipItems);
-                        amendList(ADD, Events, newEvent, 0); 
+                        addEvent(newEvent);
+                        setDbUpdatePending(newEvent);
                         updateStatus(); 
                         proceed(); 
                     }} >CONTINUE</button>
@@ -263,7 +265,7 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
         )
         case ( isActionable === false && step === 4 ):
             if (referenced === true ) {}
-            if (incubated === true ) {;}
+            if (incubated === true ) {}
             // Added to references
             return (
                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
@@ -316,12 +318,14 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
                     yes={() => { 
                         setIsDoneInaYear(true); 
                         newMission.taskList.unshift(newTask.id);
-                        pushChanges(ADD, newMission, "Missions", shipItems);
-                        amendList(ADD, MissionList, newMission, 0); proceed() 
+                        addMission(newMission)
+                        setDbUpdatePending(newMission);
                     }} 
                     no={() => { 
                         newMission.taskList.unshift(newTask.id); 
-                        amendList(ADD, SomedayList, newMission, 0);
+                        newMission.dueDate = SOMEDAY
+                        updateMission(newMission)
+                        setDbUpdatePending(newMission);
                         setIsDoneInaYear(false); 
                         updateStatus(); 
                         proceed();
@@ -334,7 +338,11 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
                     <QuestionAndOptions question='Can the desired outcome be reached within the next 12 months?' 
                     yes={() => { setIsDoneInaYear(true); proceed() }} 
-                    no={() => { amendList(ADD, SomedayList, newTask, 0); setIsDoneInaYear(false); updateStatus(); proceed() }} />
+                    no={() => { 
+                        newTask.dueDate = SOMEDAY
+                        setIsDoneInaYear(false); 
+                        updateStatus(); 
+                        proceed() }} />
                 </div>
             )
         case ( isMultistep === true && step === 6 && isDoneInaYear === true ):
@@ -343,7 +351,7 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
                     <h3 className='white tc pb2'>A new Mission has been added</h3>
                     <button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
-                    <button className="button" id={nextItemID} onClick={() => changeNav(nav)} >VIEW MISSION</button>
+                    <button className="button" id={nextItemID} onClick={() => navigate(`/Mission/${newMissionID}`)} >VIEW MISSION</button>
                 </div>
             )
         case ( isMultistep === true && step === 6 && isDoneInaYear === false ):
@@ -369,7 +377,10 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
             return (
                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
                     <QuestionAndOptions question='Can it be done now in 5 minutes or less?' 
-                    yes={() => { setIsDoneInFive(true); pushChanges(ADD, newTask, "Tasks", shipItems); amendList(ADD, TaskList, newTask, 0); proceed() }} 
+                    yes={() => { 
+                        setIsDoneInFive(true); 
+                        addTask(newTask);
+                        setDbUpdatePending(newTask)}} 
                     no={() => { setIsDoneInFive(false); proceed() }} />
                 </div>
             )
@@ -381,7 +392,7 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
                     <div className='w-100 pa2 pb3' >
                         <h3 className='fw7 b white pb2'>{newTask.name}</h3>
                     </div>
-                    <button className="button" onClick={() => { updateStatus();  changeNav(nav) }} >GO TO TASK </button>
+                    <button className="button" onClick={() => { updateStatus();  navigate(`/Task/${newTaskID}`) }} >GO TO TASK </button>
                     {/* <button className="button" id={nextItemID} onClick={() => changeNav(nav)} >VIEW TASK</button> */}
                 </div>
             )
@@ -411,7 +422,7 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
                     <DatePicker item={newTask} dueDate={newTask.dueDate} updateFunc={saveTaskDate} />
                     <div>
                         {/* <button className="button" onClick={() => { setDueDate("ASAP"); console.log(newTask); proceed(); }}>ASAP</button> */}
-                        <button className="button" onClick={() => { setDueDate(newTask.dueDate); console.log(newTask); proceed(); }} >CONTINUE</button>
+                        <button className="button" onClick={() => { setDueDate(newTask.dueDate); proceed(); }} >CONTINUE</button>
                     </div>
                 </div>
             )
@@ -422,9 +433,8 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
                     submitFunction={(answer) => { 
                         setRequiredContext(answer); 
                         newTask.requiredContext = answer;
-                        pushChanges(ADD, newTask, "Tasks", shipItems)
-                        amendList(ADD, TaskList, newTask, 0);
-                        
+                        addTask(newTask);
+                        setDbUpdatePending(newTask);                        
                         proceed(); }} />
                 </div>
             )
@@ -433,7 +443,7 @@ export default function Processor({ nextItemID, item, touchFunction, changeItemI
                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 show flex items-center flex-column' >
                     <h3 className='white tc pb2'>A new Task has been added</h3>
                     <button className="button" id={nextItemID} onClick={ processNextItem } >PROCESS NEXT ITEM</button>
-                    <button className="button" id={nextItemID} onClick={() => changeNav(nav)} >VIEW TASK</button>
+                    <button className="button" id={nextItemID} onClick={() => navigate(`/Task/${newTaskID}`)} >VIEW TASK</button>
                 </div>
             )
         default:

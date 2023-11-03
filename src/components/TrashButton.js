@@ -78,8 +78,6 @@ export default function TrashButton({ shipItems, changeNav, id }) {
         switch(title){
             case INBOX:
                 updateItem(currentItem);
-                //setInbox(inboxFilter(inbox));
-                // setLocalInbox(inboxFilter(inbox))
             break
             case TASK:
                 updateTask(currentItem)

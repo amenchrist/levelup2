@@ -4,7 +4,7 @@ import {  Event } from '../classes';
 import { pushChanges, convertDateToMilliseconds  } from '../functions';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
-import { uploadNewEvent } from '../api';
+import { UploadItem } from '../api';
 
 
 export default function NewEvent({ updateExp, shipItems, changeNav, db }) {
@@ -29,7 +29,7 @@ export default function NewEvent({ updateExp, shipItems, changeNav, db }) {
         let e = new Event( name, date, time, location, frequency );
         console.log(e);
         addEvent(e);
-        uploadNewEvent(e)
+        UploadItem(e)
         // updateExp(5);
 
         navigate(`/Events/${e.id}`);

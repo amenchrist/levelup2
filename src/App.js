@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Router from './routes';
 import { useMyStore } from './store';
-import { getInbox, getTasks, getMissions, getEvents, getReferences, UpdateItem } from './api';
+import { getInbox, getTasks, getMissions, getEvents, getReferences, UpdateItem, GetAll } from './api';
 import { completedFilter, dailyFilter, inboxFilter, missionFilter, processedFilter, removeTrash, somedayFilter, taskFilter, todayFilter, trashFilter } from './functions';
 import useDbSyncer from './hooks/useDbSyncer';
 
@@ -19,37 +19,37 @@ export default function App() {
     const { setTodaysMission, setDailyExercises, setCompleted, setProcessed, setSomeday, setTrash } = useMyStore();
 
     const { allInbox, allTasks, allMissions, allEvents, allReferences,  } = useMyStore();
-    const { inbox, tasks, missions, events, references, dbUpdatePending, updateDbUpdatePending } = useMyStore();
+    const { inbox, tasks, missions, events, dbUpdatePending, updateDbUpdatePending } = useMyStore();
     
     const store = useMyStore();
     console.log(store)
     useEffect(() => {
-        getInbox(setInboxFS);
-        getTasks(setTasksFS);
-        getMissions(setMissionsFS);
-        getEvents(setEventsFS);
-        getReferences(setReferencesFS);
+        GetAll(setInboxFS, 'inbox');
+        GetAll(setTasksFS, 'task');
+        GetAll(setMissionsFS, 'mission');
+        GetAll(setEventsFS, 'event');
+        GetAll(setReferencesFS, 'reference');
     }, []);
 
     useEffect(() => {
         setAllInbox(inboxFS);
-    }, [inboxFS, setInbox]);
+    }, [inboxFS, setAllInbox]);
 
     useEffect(() => {
         setAllTasks(tasksFS);
-    }, [tasksFS, setTasks]);
+    }, [tasksFS, setAllTasks]);
 
     useEffect(() => {
         setAllMissions(missionsFS);
-    }, [missionsFS, setMissions]);
+    }, [missionsFS, setAllMissions]);
 
     useEffect(() => {
         setAllEvents(eventsFS);
-    }, [eventsFS, setEvents]);
+    }, [eventsFS, setAllEvents]);
 
     useEffect(() => {
         setAllReferences(referencesFS);
-    }, [referencesFS, setReferences]);
+    }, [referencesFS, setAllReferences]);
 
 //---------------------------------------//
 
@@ -77,8 +77,8 @@ export default function App() {
 
     //Today's Mission
     useEffect(() => {
-        setTodaysMission(todayFilter(tasks.concat(missions)));
-    }, [tasks, missions, setTodaysMission]);
+        setTodaysMission(todayFilter(tasks.concat(missions, events)));
+    }, [tasks, missions, events, setTodaysMission]);
 
     //Daily Exercises
     useEffect(() => {
@@ -102,14 +102,10 @@ export default function App() {
 
     //Trash
     useEffect(() => {
-        setTrash(trashFilter(allInbox.concat(tasks, missions, events, references)));
-    }, [inbox, tasks, missions, events, references,  setTrash]);
+        setTrash(trashFilter(allInbox.concat(allTasks, allMissions, allEvents, allReferences)));
+    }, [allInbox, allTasks, allMissions, allEvents, allReferences,  setTrash]);
 
     //---------------------------------------///
-
-    // const lastUpdated = useDbSyncer();
-
-    // console.log(lastUpdated)
 
     useEffect(() => {        
        if (dbUpdatePending.length > 0) {
@@ -123,7 +119,7 @@ export default function App() {
           }
         }
     
-      }, [dbUpdatePending]);
+      }, [dbUpdatePending, updateDbUpdatePending]);
 
 
     return (

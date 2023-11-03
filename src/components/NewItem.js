@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { INBOX, DETAILS,REFERENCE, ADD, EVENT, TASK, MISSION } from '../constants';
+import { INBOX, REFERENCE, EVENT, TASK, MISSION } from '../constants';
 import { Item } from '../classes';
 import NewTask from './NewTask';
 import NewMission from './NewMission';
@@ -7,7 +7,7 @@ import NewReference from './NewReference';
 import NewEvent from './NewEvent';
 import { useNavigate } from 'react-router-dom';
 import { useMyStore } from '../store';
-import { uploadNewItem } from '../api';
+import { UploadItem } from '../api';
 
 export default function NewItem({  updateExp }) {
 
@@ -18,9 +18,7 @@ export default function NewItem({  updateExp }) {
     const [ form, setForm ] = useState(INBOX);
 
     function reset(){
-        //changeTitle(INBOX);
         setName('Enter item name');
-        // setDescription('');
     }
 
     function submitNewItem(event) {
@@ -28,17 +26,13 @@ export default function NewItem({  updateExp }) {
             event.preventDefault();
             let i = new Item(name);
             addItem(i);
-            uploadNewItem(i);
+            UploadItem(i);
             reset();
             // updateExp(5);
 
             navigate(`/Inbox/${i.id}`);
         }
         event.preventDefault();
-    }
-
-    function uploadItem(item){
-
     }
 
     function displayTypeForm(){

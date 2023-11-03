@@ -3,7 +3,7 @@ import { ADD, DETAILS, REFERENCES, REFERENCE } from '../constants';
 import { Reference } from '../classes';
 import { pushChanges, convertDateToMilliseconds  } from '../functions';
 import { useMyStore } from '../store';
-import { uploadNewReference } from '../api';
+import { UploadItem, uploadNewReference } from '../api';
 import { useNavigate } from 'react-router-dom';
 
 export default function NewReference({ updateExp, shipItems, changeNav, db }) {
@@ -26,7 +26,7 @@ export default function NewReference({ updateExp, shipItems, changeNav, db }) {
         let r = new Reference(name, details );
         console.log(r);
         addReference(r);
-        uploadNewReference(r)
+        UploadItem(r)
         // updateExp(5);
 
         navigate(`/References/${r.id}`);
