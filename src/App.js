@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Router from './routes';
 import { useMyStore } from './store';
-import { getInbox, getTasks, getMissions, getEvents, getReferences, UpdateItem, GetAll } from './api';
+import { UpdateItem, GetAll } from './api';
 import { completedFilter, dailyFilter, inboxFilter, missionFilter, processedFilter, removeTrash, somedayFilter, taskFilter, todayFilter, trashFilter } from './functions';
-import useDbSyncer from './hooks/useDbSyncer';
 
 export default function App() {
 

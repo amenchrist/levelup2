@@ -62,7 +62,9 @@ function store(set) {
 
         addReference: item => set((store) => ({allReferences: [item, ...store.allReferences]})),
         updateReference: item => set((store) => ({allReferences: store.allReferences.map( i => i.id === item.id ? item : i )})),
-        
+
+        updateAny: item =>  set((store) => ({"`allReferences`" : store.allReferences.map( i => i.id === item.id ? item : i )})),
+
 
         dbUpdatePending: [],
         setDbUpdatePending: item => set(store => ({dbUpdatePending: [...store.dbUpdatePending, item]})),

@@ -12,22 +12,11 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Processor({ nextItemID, item }) {
 
-    const { inbox, tasks, missions, someday, events, references } = useMyStore();
     const { addTask, addMission, addEvent, addReference } = useMyStore();
     const { setDbUpdatePending, updateItem, updateReference, updateMission } = useMyStore();
 
     const navigate = useNavigate();
-
-
-    const InboxItems = inbox;
-    const TaskList = tasks;
-    const MissionList = missions;
-    const Events = events;
-    const References = references;
-    const SomedayList = someday;
-
     
-
     const [ outcome, setOutcome ] = useState('');
     const [ requiredContext, setRequiredContext ] = useState('');
     const [ isActionable, setIsActionable ] = useState(null);
@@ -60,8 +49,7 @@ export default function Processor({ nextItemID, item }) {
         setDbUpdatePending(proj);
 
         updateStatus();
-        //InboxItems.splice(itemIndex,1);
-        // pushChanges(REMOVE, item, "Inbox");
+
         setNextID(proj.id);
     }
 
@@ -80,12 +68,9 @@ export default function Processor({ nextItemID, item }) {
         setNextID(task.id);  
 
         //ADD TASK TO TASK LIST AND 
-        //TaskList.unshift(task);
         addTask(task)
         setDbUpdatePending(task)
 
-        // InboxItems.splice(itemIndex,1);
-        // pushChanges(REMOVE, item, "Inbox");
         setNewTaskID(task.id);  
     }
 
@@ -152,7 +137,9 @@ export default function Processor({ nextItemID, item }) {
     function updateStatus() {
         item.status = PROCESSED;
         item.processedDate = new Date().toISOString().substr(0, 10);
-        updateItem(item)
+        updateItem(item);
+        setDbUpdatePending(item)
+
     }
     
     function processNextItem(e){
@@ -167,25 +154,9 @@ export default function Processor({ nextItemID, item }) {
     function refresh(){
         navigate(`/Inbox/${item.id}`);
     }
-
     
     if (item.status === UNPROCESSED && step === 0){
         proceed();
-    }
-
-    let nav;
-    if (isMultistep){
-        nav = {
-            title: MISSIONS,
-            view: DETAILS,
-            ID: newMission.id
-        }
-    } else if(isMultistep === false && step >4){
-        nav = {
-            title: TASKS,
-            view: DETAILS,
-            ID: newTask.id
-        }
     }
 
     function viewNewReference(id) {
@@ -201,8 +172,20 @@ export default function Processor({ nextItemID, item }) {
 
     }
 
+    function trashItem() {
+        setTrashed(true); item.isTrashed = true; updateStatus(); proceed();
+    }
+
+    function addToReferences() {
+        setReferenced(true); makeNewReference(item.name); proceed() 
+    }
+
+    function addToEvents() {
+         setIncubated(true); makeNewEvent(item.name); proceed();
+    }
+
     switch(true) {
-        case ( step === 1 ):
+        case ( step === 1 ): //Is this item actionable?
             return (
                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
                     <QuestionAndOptions question='Is this Actionable?' 
@@ -210,12 +193,12 @@ export default function Processor({ nextItemID, item }) {
                     no={() => { setIsActionable(false); proceed() }} />
                 </div>
             )
-        case ( isActionable === false && step === 2 ):
+        case ( isActionable === false && step === 2 ): //As it's not actionable Present options to Add to reference or create an event reminder or trash item
             return (
                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
-                    <button className="button" id={nextItemID} onClick={() => { setReferenced(true); makeNewReference(item.name); proceed() }} >ADD TO REFERENCES</button>
-                    <button className="button" id={nextItemID} onClick={() => { setIncubated(true); makeNewEvent(item.name); proceed() }} >ADD TO EVENTS</button>
-                    {/* <button className="button" id={nextItemID} onClick={() => { setTrashed(true); trashItem(); proceed() }} >TRASH</button> */}
+                    <button className="button" id={nextItemID} onClick={() => addToReferences()} >ADD TO REFERENCES</button>
+                    <button className="button" id={nextItemID} onClick={() => addToEvents()} >ADD TO EVENTS</button>
+                    <button className="button" id={nextItemID} onClick={() => trashItem() } >TRASH</button>
                 </div>
             )
         case ( trashed === true && step === 3 ):
@@ -385,7 +368,6 @@ export default function Processor({ nextItemID, item }) {
                 </div>
             )
         case (isDoneInFive === true && step === 7):
-            console.log("new tasklKST:", TaskList)
             return (
                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
                     <h2 className='fw8 b white pb2'>LET'S DO IT!</h2>
