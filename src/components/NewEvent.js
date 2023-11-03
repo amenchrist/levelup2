@@ -9,7 +9,7 @@ import { UploadItem } from '../api';
 
 export default function NewEvent({ updateExp, shipItems, changeNav, db }) {
 
-    const { addEvent } = useMyStore();
+    const { addItem } = useMyStore();
     const navigate = useNavigate();
 
     let today = new Date().toISOString().substr(0, 10);
@@ -27,9 +27,7 @@ export default function NewEvent({ updateExp, shipItems, changeNav, db }) {
         event.preventDefault();
         
         let e = new Event( name, date, time, location, frequency );
-        console.log(e);
-        addEvent(e);
-        UploadItem(e)
+        addItem(e);
         // updateExp(5);
 
         navigate(`/Events/${e.id}`);

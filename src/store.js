@@ -47,24 +47,43 @@ function store(set) {
         setSomeday: items => set(() => ({someday: [...items]})),
         setTrash: items => set(() => ({trash: [...items]})),
 
+        updateItem: item =>  set((store) => {
+            switch(item.collection){
+                case 'inbox':
+                    return {allInbox: store.allInbox.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                case 'task':
+                    return {allTasks: store.allTasks.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                case 'mission':
+                return {allMissions: store.allMissions.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                case 'event':
+                return {allEvents: store.allEvents.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                case 'reference':
+                return {allReferences: store.allReferences.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                default: 
+                return {allInbox: store.allInbox}
+            }
+        }),
 
-        addItem: item => set((store) => ({allInbox: [item, ...store.allInbox]})),
-        updateItem: item => set((store) => ({allInbox: store.allInbox.map( i => i.id === item.id ? item : i )})),
+        addItem: item =>  set((store) => {
+            switch(item.collection){
+                case 'inbox':
+                    return {allInbox: [item, ...store.allInbox], dbUploadPending: [...store.dbUploadPending, item]}
+                case 'task':
+                    return {allTasks: [...store.allTasks, item], dbUploadPending: [...store.dbUploadPending, item]}
+                case 'mission':
+                return {allMissions: [item, ...store.allMissions], dbUploadPending: [...store.dbUploadPending, item]}
+                case 'event':
+                return {allEvents: [item, ...store.allEvents], dbUploadPending: [...store.dbUploadPending, item]}
+                case 'reference':
+                return {allReferences: [item, ...store.allReferences], dbUploadPending: [...store.dbUploadPending, item]}
+                default: 
+                return {allInbox: store.allInbox}
+            }
+        }),
 
-        addTask: task => set(store => ({allTasks: [...store.allTasks, task]})),
-        updateTask: item => set((store) => ({allTasks: store.allTasks.map( i => i.id === item.id ? item : i )})),
-
-        addMission: item => set((store) => ({allMissions: [item, ...store.allMissions]})),
-        updateMission: item => set((store) => ({allMissions: store.allMissions.map( i => i.id === item.id ? item : i )})),
-
-        addEvent: item => set((store) => ({allEvents: [item, ...store.allEvents]})),
-        updateEvent: item => set((store) => ({allEvents: store.allEvents.map( i => i.id === item.id ? item : i )})),
-
-        addReference: item => set((store) => ({allReferences: [item, ...store.allReferences]})),
-        updateReference: item => set((store) => ({allReferences: store.allReferences.map( i => i.id === item.id ? item : i )})),
-
-        updateAny: item =>  set((store) => ({"`allReferences`" : store.allReferences.map( i => i.id === item.id ? item : i )})),
-
+        dbUploadPending: [],
+        setDbUploadPending: item => set(store => ({dbUploadPending: [...store.dbUploadPending, item]})),
+        updateDbUploadPending: items => set(() => ({dbUploadPending: [...items]})),
 
         dbUpdatePending: [],
         setDbUpdatePending: item => set(store => ({dbUpdatePending: [...store.dbUpdatePending, item]})),

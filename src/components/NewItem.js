@@ -26,7 +26,6 @@ export default function NewItem({  updateExp }) {
             event.preventDefault();
             let i = new Item(name);
             addItem(i);
-            UploadItem(i);
             reset();
             // updateExp(5);
 

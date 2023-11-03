@@ -9,7 +9,7 @@ import { UploadItem, uploadNewTask } from '../api';
 
 export default function NewTask({  shipItems, itemID, db, title }) {
 
-    const { addTask } = useMyStore();
+    const { addItem } = useMyStore();
     const navigate = useNavigate();
 
 
@@ -35,8 +35,8 @@ export default function NewTask({  shipItems, itemID, db, title }) {
         t.details = details;
 
         // updateExp(5);
-        addTask(t);
-        UploadItem(t);
+        addItem(t);
+
         if(title === MISSIONS){
            addToMissionTasks(t, associatedMissionID);
         }

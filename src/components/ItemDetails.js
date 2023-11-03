@@ -6,25 +6,23 @@ import { useMyStore } from '../store';
 
 export default function ItemDetails({ id, touchFunction }) {
 
-    const { inbox } = useMyStore()
+    const { inbox } = useMyStore();
 
     // NOTE: PREV AND NEXT BUTTONS INCLUDED HERE SO THEY ARE HIDDEN DURING PROCESSING
-    const InboxItems = inbox;
-
     const [ readyToProcess, setReadyToProcess ] = useState(false);
 
     let item = {};
     let nextItemID = null;
     let indx;
 
-    for (let i=0; i<InboxItems.length; i++){
+    for (let i=0; i<inbox.length; i++){
 
-        if (InboxItems[i].id === id){
-           item = InboxItems[i];
+        if (inbox[i].id === id){
+           item = inbox[i];
 
            indx = i;
-           if (InboxItems[i+1]) {
-               nextItemID = InboxItems[i+1].id;
+           if (inbox[i+1]) {
+               nextItemID = inbox[i+1].id;
            } else {
             nextItemID = 0;
            }

@@ -12,8 +12,8 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Processor({ nextItemID, item }) {
 
-    const { addTask, addMission, addEvent, addReference } = useMyStore();
-    const { setDbUpdatePending, updateItem, updateReference, updateMission } = useMyStore();
+    const { addTask, addMission, addEvent, addReference, addItem } = useMyStore();
+    const { setDbUpdatePending, updateItem } = useMyStore();
 
     const navigate = useNavigate();
     
@@ -45,8 +45,7 @@ export default function Processor({ nextItemID, item }) {
         setNewMission(proj);
         setNewMissionID(proj.id);
 
-        addMission(proj);
-        setDbUpdatePending(proj);
+        addItem(proj);
 
         updateStatus();
 
@@ -68,8 +67,7 @@ export default function Processor({ nextItemID, item }) {
         setNextID(task.id);  
 
         //ADD TASK TO TASK LIST AND 
-        addTask(task)
-        setDbUpdatePending(task)
+        addItem(task)
 
         setNewTaskID(task.id);  
     }
@@ -79,8 +77,7 @@ export default function Processor({ nextItemID, item }) {
         let ref = new Reference(name);
         setNewReference(ref);
         
-        addReference(ref);
-        setDbUpdatePending(ref);
+        addItem(ref);
 
         console.log("new ref = ", ref);
         setNextID(ref.id); 
@@ -92,8 +89,7 @@ export default function Processor({ nextItemID, item }) {
         let ev = new Event(name);
         setNewEvent(ev);
 
-        addEvent(ev);
-        setDbUpdatePending(ev);
+        addItem(ev);
 
         console.log("new event = ", ev);
         setNextID(ev.id); 
@@ -138,8 +134,6 @@ export default function Processor({ nextItemID, item }) {
         item.status = PROCESSED;
         item.processedDate = new Date().toISOString().substr(0, 10);
         updateItem(item);
-        setDbUpdatePending(item)
-
     }
     
     function processNextItem(e){
@@ -215,8 +209,7 @@ export default function Processor({ nextItemID, item }) {
                     <h2 className='white tc pb2'>Any details to add?</h2>
                     <form onSubmit={(e) => { 
                         newReference.details = refDetails; 
-                        updateReference(newReference);
-                        setDbUpdatePending(newReference)
+                        updateItem(newReference);
                         updateStatus(); 
                         e.preventDefault(); 
                         proceed() 
@@ -237,8 +230,7 @@ export default function Processor({ nextItemID, item }) {
                 <DatePicker item={newEvent} dueDate={newEvent.date} updateFunc={saveEventDate}/>
                 <div>
                     <button className="button" onClick={() => { 
-                        addEvent(newEvent);
-                        setDbUpdatePending(newEvent);
+                        addItem(newEvent);
                         updateStatus(); 
                         proceed(); 
                     }} >CONTINUE</button>
@@ -301,14 +293,12 @@ export default function Processor({ nextItemID, item }) {
                     yes={() => { 
                         setIsDoneInaYear(true); 
                         newMission.taskList.unshift(newTask.id);
-                        addMission(newMission)
-                        setDbUpdatePending(newMission);
+                        addItem(newMission)
                     }} 
                     no={() => { 
                         newMission.taskList.unshift(newTask.id); 
                         newMission.dueDate = SOMEDAY
-                        updateMission(newMission)
-                        setDbUpdatePending(newMission);
+                        updateItem(newMission);
                         setIsDoneInaYear(false); 
                         updateStatus(); 
                         proceed();
@@ -362,8 +352,8 @@ export default function Processor({ nextItemID, item }) {
                     <QuestionAndOptions question='Can it be done now in 5 minutes or less?' 
                     yes={() => { 
                         setIsDoneInFive(true); 
-                        addTask(newTask);
-                        setDbUpdatePending(newTask)}} 
+                        addItem(newTask);
+                    }} 
                     no={() => { setIsDoneInFive(false); proceed() }} />
                 </div>
             )
@@ -415,8 +405,7 @@ export default function Processor({ nextItemID, item }) {
                     submitFunction={(answer) => { 
                         setRequiredContext(answer); 
                         newTask.requiredContext = answer;
-                        addTask(newTask);
-                        setDbUpdatePending(newTask);                        
+                        addItem(newTask);                       
                         proceed(); }} />
                 </div>
             )

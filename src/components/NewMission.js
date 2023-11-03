@@ -6,11 +6,10 @@ import DatePicker from './DatePicker';
 import Scroll from './Scroll';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
-import { UploadItem, uploadNewMission } from '../api';
 
-export default function NewMission({ updateExp, shipItems, changeNav, db }) {
+export default function NewMission() {
 
-    const { addMission } = useMyStore();
+    const { addItem } = useMyStore();
 
     const navigate = useNavigate();
 
@@ -51,8 +50,9 @@ export default function NewMission({ updateExp, shipItems, changeNav, db }) {
         m.timeRequired = timeRequired;
         m.status = status;
 
-        addMission(m);
-        UploadItem(m);
+        console.log(m)
+
+        addItem(m);
         // updateExp(5);
 
         navigate(`/Missions/${m.id}`);

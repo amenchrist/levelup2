@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function NewReference({ updateExp, shipItems, changeNav, db }) {
 
-    const { addReference } = useMyStore();
+    const { addItem } = useMyStore();
 
     const navigate = useNavigate();
 
@@ -24,9 +24,7 @@ export default function NewReference({ updateExp, shipItems, changeNav, db }) {
         event.preventDefault();
         
         let r = new Reference(name, details );
-        console.log(r);
-        addReference(r);
-        UploadItem(r)
+        addItem(r);
         // updateExp(5);
 
         navigate(`/References/${r.id}`);

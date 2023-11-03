@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import List from './List';
 import { ADD, ASAP, MISSIONS, UNPLANNED, PENDING } from '../constants';
-import { displayDays, amendList, pushChanges  } from '../functions';
+import { displayDays, pushChanges  } from '../functions';
 import { UPDATE } from '../constants';
 import DatePicker from './DatePicker';
 import NewItemButton from './NewItemButton';
@@ -9,15 +9,37 @@ import Scroll from './Scroll';
 import { Task } from '../classes';
 import { useMyStore } from '../store';
 
-export default function MissionDetails({ mission, db, shipItems, exp }) {
+export default function MissionDetails({ id }) {
 
+    const { missions, updateItem, addItem } = useMyStore();
     const TaskList = useMyStore(store => store.tasks);
     let tasks = [];
     
+    let mission = {};
+    let nextItemID = null;
+    let indx;
+
+    
+
+    for (let i=0; i<missions.length; i++){
+
+        if (missions[i].id === id){
+            mission = missions[i];
+
+           indx = i;
+           if (missions[i+1]) {
+               nextItemID = missions[i+1].id;
+           } else {
+            nextItemID = 0;
+           }
+           break;
+        }    
+    }
+    
     function getTasks(){
         
-        // console.log("from get tasks ", mission)
-        if(mission?.taskList?.length !== 0){
+        console.log("from get tasks ", mission)
+        if(mission.taskList.length !== 0){
             for(let i=0; i<mission.taskList.length; i++){
                 for(let j=0; j<TaskList.length; j++){
                     if(mission.taskList[i] === TaskList[j].id ){
@@ -31,7 +53,10 @@ export default function MissionDetails({ mission, db, shipItems, exp }) {
         return tasks.sort((a,b) => a.order - b.order);
     }
 
-    const missionTasks = getTasks();
+    let  missionTasks = []
+    if(mission.id !== undefined ){
+        missionTasks = getTasks();
+    }
 
     const [ name, setName ] = useState(mission.name);
     const [ purpose, setPurpose ] = useState(mission.purpose);
@@ -57,7 +82,6 @@ export default function MissionDetails({ mission, db, shipItems, exp }) {
     const [ note, setDetails ] = useState(mission.note);    
     
     const [ openPlanner, setOpenPlanner ] = useState(false);
-    const [ lastUpdated, setLastUpdated ] = useState(db?.lastUpdated);
     const [ showTasks, setShowTasks ] = useState(false);
 
     const [ status, setStatus ] = useState(mission.status);
@@ -82,7 +106,6 @@ export default function MissionDetails({ mission, db, shipItems, exp }) {
         setOutputRecordUrl(mission.outputRecordUrl);
 
         setTimeRequired(mission.timeRequired);
-        setLastUpdated(db?.lastUpdated);
         
         setRequirements(mission.requirements);
         setPriority(mission.priority);
@@ -95,7 +118,7 @@ export default function MissionDetails({ mission, db, shipItems, exp }) {
         setStatus(mission.status)
     }, [mission.name, mission.purpose, mission.vision, mission.principles, mission.timeRequired, 
         mission.toDo, mission.skillsRequired, mission.infoRequired, mission.abilityRequired,
-        mission.dueDate, mission.backStory, mission.outputRef, mission.outputRecordUrl, db?.lastUpdated, mission.requirements, mission.priority,
+        mission.dueDate, mission.backStory, mission.outputRef, mission.outputRecordUrl, mission.requirements, mission.priority,
         mission.frequency, mission.note, mission.timeSpent, mission.taskList, mission.status])
 
     function updateDB( obj, property, newVal) {
@@ -105,7 +128,7 @@ export default function MissionDetails({ mission, db, shipItems, exp }) {
             console.log(`old value (${obj[property]}) !== new value (${newVal})`)
 
             obj[property] = newVal;
-            amendList(db, MISSIONS, mission, UPDATE, shipItems, exp)
+            updateItem(obj)
           
         }
 
@@ -129,15 +152,13 @@ export default function MissionDetails({ mission, db, shipItems, exp }) {
         if (newTaskNames.length > 0){
             newTaskNames.forEach((element, i) => {
                 let nt = new Task(element.trim(), mission.name,"", mission.id, ASAP, i);
-                db.Tasks.unshift(nt)
-                pushChanges(ADD, nt, "Tasks", shipItems)
+                addItem(nt)
+               
                 mission.taskList.unshift(nt.id);
                 mission.status = PENDING;
-                pushChanges(UPDATE, mission, "Missions", shipItems);
-                //updateDB( mission, "taskList", newTL )
+                updateItem(mission);
             });
         }
-        console.log("All Tasks", db.Tasks);
         getTasks();
     }
 
@@ -356,7 +377,7 @@ export default function MissionDetails({ mission, db, shipItems, exp }) {
         
                                 <button onClick={()=> {
                                     setStatus(PENDING); mission.status = PENDING; 
-                                    pushChanges(UPDATE, mission, "Missions", shipItems) 
+                                    updateItem(mission);
                                     }} >MARK AS PLANNED</button>
         
                                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >

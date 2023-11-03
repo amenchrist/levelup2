@@ -99,7 +99,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
         case title === MISSIONS:
             return (
                 <DetailsContainer category={title} >
-                    <MissionDetails mission={item} updateExp={updateExp}/>
+                    <MissionDetails mission={item} id={itemID} updateExp={updateExp}/>
                 </DetailsContainer>
             )
         case title === TASKS:
