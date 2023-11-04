@@ -6,7 +6,7 @@ import { useMyStore } from '../store';
 
 export default function ItemDetails({ id, touchFunction }) {
 
-    const { inbox } = useMyStore();
+    const { inbox, processorOn, setProcessorOn } = useMyStore();
 
     // NOTE: PREV AND NEXT BUTTONS INCLUDED HERE SO THEY ARE HIDDEN DURING PROCESSING
     const [ readyToProcess, setReadyToProcess ] = useState(false);
@@ -31,7 +31,7 @@ export default function ItemDetails({ id, touchFunction }) {
     }
 
     if (item.name) {
-        switch(readyToProcess){
+        switch(processorOn){
         case false:
             return (
                 <div className='h-100' >
@@ -39,7 +39,7 @@ export default function ItemDetails({ id, touchFunction }) {
                     <h5 className='white pb2'>Entry Date: {(new Date(item.entryDate)).toISOString().substr(0, 10)} </h5>
                     {/* <h5 className='white pb2'>Status: {item.status} </h5> */}
                     <div className='h-80 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column ' >
-                        <button onClick={()=> setReadyToProcess(true)} >PROCESS THIS</button>
+                        <button onClick={()=> setProcessorOn(true)} >PROCESS THIS</button>
                     </div>
                     <NewItemButton />
                 </div>

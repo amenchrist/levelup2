@@ -1,100 +1,26 @@
 import React from 'react';
-import { DETAILS, INBOX_ITEM, MISSION, REFERENCE, EVENT, REMOVE, TASK, ADD, INBOX, TASKS, MISSIONS, REFERENCES, EVENTS, UPDATE, LIST, TRASH } from '../constants';
-import { calculateTime, pushChanges } from '../functions';
+import { useMyStore } from '../store';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function TrashedItemDetails({ changeNav, item, db, shipItems }) {
 
+    const { deleteItem, updateItem } = useMyStore();
+    const navigate = useNavigate();
+
+    const collection = item.collection
+    const category = collection.split('').toSpliced(0,1,collection[0].toUpperCase()).join('');
+
     function restore(){
-        let list, dbList, title;
-        switch(item.type){
-            case INBOX_ITEM:
-                list = db.Inbox;
-                dbList = "Inbox";
-                title = INBOX;
-            break;
-            case TASK:
-                list = db.Tasks;
-                dbList = "Tasks";
-                title = TASKS;
-            break;
-            case MISSION:
-                list = db.Missions;
-                dbList = "Missions";
-                title = MISSIONS;
-            break;
-            case REFERENCE:
-                list = db.References;
-                dbList = "References";
-                title = REFERENCES;
-            break;
-            case EVENT:
-                list = db.Events;
-                dbList = "Events";
-                title = EVENTS;
-            break;
-            default:
-        }
         item.isTrashed = false;
         item.trashedDate = 0;
-        // const itemIndex = db.Trash.indexOf(item.id);
-        // db.Trash.splice(itemIndex,1);
-        // pushChanges(REMOVE, item, "Trash", shipItems);
-        //list.unshift(item);
-        pushChanges(UPDATE, item, dbList, shipItems)
-        changeNavigation(item.id, title)
+        updateItem(item);
+        navigate(`/${category}/${item.id}`);
+
     }
 
     function deleteFromDB(){
-        console.log("Deleting item")
-        let list, dbList, title;
-        switch(item.type){
-            case INBOX_ITEM:
-                list = db.Inbox;
-                dbList = "Inbox";
-                title = INBOX;
-            break;
-            case TASK:
-                list = db.Tasks;
-                dbList = "Tasks";
-                title = TASKS;
-            break;
-            case MISSION:
-                list = db.Missions;
-                dbList = "Missions";
-                title = MISSIONS;
-            break;
-            case REFERENCE:
-                list = db.References;
-                dbList = "References";
-                title = REFERENCES;
-            break;
-            case EVENT:
-                list = db.Events;
-                dbList = "Events";
-                title = EVENTS;
-            break;
-            default:
-        }
-        const itemIndex = list.map( e => e.id).indexOf(item.id);
-        console.log("Trash details item index: ", itemIndex)
-        list.splice(itemIndex,1);
-        console.log("List from trash : ", itemIndex)
-        // pushChanges(REMOVE, item, "Trash", shipItems);
-        //list.unshift(item);
-        pushChanges(REMOVE, item, dbList, shipItems)
-        changeNavigation(0, TRASH, LIST);
-
-    }
-
-
-    function changeNavigation(id, title, view){
-       
-        let nav = {
-            title: title,
-            view,
-            ID: id
-        }
-        changeNav(nav);        
+        deleteItem(item);
+        navigate(`/Trash`);
     }
     
     return (

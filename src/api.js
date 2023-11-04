@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { getDocs, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import { getDocs, collection, doc, setDoc, updateDoc,  deleteDoc } from "firebase/firestore";
 
 //INBOX
 const inboxCollectionRef = collection(db, 'inbox');
@@ -105,6 +105,17 @@ export async function UploadItem(item){
         return true
     } catch(e){
         console.log(`Something went wrong UPLOADING to firestore ${item.collection} collection`, e)
+        return false
+    }
+}
+
+//Delete ANY Item
+export async function DeleteItem(item){
+    try{
+        await deleteDoc(doc(db, item.collection, item.id), {...item});
+        return true
+    } catch(e){
+        console.log(`Something went wrong DELETING to firestore ${item.collection} collection`, e)
         return false
     }
 }

@@ -22,7 +22,6 @@ function store(set) {
         setAllEvents: items => set(() => ({allEvents: [...items]})),
         setAllReferences: items => set(() => ({allReferences: [...items]})),
 
-        // get inbox() { return inboxFilter(this.allInbox) },
         inbox: [],
         tasks: [],
         missions: [],
@@ -47,22 +46,8 @@ function store(set) {
         setSomeday: items => set(() => ({someday: [...items]})),
         setTrash: items => set(() => ({trash: [...items]})),
 
-        updateItem: item =>  set((store) => {
-            switch(item.collection){
-                case 'inbox':
-                    return {allInbox: store.allInbox.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
-                case 'task':
-                    return {allTasks: store.allTasks.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
-                case 'mission':
-                return {allMissions: store.allMissions.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
-                case 'event':
-                return {allEvents: store.allEvents.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
-                case 'reference':
-                return {allReferences: store.allReferences.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
-                default: 
-                return {allInbox: store.allInbox}
-            }
-        }),
+        processorOn: false,
+        setProcessorOn: value => set(() => ({processorOn: value})),
 
         addItem: item =>  set((store) => {
             switch(item.collection){
@@ -85,9 +70,47 @@ function store(set) {
         setDbUploadPending: item => set(store => ({dbUploadPending: [...store.dbUploadPending, item]})),
         updateDbUploadPending: items => set(() => ({dbUploadPending: [...items]})),
 
+        updateItem: item =>  set((store) => {
+            switch(item.collection){
+                case 'inbox':
+                    return {allInbox: store.allInbox.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                case 'task':
+                    return {allTasks: store.allTasks.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                case 'mission':
+                return {allMissions: store.allMissions.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                case 'event':
+                return {allEvents: store.allEvents.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                case 'reference':
+                return {allReferences: store.allReferences.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                default: 
+                return {allInbox: store.allInbox}
+            }
+        }),
+
         dbUpdatePending: [],
         setDbUpdatePending: item => set(store => ({dbUpdatePending: [...store.dbUpdatePending, item]})),
         updateDbUpdatePending: items => set(() => ({dbUpdatePending: [...items]})),
+        
+        deleteItem: item =>  set((store) => {
+            switch(item.collection){
+                case 'inbox':
+                    return {allInbox: store.allInbox.filter( i => i.id !== item.id ), dbDeletePending: [...store.dbDeletePending, item]}
+                case 'task':
+                    return {allTasks: store.allTasks.filter( i => i.id !== item.id ), dbDeletePending: [...store.dbDeletePending, item]}
+                case 'mission':
+                return {allMissions: store.allMissions.filter( i => i.id !== item.id ), dbDeletePending: [...store.dbDeletePending, item]}
+                case 'event':
+                return {allEvents: store.allEvents.filter( i => i.id !== item.id ), dbDeletePending: [...store.dbDeletePending, item]}
+                case 'reference':
+                return {allReferences: store.allReferences.filter( i => i.id !== item.id ), dbDeletePending: [...store.dbDeletePending, item]}
+                default: 
+                return {allInbox: store.allInbox}
+            }
+        }),
+        
+        dbDeletePending: [],
+        setDbDeletePending: item => set(store => ({dbDeletePending: [...store.dbDeletePending, item]})),
+        updateDbDeletePending: items => set(() => ({dbDeletePending: [...items]})),
     }
 }
 

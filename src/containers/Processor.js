@@ -63,7 +63,6 @@ export default function Processor({ nextItemID, item }) {
         let task = new Task(name, theOutcome, requiredContext, asProjID);
         setNewTask(task);
         console.log("new task = ",task);
-        updateStatus();
         setNextID(task.id);  
 
         //ADD TASK TO TASK LIST AND 
@@ -79,8 +78,9 @@ export default function Processor({ nextItemID, item }) {
         
         addItem(ref);
 
-        console.log("new ref = ", ref);
         setNextID(ref.id); 
+        // console.log("new ref = ", ref);
+
 
     }
 
@@ -90,45 +90,12 @@ export default function Processor({ nextItemID, item }) {
         setNewEvent(ev);
 
         addItem(ev);
-
-        console.log("new event = ", ev);
+        updateStatus()
+        
         setNextID(ev.id); 
+        // console.log("new event = ", ev);
 
     }
-
-    // function amendList(action, list, item, itemndx){
-    //     let dbList;
-    //     switch (list) {
-    //         case MissionList:
-    //             dbList = "Missions"
-    //         break;
-    //         case InboxItems:
-    //             dbList = "Inbox"
-    //         break;
-    //         case References:
-    //             dbList = "References"
-    //         break;
-    //         case Events:
-    //             dbList = "Events"
-    //         break;
-    //         case TaskList:
-    //             dbList = "Tasks"
-    //         break;
-    //         default:
-    //     }
-    //     switch (action) {
-    //         case REMOVE:
-    //             //list.splice(itemndx, 1);
-    //             //pushChanges(REMOVE, item, dbList, shipItems);
-    //         break;
-    //         case ADD:
-    //             list.unshift(item);
-    //             //pushChanges(ADD, item, dbList, shipItems);
-    //         break;
-    //         default:
-    //     }
-
-    // }
 
     function updateStatus() {
         item.status = PROCESSED;
@@ -162,8 +129,7 @@ export default function Processor({ nextItemID, item }) {
     }
 
     function saveDate(date){
-        //updateDB( mission, "dueDate", date )
-
+        // updateDB( mission, "dueDate", date )
     }
 
     function trashItem() {
@@ -171,7 +137,9 @@ export default function Processor({ nextItemID, item }) {
     }
 
     function addToReferences() {
-        setReferenced(true); makeNewReference(item.name); proceed() 
+        setReferenced(true); 
+        makeNewReference(item.name); 
+        proceed();
     }
 
     function addToEvents() {

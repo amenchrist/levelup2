@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Router from './routes';
 import { useMyStore } from './store';
-import { UpdateItem, GetAll, UploadItem } from './api';
+import { UpdateItem, GetAll, UploadItem, DeleteItem } from './api';
 import { completedFilter, dailyFilter, inboxFilter, missionFilter, processedFilter, removeTrash, somedayFilter, taskFilter, todayFilter, trashFilter } from './functions';
 
 export default function App() {
@@ -18,7 +18,7 @@ export default function App() {
     const { setTodaysMission, setDailyExercises, setCompleted, setProcessed, setSomeday, setTrash } = useMyStore();
 
     const { allInbox, allTasks, allMissions, allEvents, allReferences,  } = useMyStore();
-    const { inbox, tasks, missions, events, dbUpdatePending, updateDbUpdatePending, dbUploadPending, updateDbUploadPending } = useMyStore();
+    const { inbox, tasks, missions, events, dbUpdatePending, updateDbUpdatePending, dbUploadPending, updateDbUploadPending, dbDeletePending, updateDbDeletePending } = useMyStore();
     
     const store = useMyStore();
     console.log(store)
@@ -134,6 +134,21 @@ export default function App() {
          }
      
        }, [dbUploadPending, updateDbUploadPending]);
+
+       
+      useEffect(() => {        
+        if (dbDeletePending.length > 0) {
+             console.log('running db syncer')
+           //find and update current item
+           if(DeleteItem(dbDeletePending[0])){
+             const tempArray = [...dbDeletePending]
+             console.log(tempArray.shift())
+ 
+             updateDbDeletePending(tempArray)
+           }
+         }
+     
+       }, [dbDeletePending, updateDbDeletePending]);
 
 
     return (
