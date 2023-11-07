@@ -15,7 +15,6 @@ export default function TrashedItemDetails({ changeNav, item, db, shipItems }) {
         item.trashedDate = 0;
         updateItem(item);
         navigate(`/${category}/${item.id}`);
-
     }
 
     function deleteFromDB(){

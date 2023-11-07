@@ -31,29 +31,19 @@ export default function ItemDetails({ id, touchFunction }) {
     }
 
     if (item.name) {
-        switch(processorOn){
-        case false:
-            return (
-                <div className='h-100' >
-                    <h5 className='white b pb2'>{item.name}</h5>
-                    <h5 className='white pb2'>Entry Date: {(new Date(item.entryDate)).toISOString().substr(0, 10)} </h5>
-                    {/* <h5 className='white pb2'>Status: {item.status} </h5> */}
-                    <div className='h-80 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column ' >
-                        <button onClick={()=> setProcessorOn(true)} >PROCESS THIS</button>
-                    </div>
-                    <NewItemButton />
-                </div>
-            )
-        default:
-            return (
-                <div >
-                    <h5 className='white b pb2'>Name: {item.name}</h5>
-                    <h5 className='white pb2'>Entry Date: {(new Date(item.entryDate)).toISOString().substr(0, 10)} </h5>
-                    <br />
-                    <Processor item={item} nextItemID={nextItemID} itemIndex={indx} />
-                </div>
-            );
-        }
+        return (
+            <div className='h-100' >
+                <h5 className='white b pb2'>{item.name}</h5>
+                <h5 className='white pb2'>Entry Date: {(new Date(item.entryDate)).toISOString().substr(0, 10)} </h5>
+                <h5 className='white pb2'>Status: {item.status} </h5>
+                <br />
+                <Processor item={item} nextItemID={nextItemID} itemIndex={indx} />
+                <NewItemButton />
+                {/* <div className='h-80 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column ' >
+                    <button onClick={()=> setProcessorOn(true)} >PROCESS THIS</button>
+                </div> */}
+            </div>
+        )
     }
     
 }

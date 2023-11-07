@@ -40,17 +40,20 @@ export default function Processor({ nextItemID, item }) {
     const [ newEvent, setNewEvent ] = useState(null);
 
 
+    function endProcessing(obj) {
+        if(obj){
+            addItem(obj);
+        }
+        updateStatus();
+    }
+
     function makeNewMission(){
         let proj = new Mission( outcome );
         setNewMission(proj);
         setNewMissionID(proj.id);
-
-        addItem(proj);
-
-        updateStatus();
-
         setNextID(proj.id);
     }
+    
 
     function makeNewTask(name){
         let asProjID;
@@ -64,37 +67,21 @@ export default function Processor({ nextItemID, item }) {
         setNewTask(task);
         console.log("new task = ",task);
         setNextID(task.id);  
-
-        //ADD TASK TO TASK LIST AND 
-        addItem(task)
-
         setNewTaskID(task.id);  
     }
 
     function makeNewReference(name){ 
-
         let ref = new Reference(name);
         setNewReference(ref);
-        
-        addItem(ref);
-
         setNextID(ref.id); 
-        // console.log("new ref = ", ref);
-
-
+        console.log("new ref = ", ref);
     }
 
     function makeNewEvent(name){ 
-
         let ev = new Event(name);
         setNewEvent(ev);
-
-        addItem(ev);
-        updateStatus()
-        
         setNextID(ev.id); 
-        // console.log("new event = ", ev);
-
+        console.log("new event = ", ev);
     }
 
     function updateStatus() {
@@ -133,7 +120,8 @@ export default function Processor({ nextItemID, item }) {
     }
 
     function trashItem() {
-        setTrashed(true); item.isTrashed = true; updateStatus(); proceed();
+        setTrashed(true); item.isTrashed = true; 
+        proceed();
     }
 
     function addToReferences() {
@@ -146,92 +134,113 @@ export default function Processor({ nextItemID, item }) {
          setIncubated(true); makeNewEvent(item.name); proceed();
     }
 
+    function saveEventDate(date){
+        newEvent.date = date;
+    }
+
+    const ProcessorWrapper = ({children}) => {
+        return (
+            <div className='h-60 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
+                {children}
+            </div>
+        )
+    }
+
+    const EndOptions = ({object}) => {
+        return (
+            <>
+                <button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
+                <button className="button" id={nextItemID} onClick={() => {endProcessing(object); navigate('/')}} >BACK TO DASHBOARD</button>
+            </>
+        )
+    }
+
     switch(true) {
         case ( step === 1 ): //Is this item actionable?
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionAndOptions question='Is this Actionable?' 
                     yes={() => { setIsActionable(true); proceed() }} 
                     no={() => { setIsActionable(false); proceed() }} />
-                </div>
+                </ProcessorWrapper>
             )
         case ( isActionable === false && step === 2 ): //As it's not actionable Present options to Add to reference or create an event reminder or trash item
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
+                <ProcessorWrapper>                    
                     <button className="button" id={nextItemID} onClick={() => addToReferences()} >ADD TO REFERENCES</button>
                     <button className="button" id={nextItemID} onClick={() => addToEvents()} >ADD TO EVENTS</button>
                     <button className="button" id={nextItemID} onClick={() => trashItem() } >TRASH</button>
-                </div>
+                </ProcessorWrapper>
             )
         case ( trashed === true && step === 3 ):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
+                <ProcessorWrapper>
                     <h3 className='white tc pb2'>Item has been trashed</h3>
-                    <button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
-                </div>
+                    <EndOptions />
+                </ProcessorWrapper>
             )
         case ( isActionable === false && step === 3 && referenced === true ):
             //
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column'>
-                    <h2 className='white tc pb2'>Any details to add?</h2>
+                <ProcessorWrapper>
+                    <h2 className='white tc pb2'>Any details to add to the new reference?</h2>
                     <form onSubmit={(e) => { 
+                        console.log(e)
+                        e.preventDefault();
                         newReference.details = refDetails; 
-                        updateItem(newReference);
-                        updateStatus(); 
-                        e.preventDefault(); 
-                        proceed() 
+                        proceed();
                     }}>
                         <textarea rows="4" cols="45" autoFocus value={refDetails} onChange={(e)=> setRefDetails(e.target.value)} />
                         <input type='submit' value='submit' />
                     </form>
-                </div>
+                </ProcessorWrapper>
             )
-        case ( isActionable === false && step === 3 && incubated === true ):
-            function saveEventDate(date){
-                newEvent.date = date;
-            }
-        
+        case ( referenced === true && step === 4 ):
+            return (
+                <ProcessorWrapper>
+                    <h3 className='white tc pb2'>A new reference has been created</h3>
+                    <EndOptions object={newReference} />
+                </ProcessorWrapper>
+            )
+        case ( isActionable === false && step === 3 && incubated === true ):        
         return (
-            <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column'>
+            <ProcessorWrapper>
                 <h2 className='white tc pb2'>Date of Event?</h2>
                 <DatePicker item={newEvent} dueDate={newEvent.date} updateFunc={saveEventDate}/>
                 <div>
                     <button className="button" onClick={() => { 
-                        addItem(newEvent);
-                        updateStatus(); 
+                        endProcessing(newEvent);
                         proceed(); 
                     }} >CONTINUE</button>
-                </div>
-                
-            </div>
+                </div>  
+            </ProcessorWrapper>
         )
         case ( isActionable === false && step === 4 ):
             if (referenced === true ) {}
             if (incubated === true ) {}
             // Added to references
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
-                    <h3 className='white tc pb2'>Item has been processed</h3>
+            <ProcessorWrapper>
+                <h3 className='white tc pb2'>Item has been processed</h3>
                     <button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
                     <button className="button" id={nextItemID} onClick={() => {
                         referenced === true ? viewNewReference(nextID) : viewNewEvent(nextID)
                     }} >VIEW ITEM</button>
-                </div>
+            </ProcessorWrapper>
             )
         case ( isActionable === true && step === 2 ):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionandInput question="What's the desired outcome?" submitFunction={(answer) => { setOutcome(answer); proceed() }} />
-                </div>
+                </ProcessorWrapper>
             )
         case ( step === 3 ):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionAndOptions question='Can the outcome be reached with just one task?' 
                     yes={() => { setIsMultistep(false); proceed(); } } 
                     no={() => { setIsMultistep(true); proceed();  makeNewMission(); }} />
-                </div>
+                </ProcessorWrapper>
             )
             
         case ( isMultistep === false && step === 4 ):
@@ -246,17 +255,17 @@ export default function Processor({ nextItemID, item }) {
             )
         case ( isMultistep === true && step === 4 ):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionandInput question="What's the first task?" 
                     submitFunction={(answer) => { 
                         makeNewTask(answer); 
                         proceed(); 
-                        }} />
-                </div>
+                    }} />
+                </ProcessorWrapper>
             )
         case ( isMultistep === true && step === 5 ):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionAndOptions question='Can the desired outcome be reached within the next 12 months?' 
                     yes={() => { 
                         setIsDoneInaYear(true); 
@@ -271,12 +280,12 @@ export default function Processor({ nextItemID, item }) {
                         updateStatus(); 
                         proceed();
                     }} />
-                </div>
+                </ProcessorWrapper>
             )
         case ( isMultistep === false && step === 5 ):
             // console.log("step 5. new task: ", newTask);
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionAndOptions question='Can the desired outcome be reached within the next 12 months?' 
                     yes={() => { setIsDoneInaYear(true); proceed() }} 
                     no={() => { 
@@ -284,72 +293,74 @@ export default function Processor({ nextItemID, item }) {
                         setIsDoneInaYear(false); 
                         updateStatus(); 
                         proceed() }} />
-                </div>
+                </ProcessorWrapper>
             )
         case ( isMultistep === true && step === 6 && isDoneInaYear === true ):
             // New mission was added and page refreshed
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
+                <ProcessorWrapper>
                     <h3 className='white tc pb2'>A new Mission has been added</h3>
                     <button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
-                    <button className="button" id={nextItemID} onClick={() => navigate(`/Mission/${newMissionID}`)} >VIEW MISSION</button>
-                </div>
+                    <button className="button" id={nextItemID} onClick={() => navigate(`/Mission/${newMissionID}`)} >VIEW MISSION</button>    
+                </ProcessorWrapper>
             )
         case ( isMultistep === true && step === 6 && isDoneInaYear === false ):
             // New mission was added and page refreshed
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
+                <ProcessorWrapper>
                     <h3 className='white tc pb2'>A new Mission has been added to the Someday List</h3>
                     <button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
                     {/* <button className="button" id={nextItemID} onClick={() => changeItemID(nextID)} >VIEW MISSION</button> */}
-                </div>
+                </ProcessorWrapper>
+
             )
         case ( isMultistep === false && step === 6 && isDoneInaYear === false ):
             // New mission was added and page refreshed
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
+                <ProcessorWrapper>
                     <h3 className='white tc pb2'>A new Task has been added to the Someday List</h3>
                     <button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
                     {/* <button className="button" id={nextItemID} onClick={() => changeItemID(nextID)} >VIEW MISSION</button> */}
-                </div>
+                </ProcessorWrapper>
             )
         case ( isMultistep === false && step === 6 && isDoneInaYear === true ):
             console.log("step 5. new task: ", newTask);
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionAndOptions question='Can it be done now in 5 minutes or less?' 
                     yes={() => { 
                         setIsDoneInFive(true); 
                         addItem(newTask);
                     }} 
                     no={() => { setIsDoneInFive(false); proceed() }} />
-                </div>
+                </ProcessorWrapper>
+                
             )
         case (isDoneInFive === true && step === 7):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <h2 className='fw8 b white pb2'>LET'S DO IT!</h2>
                     <div className='w-100 pa2 pb3' >
                         <h3 className='fw7 b white pb2'>{newTask.name}</h3>
                     </div>
                     <button className="button" onClick={() => { updateStatus();  navigate(`/Task/${newTaskID}`) }} >GO TO TASK </button>
                     {/* <button className="button" id={nextItemID} onClick={() => changeNav(nav)} >VIEW TASK</button> */}
-                </div>
+                </ProcessorWrapper>
             )
         case ( isDoneInFive === false && step === 7 ):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionAndOptions question='Can this task be delegated?' 
                     yes={() => { setIsDelegatable(true); proceed(); }} 
                     no={() => { setIsDelegatable(false); proceed(); }} />
-                </div>
+                </ProcessorWrapper>
             )
         case ( isDelegatable === true && step === 8 ):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionandInput question="Who would you like to assign this task to?" 
                     submitFunction={(answer) => { setAssignedAgent(answer); newTask.agent = assignedAgent; proceed() }} />
-                </div>
+                </ProcessorWrapper>
             )
         case ( isDelegatable === false && step === 8 ):
             function saveTaskDate(date){
@@ -357,39 +368,39 @@ export default function Processor({ nextItemID, item }) {
                 newTask.dueDate = date;
             }
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <h2 className='fw4 white'>By when should this task to be done</h2>
                     <DatePicker item={newTask} dueDate={newTask.dueDate} updateFunc={saveTaskDate} />
                     <div>
                         {/* <button className="button" onClick={() => { setDueDate("ASAP"); console.log(newTask); proceed(); }}>ASAP</button> */}
                         <button className="button" onClick={() => { setDueDate(newTask.dueDate); proceed(); }} >CONTINUE</button>
                     </div>
-                </div>
+                </ProcessorWrapper>
             )
         case ( isDelegatable === false && step === 9 ):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <QuestionandInput question="Where should this task be done?" 
                     submitFunction={(answer) => { 
                         setRequiredContext(answer); 
                         newTask.requiredContext = answer;
                         addItem(newTask);                       
                         proceed(); }} />
-                </div>
+                </ProcessorWrapper>
             )
         case ( step === 10 ):
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show flex items-center flex-column' >
+                <ProcessorWrapper>
                     <h3 className='white tc pb2'>A new Task has been added</h3>
                     <button className="button" id={nextItemID} onClick={ processNextItem } >PROCESS NEXT ITEM</button>
                     <button className="button" id={nextItemID} onClick={() => navigate(`/Task/${newTaskID}`)} >VIEW TASK</button>
-                </div>
+                </ProcessorWrapper>
             )
         default:
             return (
-                <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
+                <ProcessorWrapper>
                     <button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
-                </div>
+                </ProcessorWrapper>
             )
     }
 }
