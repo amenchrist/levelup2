@@ -2,9 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { DAILY, EVENTS, MONTHLY, NONE, UPDATE, WEEKLY, YEARLY } from '../constants';
 import { amendList } from '../functions';
 import DatePicker from './DatePicker';
+import { useParams } from 'react-router-dom';
+import { useMyStore } from '../store';
 
 
-export default function EventDetails({ changeNav,  item, shipItems, db, exp }) {
+export default function EventDetails({ shipItems, db, exp }) {
+
+    const id = useParams().id;
+    const { events } = useMyStore();
+
+    let item = {};
+
+    for (let i=0; i<events.length; i++){
+
+        if (events[i].id === id){
+            item = events[i];
+           break;
+        }
+    }
 
     const [ name, setName ] = useState(item.name);
     const [ date, setDate ] = useState(item.date);

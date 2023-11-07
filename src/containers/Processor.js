@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import QuestionAndOptions from '../components/QuestionAndOptions';
-import QuestionandInput from '../components/QuestionAndInput';
+import QuestionAndInput from '../components/QuestionAndInput';
 import { Task, Mission, Reference, Event } from '../classes';
 import {  PROCESSED, TASK, PENDING, UNPROCESSED, REFERENCE, ADD, UPDATE, REMOVE, REFERENCES, SOMEDAY, MISSIONS, TASKS, DETAILS, EVENTS, INBOX } from '../constants';
 import DatePicker from '../components/DatePicker';
@@ -8,6 +8,7 @@ import { pushChanges  } from '../functions';
 import TaskControls from '../components/TaskControls';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
+import QuestionAndTextarea from '../components/QuestionAndTextarea';
 
 
 export default function Processor({ nextItemID, item }) {
@@ -52,8 +53,7 @@ export default function Processor({ nextItemID, item }) {
         setNewMission(proj);
         setNewMissionID(proj.id);
         setNextID(proj.id);
-    }
-    
+    }    
 
     function makeNewTask(name){
         let asProjID;
@@ -138,6 +138,13 @@ export default function Processor({ nextItemID, item }) {
         newEvent.date = date;
     }
 
+    function viewItem (selectedItem) {
+        console.log(selectedItem.collection)
+        endProcessing(selectedItem);
+        const category = selectedItem.collection.split('').toSpliced(0,1,selectedItem.collection[0].toUpperCase()).join('');
+        navigate(`/${category}s/${selectedItem.id}`);
+    }
+
     const ProcessorWrapper = ({children}) => {
         return (
             <div className='h-60 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column show ' >
@@ -149,11 +156,14 @@ export default function Processor({ nextItemID, item }) {
     const EndOptions = ({object}) => {
         return (
             <>
+                <button className="button" id={nextItemID} onClick={() => viewItem(object)} >VIEW ITEM</button>
                 <button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
-                <button className="button" id={nextItemID} onClick={() => {endProcessing(object); navigate('/')}} >BACK TO DASHBOARD</button>
+                <button className="button" id={nextItemID} onClick={() => {endProcessing(object); navigate('/')}}>BACK TO DASHBOARD</button>
             </>
         )
     }
+
+  
 
     switch(true) {
         case ( step === 1 ): //Is this item actionable?
@@ -180,19 +190,10 @@ export default function Processor({ nextItemID, item }) {
                 </ProcessorWrapper>
             )
         case ( isActionable === false && step === 3 && referenced === true ):
-            //
+            //ADD REFERENCE DETAILS
             return (
                 <ProcessorWrapper>
-                    <h2 className='white tc pb2'>Any details to add to the new reference?</h2>
-                    <form onSubmit={(e) => { 
-                        console.log(e)
-                        e.preventDefault();
-                        newReference.details = refDetails; 
-                        proceed();
-                    }}>
-                        <textarea rows="4" cols="45" autoFocus value={refDetails} onChange={(e)=> setRefDetails(e.target.value)} />
-                        <input type='submit' value='submit' />
-                    </form>
+                    <QuestionAndTextarea question="Any details to add to the new reference?" submitFunction={(answer) => { newReference.details = answer; proceed() }}/>
                 </ProcessorWrapper>
             )
         case ( referenced === true && step === 4 ):
@@ -209,12 +210,18 @@ export default function Processor({ nextItemID, item }) {
                 <DatePicker item={newEvent} dueDate={newEvent.date} updateFunc={saveEventDate}/>
                 <div>
                     <button className="button" onClick={() => { 
-                        endProcessing(newEvent);
                         proceed(); 
                     }} >CONTINUE</button>
                 </div>  
             </ProcessorWrapper>
         )
+        case ( incubated === true && step === 4 ):
+            return (
+                <ProcessorWrapper>
+                    <h3 className='white tc pb2'>A new event has been created</h3>
+                    <EndOptions object={newEvent} />
+                </ProcessorWrapper>
+            )
         case ( isActionable === false && step === 4 ):
             if (referenced === true ) {}
             if (incubated === true ) {}
@@ -231,7 +238,7 @@ export default function Processor({ nextItemID, item }) {
         case ( isActionable === true && step === 2 ):
             return (
                 <ProcessorWrapper>
-                    <QuestionandInput question="What's the desired outcome?" submitFunction={(answer) => { setOutcome(answer); proceed() }} />
+                    <QuestionAndInput question="What's the desired outcome?" submitFunction={(answer) => { setOutcome(answer); proceed() }} />
                 </ProcessorWrapper>
             )
         case ( step === 3 ):
@@ -246,7 +253,7 @@ export default function Processor({ nextItemID, item }) {
         case ( isMultistep === false && step === 4 ):
             return (
                 <div className='h-100 w-100 center br1 pa3 ba b--black-10 show ' >
-                    <QuestionandInput question="What's the task?" 
+                    <QuestionAndInput question="What's the task?" 
                     submitFunction={(answer) => {
                         makeNewTask(answer);
                         proceed(); 
@@ -256,7 +263,7 @@ export default function Processor({ nextItemID, item }) {
         case ( isMultistep === true && step === 4 ):
             return (
                 <ProcessorWrapper>
-                    <QuestionandInput question="What's the first task?" 
+                    <QuestionAndInput question="What's the first task?" 
                     submitFunction={(answer) => { 
                         makeNewTask(answer); 
                         proceed(); 
@@ -358,7 +365,7 @@ export default function Processor({ nextItemID, item }) {
         case ( isDelegatable === true && step === 8 ):
             return (
                 <ProcessorWrapper>
-                    <QuestionandInput question="Who would you like to assign this task to?" 
+                    <QuestionAndInput question="Who would you like to assign this task to?" 
                     submitFunction={(answer) => { setAssignedAgent(answer); newTask.agent = assignedAgent; proceed() }} />
                 </ProcessorWrapper>
             )
@@ -380,7 +387,7 @@ export default function Processor({ nextItemID, item }) {
         case ( isDelegatable === false && step === 9 ):
             return (
                 <ProcessorWrapper>
-                    <QuestionandInput question="Where should this task be done?" 
+                    <QuestionAndInput question="Where should this task be done?" 
                     submitFunction={(answer) => { 
                         setRequiredContext(answer); 
                         newTask.requiredContext = answer;

@@ -6,10 +6,12 @@ import { amendList  } from '../functions';
 import { COMPLETED, DETAILS, DONE, MISSIONS, SOMEDAY, TASKS, UPDATE } from '../constants';
 import Scroll from './Scroll';
 import { useMyStore } from '../store';
+import { useParams } from 'react-router-dom';
 
-export default function TaskDetails({ id , title, activeSince, activeTask, db, shipItems, changeNav, exp }) {
+export default function TaskDetails({ title, activeSince, activeTask, db, shipItems, changeNav, exp }) {
 
-    const { tasks, missions } = useMyStore()
+    const id = useParams().id;
+    const { tasks, missions } = useMyStore();
     const MissionsList = missions;
     let task = {};
     let relevantList;

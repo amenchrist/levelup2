@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import Processor from '../containers/Processor'
 import NewItemButton from '../components/NewItemButton';
 import { useMyStore } from '../store';
+import { useParams } from 'react-router-dom';
 
 
-export default function ItemDetails({ id, touchFunction }) {
+export default function ItemDetails({ touchFunction }) {
 
     const { inbox, processorOn, setProcessorOn } = useMyStore();
 
     // NOTE: PREV AND NEXT BUTTONS INCLUDED HERE SO THEY ARE HIDDEN DURING PROCESSING
     const [ readyToProcess, setReadyToProcess ] = useState(false);
+
+    const id = useParams().id;
 
     let item = {};
     let nextItemID = null;

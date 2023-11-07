@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useMyStore } from '../store';
+import { useParams } from 'react-router-dom';
 
-export default function ReferenceDetails({ id  }) {
+export default function ReferenceDetails() {
 
+    const id = useParams().id;
+    console.log(id)
     const { references } = useMyStore()
     const ReferenceList = references;
     let reference = {};
@@ -15,7 +18,7 @@ export default function ReferenceDetails({ id  }) {
         }
     }
 
-    // console.log("reference: ", reference)
+    console.log("reference: ", reference)
 
     const [ name, setName ] = useState(reference.name);
     const [ details, setDetails ] = useState(reference.details);

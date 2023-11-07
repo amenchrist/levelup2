@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 import ListItem from './ListItem';
 import Scroll from './Scroll';
 import { MISSIONS, DETAILS } from '../constants';
+import { useParams } from 'react-router-dom';
+import { useMyStore } from '../store';
 
-export default function List({ content, title, view }) {
+export default function List() {
+
+    const title = useParams().category;
+    let content = useMyStore(store => store[title.toLowerCase()]);
+    let view, listItems;
     
-    const listItems = content.map((entry,i) => {
-        return <ListItem item={content[i]} key={content[i].id}/>
-    })
+    if(content){
+        listItems = content.map((entry,i) => {
+            return <ListItem item={content[i]} key={content[i].id}/>
+        })
+    }
 
     const [ sortedContent, setSortedContent ] = useState(content);
     const [ sort, setSort ] = useState(false);

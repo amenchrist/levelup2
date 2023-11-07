@@ -63,16 +63,18 @@ export default function Details( { touchFunction, updateExp, missionID  }){
     let item = {}, prev, next;
     const id = itemID;
 
-    for (let i=0; i<content.length; i++){
+    if(content){
+        for (let i=0; i<content.length; i++){
         
-        if (content[i].id === id){
-            item = content[i];
-
-            // ASSIGN THE PREV AND NEXT ITEM IDS
-            i === 0 ? prev = content[i].id : prev = content[i-1].id;
-            i === (content.length-1) ? next = content[i].id : next = content[i+1].id;
+            if (content[i].id === id){
+                item = content[i];
+    
+                // ASSIGN THE PREV AND NEXT ITEM IDS
+                i === 0 ? prev = content[i].id : prev = content[i-1].id;
+                i === (content.length-1) ? next = content[i].id : next = content[i+1].id;
+            }
+    
         }
-
     }
 
     function DetailsContainer({children, category}) {
