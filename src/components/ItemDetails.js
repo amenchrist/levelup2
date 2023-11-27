@@ -5,9 +5,9 @@ import { useMyStore } from '../store';
 import { useParams } from 'react-router-dom';
 
 
-export default function ItemDetails({ touchFunction }) {
+export default function ItemDetails() {
 
-    const { inbox, processorOn, setProcessorOn } = useMyStore();
+    const { inbox } = useMyStore();
 
     // NOTE: PREV AND NEXT BUTTONS INCLUDED HERE SO THEY ARE HIDDEN DURING PROCESSING
     const [ readyToProcess, setReadyToProcess ] = useState(false);

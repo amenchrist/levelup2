@@ -75,13 +75,14 @@ export async function getReferences(setFunc) {
 //GET all items of a specific collection
 
 //Get Current Reference list from database
-export async function GetAll(setFunc, category) {
+export async function GetAll(setFunc, category, currentList) {
     try{
         const data = await getDocs(collection(db, category))
         const filteredData = data.docs.map(doc => ({...doc.data()}))
         setFunc([...new Set(filteredData)])
     } catch (e) {
         console.log(`Something went wrong GETTING ALL firestore ${category} data`, e);
+        setFunc([...new Set(currentList)])
     }
 }
 

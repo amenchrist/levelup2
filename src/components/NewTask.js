@@ -5,15 +5,11 @@ import { pushChanges } from '../functions';
 import DatePicker from './DatePicker';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
-import { UploadItem, uploadNewTask } from '../api';
 
 export default function NewTask({  shipItems, itemID, db, title }) {
 
     const { addItem } = useMyStore();
     const navigate = useNavigate();
-
-
-    let today = new Date().toISOString().substr(0, 10);
 
     const [ name, setName ] = useState('');
     const [ outcome, setOutcome ] = useState('');

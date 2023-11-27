@@ -3,7 +3,7 @@ import './App.css';
 import Main from './containers/Main';
 import SplashPage from './pages/SplashPage';
 import Home from './containers/Home';
-import ListContainer from './containers/ListContainer';
+import List from './components/List';
 import { useMyStore } from './store';
 import Stats from './containers/Stats';
 import Details from './containers/Details';
@@ -22,7 +22,7 @@ export default function Router() {
       element: isLoggedIn? <Main /> : <SplashPage/>,
       children: [
         { path: '', element: <Home /> },
-        { path: ':category', element: <ListContainer /> },
+        { path: ':category', element: <List /> },
         { path: ':category/:id', element: <Details /> },
         { path: 'new', element: <NewItem /> },
 

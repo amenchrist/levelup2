@@ -17,7 +17,7 @@ export default function App() {
     const { setInbox, setTasks, setMissions, setEvents, setReferences } = useMyStore();
     const { setTodaysMission, setDailyExercises, setCompleted, setProcessed, setSomeday, setTrash } = useMyStore();
 
-    const { allInbox, allTasks, allMissions, allEvents, allReferences,  } = useMyStore();
+    const { allInbox, allTasks, allMissions, allEvents, allReferences, } = useMyStore();
     const { inbox, tasks, missions, events, dbUpdatePending, updateDbUpdatePending, dbUploadPending, updateDbUploadPending, dbDeletePending, updateDbDeletePending } = useMyStore();
     
     const store = useMyStore();
@@ -133,7 +133,7 @@ export default function App() {
            }
          }
      
-       }, [dbUploadPending, updateDbUploadPending]);
+       }, [dbUploadPending, updateDbUploadPending ]);
 
        
       useEffect(() => {        

@@ -35,6 +35,28 @@ export default function List() {
         setSortedContent(content);
     }
 
+    function ListContainer({children}) {
+        return (
+            <div className='h-100 pa2'>
+                <div className='h-10'>
+                    <h5 className='fw3 white'>EXP: {10}</h5>
+                </div>
+                <div className='h-90 pa1'>
+                    <div className='h-100 w-100 center pa1'>
+                        {/* <h1 className='tc b gold ma0 pb2'>{title}</h1> */}
+                        <h2 className='tc b gold f3'>{title}</h2>
+                        <div className=' h-80 '>
+                        {children}
+                        </div>
+                        <div className='h-10 flex w-100 content-end pa2'>
+                            {/* <NewItemButton touchFunsction={handleEvent} /> */}
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        )
+    }
+
 
     switch(title){
         case MISSIONS:
@@ -78,10 +100,12 @@ export default function List() {
         default:
             return (
                 <>
+                <ListContainer>
                     <p className='white'>Total: {content.length}</p>
                     <Scroll>
                         {listItems}
                     </Scroll>
+                </ListContainer>
                 </>
             );
     }

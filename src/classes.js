@@ -1,10 +1,10 @@
-import {TASK, PENDING, MISSION, UNPLANNED, ASAP, UNPROCESSED, INBOX_ITEM, EVENT, REFERENCE, SOMEDAY } from './constants';
+import {TASK, PENDING, MISSION, UNPLANNED, ASAP, UNPROCESSED, INBOX_ITEM, EVENT, REFERENCE, SOMEDAY, PROCESSED } from './constants';
 import { v4 as uuid } from 'uuid';
 
 export class Item{
+    
     constructor(name,description='None') {
         const d= new Date();
-
         this.type = INBOX_ITEM;
         this.id = uuid();
         this.entryDate = d.getTime();
@@ -16,7 +16,15 @@ export class Item{
         this.trashedDate = "";
         this.processedDate = "";
         this.collection = "inbox";
-
+        this.updateStatus = (status, updateFunc) => {
+            this.status = status;
+            updateFunc(this);
+        }
+        this.markAsProcessed = (updateFunc) => {
+            this.status = PROCESSED;
+            this.processedDate = new Date().toISOString().substr(0, 10);
+            // updateFunc(this);
+        }
     }
 }
 
@@ -47,7 +55,7 @@ export class Task{
         this.doneDate = "N/A";
         this.order = order;
         this.collection = "task";
-
+        this.agent = '';
     }
 }
 

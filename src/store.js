@@ -46,8 +46,8 @@ function store(set) {
         setSomeday: items => set(() => ({someday: [...items]})),
         setTrash: items => set(() => ({trash: [...items]})),
 
-        processorOn: false,
-        setProcessorOn: value => set(() => ({processorOn: value})),
+        processorStage: 1,
+        setProcessorStage: value => set(() => ({processorStage: value})),
 
         addItem: item =>  set((store) => {
             switch(item.collection){

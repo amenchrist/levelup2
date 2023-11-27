@@ -6,18 +6,14 @@ import { useMyStore } from '../store';
 import { UploadItem, uploadNewReference } from '../api';
 import { useNavigate } from 'react-router-dom';
 
-export default function NewReference({ updateExp, shipItems, changeNav, db }) {
+export default function NewReference({ item, processorSubmit }) {
 
-    const { addItem } = useMyStore();
+    const { addItem, updateItem } = useMyStore();
 
     const navigate = useNavigate();
 
-
-    let today = new Date().toISOString().substr(0, 10);
-
-    const [ name, setName ] = useState('');
+    const [ name, setName ] = useState(() => item? item.name : '');
     const [ details, setDetails ] = useState('');
-    const [ dueDate, setDueDate ] = useState(today);
 
 
     function submitNewItem(event) {
@@ -25,8 +21,12 @@ export default function NewReference({ updateExp, shipItems, changeNav, db }) {
         
         let r = new Reference(name, details );
         addItem(r);
-        // updateExp(5);
 
+        if(item){
+            processorSubmit(r.id)
+        } else {
+        }
+        
         navigate(`/References/${r.id}`);
     }
 

@@ -4,17 +4,15 @@ import {  Event } from '../classes';
 import { pushChanges, convertDateToMilliseconds  } from '../functions';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
-import { UploadItem } from '../api';
 
-
-export default function NewEvent({ updateExp, shipItems, changeNav, db }) {
+export default function NewEvent({ item, processorSubmit }) {
 
     const { addItem } = useMyStore();
     const navigate = useNavigate();
 
     let today = new Date().toISOString().substr(0, 10);
 
-    const [ name, setName ] = useState('');
+    const [ name, setName ] = useState(() => item? item.name : '');
     const [ date, setDate ] = useState(today);
     const [ time, setTime ] = useState("");
     const [ location, setLocation ] = useState("");
@@ -28,6 +26,10 @@ export default function NewEvent({ updateExp, shipItems, changeNav, db }) {
         
         let e = new Event( name, date, time, location, frequency );
         addItem(e);
+
+        if(item){
+            processorSubmit(e.id)
+        }
         // updateExp(5);
 
         navigate(`/Events/${e.id}`);
