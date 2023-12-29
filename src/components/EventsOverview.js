@@ -6,7 +6,7 @@ function EventsOverview() {
     const navigate = useNavigate();
 
   return (
-    <div className='flex items-center justify-center h-100 w-100 center bg-white pa1'  onClick={() => navigate('/Events')}>
+    <div className='flex items-center justify-center h-100 w-100 center bg-white pa1'  onClick={() => navigate('/Schedule')}>
         <h4 className='tc'>Calendar</h4>
     </div>
   )
