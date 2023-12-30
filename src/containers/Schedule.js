@@ -1,30 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Scroll from '../components/Scroll'
 
 function Schedule() {
 
-    const date = new Date(2023, 11, 29);
-    date.setMinutes(15*5)
+    const [ now, setNow ] = useState(new Date())
 
-    console.log(date.toISOString().substr(11, 5))
-    // new Array(12*24).fill('empty').forEach((e,i) => {
-    //     date.setMinutes(i*5)
-    //     console.log(date.toISOString().substr(11, 5))})
+    useEffect(() => {
+        const myInterval = setInterval(() => setNow(new Date()), 1000)
 
+        return () => clearInterval(myInterval)
+    }, [])
 
 
     const Spaces = () => {
-        const spaces = new Array(12*24).fill('empty').map((e,i) => {
-            const date = new Date(2023, 11, 29);
-            date.setMinutes(i*5)
-            return date.toISOString().substr(11, 5)
-        });
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        const minutesTillNow = currentHour*60+currentMinute;
+        const spaces = new Array(12*24).fill('empty').map((e,i) => i*5);
         return(
             <>
-            {spaces.map((e,i) => 
-                <div style={{height: '30px', border: '1px solid grey'}} key={i}>
-                <p style={{color: 'grey'}}>{e}</p>
-                </div>
+            {spaces.map((e,i) => {
+                const date = new Date(2023, 11, 30);
+                date.setMinutes(e)
+                if (minutesTillNow >= e && minutesTillNow < e+5 ) {
+                    return (<div style={{height: '50px', border: '1px solid red'}} key={i}>
+                    <p style={{color: 'white'}}>{date.toISOString().substr(11, 5)}</p>
+                    </div>)
+                } else {
+                    return (<div style={{height: '50px', border: '1px solid grey'}} key={i}>
+                    <p style={{color: 'grey'}}>{date.toISOString().substr(11, 5)}</p>
+                    </div>)
+                }
+            }                
             )}
             </>
         )
