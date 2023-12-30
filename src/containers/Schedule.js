@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import Scroll from '../components/Scroll'
+import Scroll from '../components/Scroll';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 function Schedule() {
 
     const [ now, setNow ] = useState(new Date())
 
     useEffect(() => {
-        const myInterval = setInterval(() => setNow(new Date()), 1000)
-
+        const myInterval = setInterval(() => {
+            if(now.toDateString() === new Date().toDateString()){
+                setNow(new Date())
+            }
+        } , 1000)
         return () => clearInterval(myInterval)
-    }, [])
+    }, [now])
+
+    
 
 
     const Spaces = () => {
@@ -20,9 +29,9 @@ function Schedule() {
         return(
             <>
             {spaces.map((e,i) => {
-                const date = new Date(2023, 11, 30);
+                const date = new Date(now.getFullYear(), now.getMonth(), now.getDay());
                 date.setMinutes(e)
-                if (minutesTillNow >= e && minutesTillNow < e+5 ) {
+                if (minutesTillNow >= e && minutesTillNow < e+5 && now.toDateString() === new Date().toDateString()) {
                     return (<div style={{height: '50px', border: '1px solid red'}} key={i}>
                     <p style={{color: 'white'}}>{date.toISOString().substr(11, 5)}</p>
                     </div>)
@@ -45,6 +54,7 @@ function Schedule() {
         borderBottom: '2px solid white'
     }
 
+
     
 
     
@@ -54,7 +64,11 @@ function Schedule() {
         </div>
         <div style={{height: '5%', display: 'flex', justifyContent: 'space-between', padding: 5, alignItems: 'center', borderBottom: '2px solid white'}}>
             <h2 style={{color: 'white'}}>{'<'}</h2>
-            <h2 style={{textAlign: 'center', color: 'white'}}><strong>Today</strong></h2>
+            <Popup trigger={<h2 style={{textAlign: 'center', color: 'white'}}><strong>{now.toDateString()}</strong></h2>} position="bottom center">
+                <div className='w-100 show' style={{width: '100%'}}>
+                    <Calendar className={'w-100'} onChange={setNow} value={now} />
+                </div>
+            </Popup>
             <h2 style={{color: 'white'}}>{'>'}</h2>
         </div>
         <div style={{height: '75%'}}>
