@@ -2,7 +2,6 @@ import React from 'react';
 import List from '../components/List';
 import { useParams } from 'react-router-dom';
 import { useMyStore } from '../store';
-import { removeTrash } from '../functions';
 
 function ListContainer() {
 

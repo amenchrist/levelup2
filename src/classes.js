@@ -43,7 +43,7 @@ export class Task{
         this.requiredContext = requiredContext;
         this.note = '';
         this.dueDate = dueDate//(new Date()).toISOString().substr(0, 10);
-        this.timeRequired = 0;
+        this.timeRequired = 15; //in multiples of 5 minutes
         this.requirements = '';
         this.associatedMissionID = associatedMissionID;
         this.exp = 20;
@@ -56,6 +56,8 @@ export class Task{
         this.order = order;
         this.collection = "task";
         this.agent = '';
+        this.startDate = new Date(d.getFullYear(), d.getMonth(), d.getDate()).toString();
+        this.startTime = '00:00';
     }
 }
 
