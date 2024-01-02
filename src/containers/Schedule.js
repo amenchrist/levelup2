@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function Schedule() {
 
@@ -13,9 +14,9 @@ function Schedule() {
 
     useEffect(() => {    
         const myInterval = setInterval(() => {
-            if(now.toDateString() === new Date().toDateString()){
-                setNow(new Date())
-            }
+            // if(now.toDateString() === new Date().toDateString()){
+            //     setNow(new Date())
+            // }
         } , 1000)
         return () => clearInterval(myInterval)
     }, [now])
@@ -29,34 +30,56 @@ function Schedule() {
    
 
     const task = {
+        id: 'abc',
         title: 'Task 1',
         startTime,
-        startDate: new Date(2024,0,1),
+        startDate: new Date(2024,0,2),
         duration: 30,
         outcome: 'Outcome'
     }
 
-    const Task = () => {
+    const Task = (i) => {
         const height = (task.duration/5)*50
         return (
-            <div draggable style={{zIndex: 1, border: '2px solid black', height: `${height}px`, backgroundColor: 'white', position: 'relative', padding: '5px', margin: '-5px' }}>
-                <p>{task.startTime}</p>
-                <br/>
-                <h2 style={{fontWeight: 700}}>{task.title}</h2>
-                <p>{task.outcome}</p>
-                <p>Duration: {task.duration} mins</p>
-                <p>Goal: </p>
-                <br/>
-                <br/>
-                <hr />
-                <button>Start Now</button>
-
-            </div>
+            <Draggable draggableId={task.startTime} index={Math.ceil(Math.random()*1000)}>
+                {provided => (
+                    <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                        <div style={{zIndex: 1, border: '2px solid black', height: `${height}px`, backgroundColor: 'white', position: 'relative', padding: '5px', margin: '-5px' }}>
+                            <p>{task.startTime}</p>
+                            <br/>
+                            <h2 style={{fontWeight: 700}}>{task.title}</h2>
+                            <p>{task.outcome}</p>
+                            <p>Duration: {task.duration} mins</p>
+                            <p>Goal: </p>
+                            <br/>
+                            <br/>
+                            <hr />
+                            <button>Start Now</button>
+                        </div>
+                    </div>
+                )}
+                
+            </Draggable>
+            
         )
     }
 
     function handleDragover(e) {
         e.preventDefault();
+    }
+
+    function handleDrag(result){
+
+        const { destination, source, draggableId } = result;
+
+        if(!destination) {return};
+
+        if(destination.droppableId === source.droppableId) {return}
+
+        task.startTime = destination.droppableId
+
+
+
     }
 
     const Spaces = () => {
@@ -75,19 +98,26 @@ function Schedule() {
                 
                 const day = new Date(now.getFullYear(), now.getMonth(), now.getDay()).toDateString()
 
-                if (minutesTillNow >= e && minutesTillNow < e+5 && now.toDateString() === new Date().toDateString()) {
-                    return (
-                    <div style={{height: '50px', border: '1px solid red', padding: '5px', position: 'relative'}} key={i} onDragOver={handleDragover} onDrop={() => setStartTime(time)}>
-                        <p style={{color: 'grey', position: 'absolute', zIndex: 1}}>{time}</p>
-                        {task.startDate.toDateString() === day && task.startTime === time ? <Task /> : <></>}
-                    </div>)
-                } else {
-                    return (
-                    <div style={{height: '50px', border: '1px solid grey', padding: '5px', position: 'relative'}} key={i} onDragOver={e => handleDragover(e)} onDrop={() => setStartTime(time)}>
-                        <p style={{color: 'grey', position: 'absolute'}}>{time}</p>
-                        {task.startDate.toDateString() === day && task.startTime === time ? <Task /> : <></>}
-                    </div>)
-                }
+                return (
+                    <Droppable droppableId={time}>
+                        {provided => (
+                            <div ref={provided.innerRef} {...provided.droppableProps} >
+                                {minutesTillNow >= e && minutesTillNow < e+5 && now.toDateString() === new Date().toDateString()?
+                                    <div  style={{height: '50px', border: '1px solid red', padding: '5px', position: 'relative'}} key={i} onDragOver={handleDragover} onDrop={() => setStartTime(time)}>
+                                        <p style={{color: 'grey', position: 'absolute', zIndex: 1}}>{time}</p>
+                                        {task.startDate.toDateString() === day && task.startTime === time ? <Task i={i}/> : <></>}
+                                    </div>
+                                    :
+                                    <div style={{height: '50px', border: '1px solid grey', padding: '5px', position: 'relative'}} key={i} onDragOver={e => handleDragover(e)} onDrop={() => setStartTime(time)}>
+                                        <p style={{color: 'grey', position: 'absolute'}}>{time}</p>
+                                        {task.startDate.toDateString() === day && task.startTime === time ? <Task i={i}/> : <></>}
+                                    </div>
+                                }
+                                
+                            </div>                               
+                        )}
+                    </Droppable>
+                )
             }                
             )}
             </>
@@ -117,7 +147,9 @@ function Schedule() {
         </div>
         <div style={{height: '75%'}}>
             <Scroll>
-                <Spaces />
+                <DragDropContext onDragEnd={handleDrag}>
+                    <Spaces />
+                </DragDropContext>
             </Scroll>
         </div>
     </>
