@@ -1,6 +1,9 @@
 import {TASK, PENDING, MISSION, UNPLANNED, ASAP, UNPROCESSED, INBOX_ITEM, EVENT, REFERENCE, SOMEDAY, PROCESSED } from './constants';
 import { v4 as uuid } from 'uuid';
 
+
+//Keep all dates in milliseconds here
+
 export class Item{
     
     constructor(name,description='None') {
@@ -57,7 +60,7 @@ export class Task{
         this.collection = "task";
         this.agent = '';
         this.startDate = new Date(d.getFullYear(), d.getMonth(), d.getDate()).toString();
-        this.startTime = '00:00';
+        this.startTime = '00:00'; // Assigned by agent or scheduler at creation
     }
 }
 
