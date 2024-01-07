@@ -1,70 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import { ASAP, MISSIONS, NEW, SOMEDAY } from '../constants';
-import { convertDateToMilliseconds, pushChanges } from '../functions';
 
 
-export default function DatePicker({ item, dueDate, db, title, updateFunc, view }){
+export default function DatePicker({ item, date, title, setDate }){
 
-    let DbList = ''
     switch (title) {
         case MISSIONS:
             default:
     }
 
-    // REASSIGN DUE DATE TO FIX "ASAP" DATE FORMAT ISSUES
-    let dateValue;
-    //dueDate === ASAP ? dateValue = new Date().getTime() : dateValue = dueDate;
-    dueDate === ASAP ? dateValue = new Date().toISOString().substr(0, 10) : dateValue = dueDate;
-
     // CONVERT DATE STRING TO MILLISECONDS
-    //const [ date, setDate ] = useState((new Date(dateValue)).toISOString().substr(0, 10));
-    const [ date, setDate ] = useState((dateValue));
+    const [ localDate, setLocalDate ] = useState(() => { 
+        if (date === null) {
+            return null
+        } else{
+            return new Date(date).toISOString().substr(0, 10)
+        }
+    } );
     const [ changeDate, setChangeDate ] = useState(false);
     const [ isASAP, setIsASAP ] = useState(false);
     const [ isSomeday, setIsSomeday ] = useState(false);
-    
-    //   let str = "2020-10-26";
-    //   console.log(prepareDate(str));
+
 
     useEffect(() => {
-        //view === NEW ? setChangeDate(true) : setChangeDate(false) ;
-        setChangeDate(false)
-        // setDate((new Date(dateValue)).toISOString().substr(0, 10));
-        setDate((dateValue));
-        // setChangeDate(false);
-        if (dueDate === ASAP){
-            setIsASAP(true)
-        } else {
-            setIsASAP(false)
+        if(localDate){
+            const year = parseInt(localDate.substring(0,4));
+            const month = parseInt(localDate.substring(0,4))-1;
+            const day = parseInt(localDate.substring(8,10));
+            setChangeDate(false)
+            setDate(new Date(year, month, day))
         }
-    }, [dueDate, ASAP])
+        console.log(localDate);
+
+    }, [localDate])
 
     switch(changeDate){
         case true:
-            console.log("Current task ", item)
-            console.log("Current task.dueDate ", dueDate)
-            console.log("Current date: ", date)
-            console.log("Current dateValue: ", dateValue)
             return (
-                <div>
+                <div style={{paddingLeft: '5px'}}>
                     <input type='date' className='fw3 white bn bg-transparent' autoFocus
-                    defaultValue={date}
-                    onChange={(e)=> {console.log(e.target.value);setDate(e.target.value);} } 
+                    defaultValue={localDate}
+                    onChange={(e)=> {
+                        setLocalDate(e.target.value);
+                        setIsSomeday(false) ;
+                        setIsASAP(false); 
+                    } } 
                     onBlur={() =>{}} 
                     />
                     <div>
                         <button className="button" onClick={() => { 
-                            updateFunc(ASAP); setIsASAP(true); 
+                            //Scheduler sets the localDate to first avaialable slot
+                            setIsASAP(true); 
                             setChangeDate(false) 
                         }}>A.S.A.P</button>
+
                         <button className="button" onClick={() => { 
-                            updateFunc(SOMEDAY);
-                            setChangeDate(false); setIsSomeday(true) 
+                            //Schedule for first available slot in the next year
+                            setIsSomeday(true) ;
+                            setChangeDate(false); 
                         }}>SOMEDAY</button>
+
                         <button className="button" onClick={() => { 
-                            //updateFunc(convertDateToMilliseconds(date));
-                            updateFunc(date);
-                            setChangeDate(false); setIsASAP(false) 
+                            setDate(localDate);
+                            setChangeDate(false); 
+                            setIsASAP(false) 
                         }}>Save</button>
                     </div>
                 </div>
@@ -72,19 +71,21 @@ export default function DatePicker({ item, dueDate, db, title, updateFunc, view 
         default:
             if (isASAP){
                 return (
-                    <div>
+                    <div style={{paddingLeft: '5px'}} >
                         <h5 className='fw4 white' onClick={() => setChangeDate(true)}>ASAP</h5>
                     </div>
                     )
-            } else if (isSomeday) {
+            } else if (localDate === null) {
                 return (
-                    <div>
-                        <h5 className='fw4 white' onClick={() => setChangeDate(true)}>SOMEDAY</h5>
+                    <div style={{paddingLeft: '5px'}} >
+                        <h5 className='fw4 white' onClick={() => setChangeDate(true)}>N/A</h5>
                     </div>
                     )
             } else {
                 return (
-                    <h5 className='fw4 white' onClick={() => setChangeDate(true)}>{date}</h5>
+                    <div style={{paddingLeft: '5px'}} >
+                        <h5 className='fw4 white' onClick={() => setChangeDate(true)}>{localDate}</h5>
+                    </div>
                 )
             }
     }

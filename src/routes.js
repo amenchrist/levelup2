@@ -8,7 +8,7 @@ import { useMyStore } from './store';
 import Stats from './containers/Stats';
 import Details from './containers/Details';
 import NewItem from './components/NewItem';
-import Schedule from './containers/Calendar';
+import Schedule from './containers/Schedule';
 
 export default function Router() {
 

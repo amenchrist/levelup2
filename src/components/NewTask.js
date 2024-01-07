@@ -15,7 +15,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
     const [ outcome, setOutcome ] = useState('');
     const [ requiredContext, setRequiredContext ] = useState('');
     const [ details, setDetails ] = useState('');
-    const [ dueDate, setDueDate ] = useState(SOMEDAY);
+    const [ dueDate, setDueDate ] = useState(null);
     const [ agent, setAgent ] = useState('');
     const [ priority, setPriority ] = useState('');
     const [ frequency, setFrequency ] = useState('NONE');
@@ -66,7 +66,10 @@ export default function NewTask({  shipItems, itemID, db, title }) {
                 <textarea  className='pa2 mb1' placeholder='Details' value={details} onChange={(e) => setDetails(e.target.value)} />
                 <textarea  className='pa2 mb1' placeholder='Required Context' value={requiredContext} onChange={(e) => setRequiredContext(e.target.value)} />
                 {/* <label className='fw4 white' htmlFor="due date" >Due Date:</label> */}
-                <DatePicker item={{}} dueDate={dueDate} updateFunc={setDueDate} />
+                <div className='pa2' style={{padding: '5px 0', display: 'flex', }}>
+                    <p style={{color: 'white'}}>Due Date: </p>
+                    <DatePicker item={{}} date={dueDate} setDate={setDueDate} />
+                </div>
                 {/* <input className='pa2 mb1' id='due date' type='date' min={today} value={dueDate} onChange={(e) => setDueDate(e.target.value)} /> */}
                 <select className='pa2 mb1' id="priority" value={frequency} onChange={(e)=> setFrequency(e.target.value)}>
                     <option value="" disabled defaultValue>Frequency</option>

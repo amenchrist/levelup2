@@ -32,7 +32,7 @@ export class Item{
 }
 
 export class Task{
-    constructor(name,outcome, requiredContext, associatedMissionID = 0, dueDate = SOMEDAY, order = 0) {
+    constructor(name,outcome, requiredContext, associatedMissionID = 0, dueDate = null, order = 0) {
         const d = new Date();
         this.type = TASK;
         this.id = uuid();
@@ -59,7 +59,7 @@ export class Task{
         this.order = order;
         this.collection = "task";
         this.agent = '';
-        this.startDate = new Date(d.getFullYear(), d.getMonth(), d.getDate()).toString();
+        this.startDate = null // null or a value. A task can either have a set time you want it done or an assigned time by the scheduler
         this.startTime = '00:00'; // Assigned by agent or scheduler at creation
     }
 }
