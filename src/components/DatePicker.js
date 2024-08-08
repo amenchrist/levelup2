@@ -19,7 +19,6 @@ export default function DatePicker({ item, date, title, setDate }){
     } );
     const [ changeDate, setChangeDate ] = useState(false);
     const [ isASAP, setIsASAP ] = useState(false);
-    const [ isSomeday, setIsSomeday ] = useState(false);
 
 
     useEffect(() => {
@@ -32,7 +31,7 @@ export default function DatePicker({ item, date, title, setDate }){
         }
         console.log(localDate);
 
-    }, [localDate])
+    }, [localDate, setDate])
 
     switch(changeDate){
         case true:
@@ -42,7 +41,6 @@ export default function DatePicker({ item, date, title, setDate }){
                     defaultValue={localDate}
                     onChange={(e)=> {
                         setLocalDate(e.target.value);
-                        setIsSomeday(false) ;
                         setIsASAP(false); 
                     } } 
                     onBlur={() =>{}} 
@@ -56,7 +54,6 @@ export default function DatePicker({ item, date, title, setDate }){
 
                         <button className="button" onClick={() => { 
                             //Schedule for first available slot in the next year
-                            setIsSomeday(true) ;
                             setChangeDate(false); 
                         }}>SOMEDAY</button>
 

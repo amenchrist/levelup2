@@ -19,7 +19,6 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
     title === SOMEDAY ? relevantList = tasks.concat(missions) : relevantList = tasks;
 
     for (let i=0; i<relevantList.length; i++){
-
         if (relevantList[i].id === id){
            task = relevantList[i];
            break;
@@ -42,7 +41,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
     const [ name, setName ] = useState(task.name);
     const [ requiredContext, setrequiredContext ] = useState(task.requiredContext);
     const [ outcome, setoutcome ] = useState(task.outcome);
-    const [ dueDate, setdueDate ] = useState(task.dueDate);
+    const [ dueDate, setDueDate ] = useState(task.dueDate);
   //  const [ timeRequired, settimeRequired ] = useState(task.timeRequired);
     const [ note, setnote ] = useState(task.note);
     const [ lastUpdated, setlastUpdated ] = useState(db?.lastUpdated);
@@ -53,7 +52,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
         setrequiredContext(task.requiredContext);
         setoutcome(task.outcome);
         setnote(task.note);
-        setdueDate(task.dueDate);
+        setDueDate(task.dueDate);
     }, [task.name, task.requiredContext, task.outcome, task.note, task.dueDate, task.timeSpent, activeSince, activeTask, task.id, db?.lastUpdated ])
 
 
@@ -121,10 +120,10 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
                         </div>
                         <div className='w-100 pb3 flex justify-between'>
                             {/* <Timer timeSpent={task.timeSpent} task={task} /> */}
-                            {/* <input type='date' defaultValue={dueDate} onChange={(e)=> {setdueDate(e.target.value);} } onBlur={() =>task.dueDate=dueDate} className='fw3 white bn bg-transparent' /> */}
+                            {/* <input type='date' defaultValue={dueDate} onChange={(e)=> {setDueDate(e.target.value);} } onBlur={() =>task.dueDate=dueDate} className='fw3 white bn bg-transparent' /> */}
                         </div>
                         <h5 className='fw3 white'>DUE:</h5>
-                        <DatePicker item={task} dueDate={dueDate} updateFunc={saveDate} />
+                        <DatePicker item={task} date={dueDate} setDate={saveDate} />
                         <div className='w-100 pl2 pb3 flex justify-between'>                    
                             {/* <h5 className='fw3 white'>Time Required: {task.timeRequired}</h5>
                             <h5 className='fw3 white'>Time Remaining: 12:34:50 </h5> */}
