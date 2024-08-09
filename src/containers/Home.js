@@ -14,6 +14,7 @@ import List from '../components/List';
 import Scroll from '../components/Scroll';
 import { useMyStore } from '../store';
 import ListItem from '../components/ListItem';
+import { Box, Container, Grid, Typography } from '@mui/material';
 
 export default function Home() {
     let content = useMyStore(store => store['tasks']);
@@ -48,11 +49,23 @@ export default function Home() {
     }
    
     return (
-        <div className='h-100 pa1' >
-            <h1 className='white b '>Christ Amen</h1>
-            <p className='white'>Rank: F</p>
-            <p className='white'>Class: God</p>
-            <p className='white'>Exp: 2356</p>
+			<div className='h-100 pa1' >
+					<Container component="main" maxWidth="xs" sx={{}}>
+						<Box sx={{ marginTop: 4, display: 'flex', flexDirection: 'column',height:'80%', }} color={'white'}>
+							<Typography component="h1" variant="h5" >Amen Christ</Typography>
+							<Grid container justifyContent="space-between">
+								<Grid item>
+									<Typography variant='p' >Rank: F</Typography>
+								</Grid>
+								<Grid item>
+									<Typography variant='p' >Class: God</Typography>
+								</Grid>
+							</Grid>
+							<Grid item>
+							<Typography variant='p' >Exp: 2356</Typography>
+						</Grid>
+				</Box>
+      </Container>
             <hr/>
             <ListContainer>
                     <p className='white'>Total: {0}</p>
