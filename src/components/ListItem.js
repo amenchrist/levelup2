@@ -1,14 +1,22 @@
 import React from 'react';
-import { MISSION, TASK, INBOX_ITEM, TASKS, DONE, COMPLETED, DETAILS, MISSIONS, INBOX, TRASH, CALENDAR, MISSION_TASKS, SOMEDAY, EVENT, EVENTS, REFERENCES, REFERENCE, PROCESSED } from '../constants';
+import { MISSION, TASK, INBOX_ITEM,  MISSIONS, SOMEDAY, EVENT, EVENTS, REFERENCES, REFERENCE, PROCESSED } from '../constants';
 import { displayDays } from '../functions';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, } from 'react-router-dom';
 
 
 export default function ListItem( { item, title }){
     
     let nextTitle;
     const navigate = useNavigate();
-    const { category } = useParams();
+    let category = item.collection + 's';
+    switch(item.collection){
+      case 'inbox':
+        category = 'inbox';
+      break;
+      default: 
+    }
+
+    // const { category } = useParams();
 
     function ListWrapper({ children, suffix }) {
         return (
@@ -24,8 +32,6 @@ export default function ListItem( { item, title }){
         )
     } 
 
-    // console.log(item)
-    
     switch(true){
         case item.type === MISSION && !item.isTrashed:
             title === SOMEDAY ? nextTitle = SOMEDAY : nextTitle = MISSIONS;
@@ -38,50 +44,50 @@ export default function ListItem( { item, title }){
             if(title === SOMEDAY){
                 nextTitle = SOMEDAY;
                 return (
-                    <ListWrapper suffix={item.status} >
-                        <p className='fw3 white'>NO DATE SET</p>
-                    </ListWrapper>
+                  <ListWrapper suffix={item.status} >
+                      <p className='fw3 white'>NO DATE SET</p>
+                  </ListWrapper>
                 )
             } else {
                 return (
-                    <ListWrapper suffix={item.status} >
-                        <p className='fw3 white'>{displayDays(item.dueDate)}</p>
-                    </ListWrapper>
+                  <ListWrapper suffix={item.status} >
+                      <p className='fw3 white'>{'Today, 12:35pm'}</p>
+                  </ListWrapper>
                 )
             }
         case item.type === EVENT && !item.isTrashed:
             nextTitle = EVENTS;
             console.log(nextTitle);
             return (
-                <ListWrapper suffix={'REM'} >
-                    <p className='fw3 white'>{new Date(item.date).toDateString()}</p>
-                </ListWrapper>
+              <ListWrapper suffix={'REM'} >
+                <p className='fw3 white'>{new Date(item.date).toDateString()}</p>
+              </ListWrapper>
             )
         case item.type === REFERENCE && !item.isTrashed:
         nextTitle = REFERENCES;
             return (
-                <ListWrapper suffix={'REF'} >
-                    <p className='fw3 white'>{new Date(item.date).toDateString()}</p>
-                </ListWrapper>
+              <ListWrapper suffix={'REF'} >
+                <p className='fw3 white'>{new Date(item.date).toDateString()}</p>
+              </ListWrapper>
             )
         case item.status === PROCESSED && !item.isTrashed:
         nextTitle = PROCESSED;
             return (
-                <ListWrapper suffix={'PROCESSED'} >
-                    <p className='fw3 white'>{new Date(item.processedDate).toDateString()}</p>
-                </ListWrapper>
+              <ListWrapper suffix={'PROCESSED'} >
+                <p className='fw3 white'>{new Date(item.processedDate).toDateString()}</p>
+              </ListWrapper>
             )
         case item.type === INBOX_ITEM && !item.isTrashed:
             return (
-                <ListWrapper suffix={'PROCESS'} >
+              <ListWrapper suffix={'PROCESS'} >
                     <p className='fw3 white'>Entered: {(new Date(item.entryDate)).toLocaleString()}</p>
-                </ListWrapper>
+              </ListWrapper>
             )
         case item.isTrashed:
             return (
-                <ListWrapper suffix={item.type} >
-                    <p className='fw3 white'>DELETED: {(new Date(item.trashedDate)).toLocaleString()}</p>
-                </ListWrapper>
+              <ListWrapper suffix={item.type} >
+                <p className='fw3 white'>DELETED: {(new Date(item.trashedDate)).toLocaleString()}</p>
+              </ListWrapper>
             )
         default:
             return (

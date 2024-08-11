@@ -59,8 +59,9 @@ export class Task{
         this.order = order;
         this.collection = "task";
         this.agent = '';
-        this.startDate = null // null or a value. A task can either have a set time you want it done or an assigned time by the scheduler
-        this.startTime = '00:00'; // Assigned by agent or scheduler at creation
+        this.startDate = null // 
+        this.startTime = '00:00'; // Time 
+        this.scheduledDate = null; // Assigned by agent or system at creation
     }
 }
 
@@ -96,7 +97,10 @@ export class Mission{
         this.exp = 100;
         this.collection = "mission";
 
+        
     }
+
+   
 }
 
 export class Reference{

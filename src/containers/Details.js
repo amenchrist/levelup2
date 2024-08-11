@@ -1,5 +1,5 @@
 import React from 'react';
-import { REFERENCE, COMPLETED, PROCESSED, INBOX, TRASH, REFERENCES, MISSIONS, TASKS, CALENDAR, SOMEDAY, WAITING_FOR, EVENTS, TODAY, ASAP, MISSION_TASKS, TASK, MISSION, EVENT, DAILY, DONE } from '../constants';
+import { COMPLETED, PROCESSED, INBOX, TRASH, REFERENCES, MISSIONS, TASKS,  SOMEDAY, EVENTS, TODAY, MISSION_TASKS, TASK, MISSION, DAILY,  } from '../constants';
 import NewItemButton from '../components/NewItemButton';
 import ItemDetails from '../components/ItemDetails';
 import TaskDetails from '../components/TaskDetails';
@@ -14,6 +14,7 @@ import TrashedItemDetails from '../components/TrashedItemDetails';
 import EventDetails from '../components/EventDetails';
 import { useParams } from 'react-router-dom';
 import { useMyStore } from '../store';
+import { Grid, Typography } from '@mui/material';
 
 
 export default function Details( { touchFunction, updateExp, missionID  }){
@@ -21,43 +22,6 @@ export default function Details( { touchFunction, updateExp, missionID  }){
     const itemID = useParams().id;
     const title = useParams().category.toUpperCase();
     const content = useMyStore(store => store[title.toLowerCase()]);
-
-
-    // //SPECIAL CONDITION FOR MISSION'S LIST
-    // if(title === MISSION_TASKS) {
-
-    //     content = getTasks(getMission(parseInt(missionID)), tasks);
-
-    //     function getMission(projID){
-    //         console.log("proj id: ", projID)
-    //         let proj = {};
-    //         for (let x=0; x < missions.length; x++){
-    //             if (missions[x].id === projID){
-    //                 proj = missions[x];
-    //             }
-    //         }
-    //         console.log("proj = ", proj)
-    //         return proj;
-            
-    //     }
-    //     function getTasks(mission, TaskList){
-    //         console.log("proj tasks: ", mission.taskList)
-    //         let tasks = [];
-    //         if(mission.taskList.length !== 0){
-    //             for(let i=0; i<mission.taskList.length; i++){
-    //                 for(let j=0; j<TaskList.length; j++){
-    //                     if(mission.taskList[i] === TaskList[j].id ){
-    //                         tasks.push(TaskList[j]);
-    //                         break;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         console.log(tasks);
-    //         return tasks;
-    //     }
-    // }
-
 
     // FIND ITEM
     let item = {}, prev, next;
@@ -78,22 +42,31 @@ export default function Details( { touchFunction, updateExp, missionID  }){
     }
 
     function DetailsContainer({children, category}) {
-        return (
-            <div className='w-100 h-100 center br1 pa2 bw2 ba b--black-10'>
-                <div className='flex justify-between items-center'>
-                    <BackButton id={0} />
-                    <TrashButton id={itemID} title={category} />
-                </div>
-                <h2 className='tc b gold f3'>{category}</h2>
-                <div className='h-70'>
-                    {children}
-                </div>
-                <div className='flex justify-between self-end'>
-                    <PrevItemButton  prevID={prev} currentID={itemID} />
-                    <NextItemButton nextID={next} currentID={itemID}/>
-                </div>
+      return (
+        <div className='w-100 h-100 center br1 pa2 bw2 ba b--black-10'>
+          <Grid container justifyContent="space-between" >
+            <Grid item sx={{padding: '5px 0 5px 0', color: 'white'}}>
+              <Typography variant='p' >Discipline Streak: 0 Days</Typography>
+            </Grid>
+            <Grid item sx={{padding: '5px 0 5px 0', color: 'white'}}>
+              <Typography variant='p' >Exp: 0</Typography>
+            </Grid>
+          </Grid>
+          <hr/>
+          <div className='flex justify-between items-center'>
+            <BackButton id={0} />
+            <h2 className='tc b gold f3'>{category}</h2>
+            <TrashButton id={itemID} title={category} />
+          </div>
+          <div className='h-70'>
+              {children}
+          </div>
+          <div className='flex justify-between self-end'>
+              <PrevItemButton  prevID={prev} currentID={itemID} />
+              <NextItemButton nextID={next} currentID={itemID}/>
+          </div>
                 
-            </div>
+        </div>
         )
     }
     // CHOOSE DETAILS FORMAT FOR DIFFERENT LIST OR ITEM TYPES
