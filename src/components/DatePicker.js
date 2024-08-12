@@ -20,25 +20,27 @@ export default function DatePicker({ item, date, title, setDate }){
     const [ changeDate, setChangeDate ] = useState(false);
     const [ isASAP, setIsASAP ] = useState(false);
 
+    console.log(localDate)
 
-    useEffect(() => {
-        if(localDate){
-            const year = parseInt(localDate.substring(0,4));
-            const month = parseInt(localDate.substring(0,4))-1;
-            const day = parseInt(localDate.substring(8,10));
-            setChangeDate(false)
-            setDate(new Date(year, month, day))
-        }
-        console.log(localDate);
 
-    }, [localDate, setDate])
+    // useEffect(() => {
+    //     if(localDate){
+    //         const year = parseInt(localDate.substring(0,4));
+    //         const month = parseInt(localDate.substring(0,4))-1;
+    //         const day = parseInt(localDate.substring(8,10));
+    //         setChangeDate(false)
+    //         setDate(new Date(year, month, day))
+    //     }
+    //     console.log(localDate);
+
+    // }, [localDate, setDate])
 
     switch(changeDate){
         case true:
             return (
                 <div style={{paddingLeft: '5px'}}>
                     <input type='date' className='fw3 white bn bg-transparent' autoFocus
-                    defaultValue={localDate}
+                    
                     onChange={(e)=> {
                         setLocalDate(e.target.value);
                         setIsASAP(false); 

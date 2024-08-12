@@ -7,7 +7,7 @@ import { COMPLETED, DETAILS, DONE, MISSIONS, SOMEDAY, TASKS, UPDATE } from '../c
 import Scroll from './Scroll';
 import { useMyStore } from '../store';
 import { useParams } from 'react-router-dom';
-import { TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 
 export default function TaskDetails({ title, activeSince, activeTask, db, shipItems, changeNav, exp }) {
 
@@ -38,6 +38,8 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
             }
         }
     }
+
+    console.log(task)
 
     ///////////////////////////////////////////////////////
 
@@ -86,30 +88,29 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
       break;    
       default:
         return (
+          <>
+          <Box >
+              <TextField fullWidth variant="outlined" value={name} sx={{ fontSize: '30px',p: 1}} />
+          </Box>
+
           <div className='h-100' >
             <Scroll>
               <div className='w-100 pb3'  >
-              <TextField fullWidth variant="standard" value={name} sx={{ fontSize: '30px',p: 1}} 
+              <TextField fullWidth label="Email Address"  variant="outlined" value={name} sx={{ fontSize: '30px',p: 1}} />
+                <textarea rows="2" cols="30" wrap='hard' 
                 onChange={(e)=> {setName(e.target.value);} } 
                 onBlur={() => { updateDB(task, "name", name ) } } 
-              />
-                <textarea rows="2" cols="30" wrap='hard' 
-                
                 value={name} className='bn fw9 b white bg-transparent pa1'
                 />
-                <h5 className='fw3 white'>Scheduled: Sunday, Aug 17 @ 2pm </h5>
-                <h5 className='fw3 white'>Time Required: {task.timeRequired}</h5>
+                <h5 className='fw3 white pb2'>Scheduled: Sunday, Aug 17 @ 2pm </h5>
+                <h5 className='fw3 white pb2'>Time Required: {task.timeRequired}</h5>
                 <div className='w-100 pb3 flex justify-between'>
-                  <div>
+                  <div className='flex justify-between' >
                     <h5 className='fw3 white'>DUE:</h5>
-                {/* <DatePicker item={task} date={dueDate} setDate={saveDate} /> */}
+                    {/* <DatePicker item={task} date={dueDate} setDate={saveDate} /> */}
                   </div>                    
                   <h5 className='fw3 white'>Time Remaining: 12:34:50 </h5>
                 </div>
-                {/* <input type='text' onChange={(e)=> {setrequiredContext(e.target.value);} } 
-                onBlur={() =>{ updateDB(task, "requiredContext", requiredContext ) }} 
-                value={requiredContext} className='fw1 white bn bg-transparent' 
-                /> */}
               </div>
               {/* <div className='w-100 pb3'>
                 <h5 className='fw3 white'>Mission: </h5>
@@ -140,6 +141,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
             </Scroll>
             {/* <TaskControls task={task} position={''} /> */}
           </div>
+          </>
             );
     }
 }

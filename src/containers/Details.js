@@ -43,6 +43,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
 
     function DetailsContainer({children, category}) {
       return (
+        <>
         <div className='w-100 h-100 center br1 pa2 bw2 ba b--black-10'>
           <Grid container justifyContent="space-between" >
             <Grid item sx={{padding: '5px 0 5px 0', color: 'white'}}>
@@ -67,6 +68,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
           </div>
                 
         </div>
+        </>
         )
     }
     // CHOOSE DETAILS FORMAT FOR DIFFERENT LIST OR ITEM TYPES
