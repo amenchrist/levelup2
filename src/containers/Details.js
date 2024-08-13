@@ -22,6 +22,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
     const itemID = useParams().id;
     const title = useParams().category.toUpperCase();
     const content = useMyStore(store => store[title.toLowerCase()]);
+    const { player } = useMyStore();
 
     // FIND ITEM
     let item = {}, prev, next;
@@ -50,7 +51,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
               <Typography variant='p' >Discipline Streak: 0 Days</Typography>
             </Grid>
             <Grid item sx={{padding: '5px 0 5px 0', color: 'white'}}>
-              <Typography variant='p' >Exp: 0</Typography>
+              <Typography variant='p' >Exp: {player.exp}</Typography>
             </Grid>
           </Grid>
           <hr/>

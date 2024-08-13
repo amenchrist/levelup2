@@ -8,33 +8,34 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
     let content = useMyStore(store => store['tasks']);
+    const { player } = useMyStore()
     let listItems;
-		const navigate = useNavigate();
+	const navigate = useNavigate();
     
     if(content){
-        listItems = content.map((entry,i) => {
-            return <ListItem item={content[i]} key={content[i].id}/>
-        })
+      listItems = content.map((entry,i) => {
+        return <ListItem item={content[i]} key={content[i].id}/>
+      })
     }
    
     return (
 			<div className='h-100 pa1' >
 					<Container component="main" maxWidth="xs" sx={{paddingBottom: '10px'}}>
 						<Box sx={{ marginTop: 3, display: 'flex', flexDirection: 'column',height:'80%' }} color={'white'}>
-							<Typography component="h1" variant="h5" sx={{ fontWeight: 'bold' }}>Amen Christ</Typography>
+							<Typography component="h1" variant="h5" sx={{ fontWeight: 'bold' }}>{player.name}</Typography>
 							<Grid container justifyContent="space-between" >
-								<Box sx={{padding: '5px 0 5px 0'}}>
+								<Box >
 									<Grid item sx={{padding: '5px 0 5px 0',}}>
 										<Typography variant='p' >Race: God</Typography>
 									</Grid>
 									<Grid item sx={{padding: '5px 0 5px 0'}}>
-										<Typography variant='p'  >Rank: F</Typography>
+										<Typography variant='p'  >Rank: {player.rank}</Typography>
 									</Grid>
 									<Grid item sx={{padding: '5px 0 5px 0'}}>
-										<Typography variant='p' >Exp: 0</Typography>
+										<Typography variant='p' >Exp: {player.exp}</Typography>
 									</Grid>
 									<Grid item sx={{padding: '5px 0 5px 0'}}>
-										<Typography variant='p' >Discipline Streak: 0 Days</Typography>
+										<Typography variant='p' >Discipline Streak: {player.streak} Days</Typography>
 									</Grid>
 								</Box>
 								<Box >
@@ -60,9 +61,9 @@ export default function Home() {
 						<div className=' h-80 '>
 							<Grid container justifyContent="space-between" alignItems={'center'} color={'white'} sx={{padding: '20px 0 10px 0'}}>
 								<Grid item>
-									<Typography variant='p' >Total: 0</Typography>
+									<Typography variant='p' >Total: {content.length}</Typography>
 								</Grid>
-								<Grid item sx={{border: '2px solid white', padding: '5px 7px'}} onClick={() => navigate(`/new`)} >
+								<Grid item sx={{border: '2px solid white', padding: '5px 7px'}} onClick={() => navigate(`/new/task`)} >
 									<Typography variant='p'>+</Typography>
 								</Grid>
 							</Grid>

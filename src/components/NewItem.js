@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { INBOX, REFERENCE, EVENT, TASK, MISSION } from '../constants';
-import { Item } from '../classes';
+import {Item} from '../classes/Item';
 import NewTask from './NewTask';
 import NewMission from './NewMission';
 import NewReference from './NewReference';
 import NewEvent from './NewEvent';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useMyStore } from '../store';
 import { UploadItem } from '../api';
+import { Grid, Typography } from '@mui/material';
 
 export default function NewItem({  updateExp }) {
 
     const navigate = useNavigate();
     const { addItem } = useMyStore();
+    const collection = useParams().collection.toUpperCase();
 
     const [ name, setName ] = useState('');
-    const [ form, setForm ] = useState(INBOX);
+    const [ form, setForm ] = useState(collection);
 
     function reset(){
         setName('Enter item name');
@@ -36,15 +38,7 @@ export default function NewItem({  updateExp }) {
 
     function displayTypeForm(){
         switch(form) {
-            case TASK:
-                return <NewTask updateExp={updateExp} />
-            case MISSION:
-                return <NewMission updateExp={updateExp} />
-            case REFERENCE:
-                return <NewReference updateExp={updateExp} />
-            case EVENT:
-                return <NewEvent updateExp={updateExp} />
-            default:
+            case INBOX:
                 return (
                     <div className='h-100 w-100 center br1 pa3 ba b--black-10 '>
                         <h1 className='tc b gold f3'>NEW ITEM</h1>
@@ -54,6 +48,20 @@ export default function NewItem({  updateExp }) {
                             <input className='pa2 mb1' type='submit' value='submit' />
                         </form>
                     </div>
+                )
+            case MISSION:
+                return <NewMission updateExp={updateExp} />
+            case REFERENCE:
+                return <NewReference updateExp={updateExp} />
+            case EVENT:
+                return <NewEvent updateExp={updateExp} />
+            case TASK:
+                return <NewTask updateExp={updateExp} />
+            default:
+                return (
+                    <Grid item sx={{ padding: '5px 7px', color: 'white', textAlign: 'center' }}  >
+                        <Typography variant='p'>Category Unknown</Typography>
+                    </Grid>
                 )
         }
     }

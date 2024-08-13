@@ -6,7 +6,7 @@ export default class ContactInfo {
         const defaultObj = {
             email: null,
             phoneNumber: null,
-            address: new Address()
+            address: {...new Address()}
         };
         constructorHelper.call(this, data, defaultObj)       
     }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Router from './routes';
 import { useMyStore } from './store';
-import { UpdateItem, GetAll, UploadItem, DeleteItem } from './api';
+import { UpdateItem, GetAll, UploadItem, DeleteItem, getPlayer } from './api';
 import { completedFilter, dailyFilter, inboxFilter, missionFilter, processedFilter, removeTrash, somedayFilter, taskFilter, todayFilter, trashFilter } from './functions';
 
 export default function App() {
@@ -12,7 +12,9 @@ export default function App() {
     const [ missionsFS, setMissionsFS ] = useState([]);
     const [ eventsFS, setEventsFS ] = useState([]);
     const [ referencesFS, setReferencesFS ] = useState([]);
+    const [ playerFS, setPlayerFS ] = useState({})
 
+    const { setPlayer } = useMyStore();
     const { setAllInbox, setAllTasks, setAllMissions, setAllEvents, setAllReferences } = useMyStore();
     const { setInbox, setTasks, setMissions, setEvents, setReferences } = useMyStore();
     const { setTodaysMission, setDailyExercises, setCompleted, setProcessed, setSomeday, setTrash } = useMyStore();
@@ -21,14 +23,18 @@ export default function App() {
     const { inbox, tasks, missions, events, dbUpdatePending, updateDbUpdatePending, dbUploadPending, updateDbUploadPending, dbDeletePending, updateDbDeletePending } = useMyStore();
     
     const store = useMyStore();
-    console.log(store)
     useEffect(() => {
+        getPlayer('thechristamen', setPlayerFS);
         GetAll(setInboxFS, 'inbox');
         GetAll(setTasksFS, 'task');
         GetAll(setMissionsFS, 'mission');
         GetAll(setEventsFS, 'event');
         GetAll(setReferencesFS, 'reference');
     }, []);
+
+    useEffect(() => {
+        setPlayer(playerFS);
+    }, [playerFS, setPlayer]);
 
     useEffect(() => {
         setAllInbox(inboxFS);
@@ -63,7 +69,6 @@ export default function App() {
     }, [allTasks, setTasks]);
 
     useEffect(() => {
-        console.log('setting all missions')
         setMissions(missionFilter(allMissions));
     }, [allMissions, setMissions]);
 

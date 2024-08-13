@@ -8,6 +8,8 @@ function store(set) {
         setLastUpdated: () => set(() => ({lastUpdated: new Date().getTime()})),
         user: {},
         setUser: user => set(() => ({user: user})),
+        player: {},
+        setPlayer: player => set(() => ({player: player})),
         isLoggedIn: true,
         setIsLoggedIn: value => set(() => ({isLoggedIn: value})),
 

@@ -48,16 +48,16 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
     const [ outcome, setoutcome ] = useState(task.outcome);
     const [ dueDate, setDueDate ] = useState(task.dueDate);
     const [ timeRequired, settimeRequired ] = useState(task.timeRequired);
-    const [ note, setnote ] = useState(task.note);
+    const [ details, setDetails ] = useState(task.details);
     const [ lastUpdated, setlastUpdated ] = useState(db?.lastUpdated);
 
     useEffect(() => {
         setName(task.name);
         setScheduledDate(task.scheduledDate);
         setoutcome(task.outcome);
-        setnote(task.note);
+        setDetails(task.details);
         setDueDate(task.dueDate);
-    }, [task.name, task.scheduledDate, task.outcome, task.note, task.dueDate, task.timeSpent, activeSince, activeTask, task.id, db?.lastUpdated ])
+    }, [task.name, task.scheduledDate, task.outcome, task.details, task.dueDate, task.timeSpent, activeSince, activeTask, task.id, db?.lastUpdated ])
 
     function updateDB( obj, property, newVal) {
 
@@ -68,16 +68,6 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
             // amendList(db, 'TASKS', task, UPDATE, shipItems, exp);
             task.update({...task})
         }
-    }
-
-    function changeNavigation(id, title){
-       
-      let nav = {
-        title: title,
-        view: DETAILS,
-        ID: id
-      }
-      changeNav(nav); 
     }
 
     function saveDate(date){
@@ -104,7 +94,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
                   <h5 className='fw3 white pb2'>Time: 2pm </h5>
                 </div>
 
-                <h5 className='fw3 white pb2'>Time Required: {task.timeRequired}</h5>
+                <h5 className='fw3 white pb2'>Time Required: {task.timeRequired} minutes</h5>
                 <div className='w-100 pb3 flex justify-between'>
                   <div className='flex justify-between' >
                     <h5 className='fw3 white'>DUE:</h5>
@@ -132,15 +122,15 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
                 <h5 className='fw3 white'>Time Remaining: 12:34:50 </h5> */}
               </div>
               <div className='pb2'>
-                <h5 className='bb b--white pb2 fw3 white b' >Additional Details</h5>
+                <h5 className='bb b--white pb2 fw3 white b' >Details</h5>
                 <div className='pa2'>
                   {/* <p className='fw3 white'>{task.note}</p> */}
-                  <textarea rows="2" cols="45" onChange={(e)=> {setnote(e.target.value);} } onBlur={ () =>{ updateDB(task, "note", note )}} value={note} className='fw3 white bn bg-transparent' />
+                  <textarea rows="2" cols="45" onChange={(e)=> {setDetails(e.target.value);} } onBlur={ () =>{ updateDB(task, "details", details )}} value={details} className='fw3 white bn bg-transparent' />
                   </div>
                 </div>
                   <h5 className='fw3 white'>Status: {task.status}</h5>
             </Scroll>
-            {/* <TaskControls task={task} position={''} /> */}
+            <TaskControls task={task} position={''} />
           </div>
           </>
             );

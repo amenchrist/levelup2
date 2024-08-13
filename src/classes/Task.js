@@ -1,4 +1,4 @@
-import { updateDoc, doc } from 'firebase/firestore';
+import { updateDoc, doc, setDoc } from 'firebase/firestore';
 import { db } from "../firebase";
 import {TASK, PENDING,} from '../constants';
 import { v4 as uuid } from 'uuid';
@@ -18,7 +18,6 @@ export class Task{
           name: '',
           outcome: '',
           requiredContext: '',
-          note: '',
           dueDate: null,//(new Date()).toISOString().substr(0, 10);
           timeRequired: 15, //in multiples of 5 minutes
           requirements: '',
@@ -32,7 +31,7 @@ export class Task{
           doneDate: "N/A",
           order: 0,
           collection: "task",
-          agent: '',
+          playerId: '',
           startDate: null,// 
           startTime: '00:00', // Time 
           scheduledDate: null, // Assigned by agent or system at creation
@@ -49,6 +48,17 @@ export class Task{
         return updatedTask;
       } catch (err) {
         console.log('Error updating task')
+        console.log(err);
+        return false
+      }
+    }
+
+    async uploadTask(task) {
+      try {
+          await setDoc(doc(db, `task`, task.id), {...task});
+          return true
+      } catch (err) {
+        console.log('Error uploading task')
         console.log(err);
         return false
       }

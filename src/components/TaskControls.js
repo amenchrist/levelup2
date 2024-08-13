@@ -16,7 +16,6 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
     }
     
     let prevTimeSpent = parseInt(task.timeSpent);
-    //console.log("on entering task cont, prevtime: ", prevTimeSpent)
     function startTimer(){
         task.status = ACTIVE;
         if (task.activeSince === 0 ){
@@ -34,8 +33,7 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
         task.activeSince = 0;
         timerOn = false;
         updateTask();
-        //console.log("previos time spent:, ", prevTimeSpent)
-        //console.log("time spent:, ", task.timeSpent)
+
     }
 
     function markAsDone(){
@@ -45,16 +43,10 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
             pauseTask();
         }
         task.status = DONE;
-        //console.log("timespent from task controls: ", prevTimeSpent)
-        //parseInt(prevTimeSpent) === 0 ? task.timeSpent = 0 : task.timeSpent = prevTimeSpent + (dateNow - parseInt(activeSince));
-        //console.log("timespent from task controls after: ", task.timeSpent)
         setActiveTask({});
         updateExp(task.exp);
         updateTask();
-        //db.Completed.unshift(task);
-        //pushChanges(ADD, task, "Completed", shipItems);
-        //db.Tasks.splice(position,1);
-        //pushChanges(REMOVE, task, "Tasks", shipItems);
+
         const nav = {
             title: COMPLETED,
             view: "DETAILS",
@@ -63,7 +55,9 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
         changeNav(nav);
     }
 
-    
+    function rescheduleTask () {
+
+    }
 
     switch(task.status){
         case ACTIVE:
@@ -85,14 +79,19 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
                 )
             }
         case PENDING:
-            //console.log(typeof activeTask)
-            //console.log(activeTask.id)
-            if(activeTask.id === undefined) {
+            if(activeTask?.id === undefined) {
                 return (
-                    <div className='flex justify-center'>
-                        <button className="button" onClick={startTimer}>START</button>
-                        <button className="button" onClick={markAsDone}>MARK DONE</button>
-                    </div>
+                    <>
+                        <div className='flex justify-center'>
+                            <button className="button" onClick={startTimer}>START</button>
+                            <button className="button" onClick={pauseTask}>PAUSE</button>
+                        </div>
+                        <br />
+                        <div className='flex justify-center'>
+                            <button className="button" onClick={rescheduleTask}>RESCHEDULE</button>
+                            <button className="button" onClick={markAsDone}>COMPLETED</button>
+                        </div>
+                    </>
                 )
             } else {
                 return (
@@ -102,6 +101,5 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
         default:
             return <div></div>
     }
-    // Different controls are displayed based on if a task is ongoing
 }
 

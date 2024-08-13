@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { PENDING, LOW, TASK, MEDIUM, HIGH, MISSIONS, ADD, DAILY, NONE, SOMEDAY } from '../constants';
-import { Task } from '../classes';
 import { pushChanges } from '../functions';
 import DatePicker from './DatePicker';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
+import { Task } from '../classes/Task';
+import Player from '../classes/Player';
 
 export default function NewTask({  shipItems, itemID, db, title }) {
 
-    const { addItem } = useMyStore();
+    const { addItem, player } = useMyStore();
     const navigate = useNavigate();
 
     const [ name, setName ] = useState('');
@@ -17,27 +18,35 @@ export default function NewTask({  shipItems, itemID, db, title }) {
     const [ details, setDetails ] = useState('');
     const [ dueDate, setDueDate ] = useState(null);
     const [ agent, setAgent ] = useState('');
+    const [ agentId, setAgentId ] = useState('');
     const [ priority, setPriority ] = useState('');
     const [ frequency, setFrequency ] = useState('NONE');
     const [ requirements, setRequirements ] = useState('');
-    const [ associatedMissionID, setAssociatedMissionID ] = useState(itemID);
+    const [ associatedMissionID, setAssociatedMissionID ] = useState(itemID || null);
 
     function submitNewItem(event) {
         event.preventDefault();
 
-        let t = new Task(name, outcome, requiredContext, associatedMissionID, dueDate);
-
-        t.frequency = frequency;
-        t.details = details;
+        let t = new Task({name, outcome, requiredContext, associatedMissionID, dueDate, frequency, details});
+        console.log(t)
 
         // updateExp(5);
-        addItem(t);
+        const taskUploaded = t.uploadTask({...t})
+        if(taskUploaded){
 
-        if(title === MISSIONS){
-           addToMissionTasks(t, associatedMissionID);
-        }
+            let p = new Player({...player})
+            p.updateExp(5)
+
+
+
+            // addItem(t);
     
-        navigate(`/Tasks/${t.id}`);        
+            if(title === MISSIONS){
+               addToMissionTasks(t, associatedMissionID);
+            }
+        
+            navigate(`/Tasks/${t.id}`);        
+        }
     }
 
     function addToMissionTasks(task, projID){

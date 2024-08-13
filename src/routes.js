@@ -9,6 +9,7 @@ import Stats from './containers/Stats';
 import Details from './containers/Details';
 import NewItem from './components/NewItem';
 import Schedule from './containers/Schedule';
+import NewPlayer from './components/NewPlayer';
 
 export default function Router() {
 
@@ -25,14 +26,9 @@ export default function Router() {
         { path: '', element: <Home /> },
         { path: ':category', element: <List /> },
         { path: ':category/:id', element: <Details /> },
-        { path: 'new', element: <NewItem /> },
+        { path: 'new/:collection', element: <NewItem /> },
         { path: 'Schedule', element: <Schedule /> },
-        
-
-        // { path: 'tasks', element: <ListContainer title={'Tasks'} /> },
-        // { path: 'tasks/:id', element: <h2>Task Details</h2> },
-        // { path: 'missions', element: <ListContainer title={'Missions'} />},
-        // { path: 'missions/:id', element: <h2>Mission Details</h2> },
+        { path: 'new-player', element: <NewPlayer /> },
         { path: 'stats', element: <Stats /> },
       ],
     },

@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { getDocs, collection, doc, setDoc, updateDoc,  deleteDoc } from "firebase/firestore";
+import { getDocs, collection, doc, setDoc, updateDoc,  deleteDoc, getDoc } from "firebase/firestore";
 
 //INBOX
 const inboxCollectionRef = collection(db, 'inbox');
@@ -120,3 +120,20 @@ export async function DeleteItem(item){
         return false
     }
 }
+
+export const getPlayer = async (handle, setFunc) => {
+
+    try {
+      const docRef = doc(db, 'player', handle)
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()){
+        setFunc(docSnap.data());
+      } else {
+        console.log('Player not found');
+        return null
+      }
+    } catch (err) {
+      console.log(err);
+      return null
+    } 
+  }
