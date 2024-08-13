@@ -3,11 +3,12 @@ import DatePicker from './DatePicker';
 import Timer from './Timer';
 import TaskControls from './TaskControls';
 import { amendList  } from '../functions';
-import { COMPLETED, DETAILS, DONE, MISSIONS, SOMEDAY, TASKS, UPDATE } from '../constants';
+import { COMPLETED, DETAILS, SOMEDAY, } from '../constants';
 import Scroll from './Scroll';
 import { useMyStore } from '../store';
 import { useParams } from 'react-router-dom';
 import { Box, TextField } from '@mui/material';
+import { Task } from '../classes/Task';
 
 export default function TaskDetails({ title, activeSince, activeTask, db, shipItems, changeNav, exp }) {
 
@@ -21,7 +22,8 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
 
     for (let i=0; i<relevantList.length; i++){
         if (relevantList[i].id === id){
-           task = relevantList[i];
+           task =  relevantList[i];
+           task = new Task({...task})
            break;
         }
     }
@@ -38,8 +40,6 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
             }
         }
     }
-
-    console.log(task)
 
     ///////////////////////////////////////////////////////
 
@@ -65,7 +65,8 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
             console.log(`old value (${obj[property]}) !== new value (${newVal})`)
 
             obj[property] = newVal;
-            amendList(db, TASKS, task, UPDATE, shipItems, exp);
+            // amendList(db, 'TASKS', task, UPDATE, shipItems, exp);
+            task.update({...task})
         }
     }
 
@@ -76,7 +77,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
         view: DETAILS,
         ID: id
       }
-      changeNav(nav);        
+      changeNav(nav); 
     }
 
     function saveDate(date){
@@ -89,20 +90,20 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
       default:
         return (
           <>
-          <Box >
-              <TextField fullWidth variant="outlined" value={name} sx={{ fontSize: '30px',p: 1}} />
-          </Box>
-
           <div className='h-100' >
             <Scroll>
-              <div className='w-100 pb3'  >
-              <TextField fullWidth label="Email Address"  variant="outlined" value={name} sx={{ fontSize: '30px',p: 1}} />
+              <div className='w-100 pb3 pt3'>
+              {/* <TextField fullWidth label="Email Address"  variant="outlined" value={name} sx={{ fontSize: '30px',p: 1}} /> */}
                 <textarea rows="2" cols="30" wrap='hard' 
                 onChange={(e)=> {setName(e.target.value);} } 
                 onBlur={() => { updateDB(task, "name", name ) } } 
                 value={name} className='bn fw9 b white bg-transparent pa1'
                 />
-                <h5 className='fw3 white pb2'>Scheduled: Sunday, Aug 17 @ 2pm </h5>
+                <div className='w-100 pb3 flex justify-between'>
+                  <h5 className='fw3 white pb2'>Date: Sunday, Aug 17 </h5>
+                  <h5 className='fw3 white pb2'>Time: 2pm </h5>
+                </div>
+
                 <h5 className='fw3 white pb2'>Time Required: {task.timeRequired}</h5>
                 <div className='w-100 pb3 flex justify-between'>
                   <div className='flex justify-between' >
