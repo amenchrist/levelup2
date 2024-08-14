@@ -5,11 +5,13 @@ import { useMyStore } from '../store';
 import ListItem from '../components/ListItem';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 export default function Home() {
-    let content = useMyStore(store => store['tasks']);
-    const { player } = useMyStore()
-    let listItems;
+	let content = useMyStore(store => store['tasks']);
+	const { completed } = useMyStore()
+	const { player } = useMyStore()
+	let listItems;
 	const navigate = useNavigate();
     
     if(content){
@@ -17,6 +19,10 @@ export default function Home() {
         return <ListItem item={content[i]} key={content[i].id}/>
       })
     }
+
+		const today = dayjs().format('DD-MM-YYYY')
+		
+		const doneToday = completed.filter(t => dayjs(t.doneDate).format('DD-MM-YYYY') === today)
    
     return (
 			<div className='h-100 pa1' >
@@ -62,6 +68,9 @@ export default function Home() {
 							<Grid container justifyContent="space-between" alignItems={'center'} color={'white'} sx={{padding: '20px 0 10px 0'}}>
 								<Grid item>
 									<Typography variant='p' >Total: {content.length}</Typography>
+								</Grid>
+								<Grid item>
+									<Typography variant='p' >Done Today: {doneToday.length}</Typography>
 								</Grid>
 								<Grid item sx={{border: '2px solid white', padding: '5px 7px'}} onClick={() => navigate(`/new/task`)} >
 									<Typography variant='p'>+</Typography>

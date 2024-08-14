@@ -1,22 +1,26 @@
 import React from 'react';
 import { MISSION, TASK, INBOX_ITEM,  MISSIONS, SOMEDAY, EVENT, EVENTS, REFERENCES, REFERENCE, PROCESSED } from '../constants';
 import { displayDays } from '../functions';
-import { useNavigate, } from 'react-router-dom';
+import { useNavigate, useParams, } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 
 export default function ListItem( { item, title }){
     
     let nextTitle;
     const navigate = useNavigate();
-    let category = item.collection + 's';
-    switch(item.collection){
-      case 'inbox':
-        category = 'inbox';
-      break;
-      default: 
-    }
+    // let category = item.collection + 's';
+    // switch(item.collection){
+    //   case 'inbox':
+    //     category = 'inbox';
+    //   break;
+    //   default: 
+    // }
 
-    // const { category } = useParams();
+    let { category } = useParams();
+    if(category === undefined){
+      category = item.collection + 's'
+    } 
 
     function ListWrapper({ children, suffix }) {
         return (
@@ -49,9 +53,10 @@ export default function ListItem( { item, title }){
                   </ListWrapper>
                 )
             } else {
+              const date = dayjs(item.scheduledDate).format('YYYY-MM-DD')
                 return (
                   <ListWrapper suffix={item.status} >
-                      <p className='fw3 white'>{'Today, 12:35pm'}</p>
+                      <p className='fw3 white'>{dayjs(`${date} ${item.scheduledTime}`).format('dddd, MMMM DD @ hh:mm a')}</p>
                   </ListWrapper>
                 )
             }

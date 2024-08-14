@@ -1,6 +1,7 @@
 import React from 'react';
 import { ASAP, DETAILS, MISSIONS } from '../constants';
 import { calculateTime } from '../functions';
+import dayjs from 'dayjs';
 
 
 export default function CompletedItemDetails({ MissionsList, changeNav,  item }) {
@@ -30,7 +31,7 @@ export default function CompletedItemDetails({ MissionsList, changeNav,  item })
         changeNav(nav);        
     }
 
-    console.log("completed" ,item)
+    const doneDate = dayjs(item.doneDate).format('dddd, MMMM DD @ hh:mm a')
     
     return (
         <div className='' >
@@ -51,21 +52,21 @@ export default function CompletedItemDetails({ MissionsList, changeNav,  item })
                     <h5 className='fw3 white'>Outcome: </h5>
                     <h5 className='fw3 white'>{item.outcome} </h5>
                 </div>
-                <div className='w-100 pl2 pb3 flex justify-between'>
+                <div className='w-100 pl2 pb3'>
+                    <h5 className='fw3 white'>COMPLETED: {doneDate} </h5>
                     <h5 className='fw3 white'>Time Spent: {calculateTime(item.timeSpent)}</h5>
-                    <h5 className='fw3 white'>Due Date: {item.dueDate === ASAP ? ASAP : item.dueDate} </h5>
                 </div>
                 <div className='w-100 pl2 pb3 flex justify-between'>
-                    <h5 className='fw3 white'>COMPLETED: {(item.doneDate)} </h5>
+                <h5 className='fw3 white'>Due Date: {dayjs(`${item.dueDate}`).format('dddd, MMMM DD @ hh:mm a')} </h5>
                 </div>
                 <div className='w-100 pl2 pb3 flex justify-between'>           
                     {/* <h5 className='fw3 white'>Time Required: {task.timeRequired}</h5>
                     <h5 className='fw3 white'>Time Remaining: 12:34:50 </h5> */}
                 </div>
                 <h5 className='fw3 white'>Status: {item.status}</h5>
-                <h5 className='bb b--white pa2 fw3 white b' >NOTE</h5>
+                <h5 className='bb b--white pa2 fw3 white b' >Details</h5>
                 <div className='pa2'>
-                    <p className='fw3 white'>{item.note}</p>
+                    <p className='fw3 white'>{item.details}</p>
                 </div>
             </div>
         </div>

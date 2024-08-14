@@ -9,8 +9,8 @@ import NewItemButton from './NewItemButton';
 
 export default function List() {
 
-    const title = useParams().category.toLowerCase();
-    let content = useMyStore(store => store[title.toLowerCase()]);
+    const category = useParams().category.toLowerCase();
+    let content = useMyStore(store => store[category.toLowerCase()]);
     const { player } = useMyStore();
     let view, listItems;
 
@@ -54,8 +54,8 @@ export default function List() {
                 <hr/>
                 <div className='h-90 pa1'>
                     <div className='h-100 w-100 center pa1'>
-                        {/* <h1 className='tc b gold ma0 pb2'>{title}</h1> */}
-                        <h2 className='tc b gold f3'>{title.split().toSpliced(0,1,title[0].toUpperCase(), title.slice(1))}</h2>
+                        {/* <h1 className='tc b gold ma0 pb2'>{category}</h1> */}
+                        <h2 className='tc b gold f3'>{category.split().toSpliced(0,1,category[0].toUpperCase(), category.slice(1))}</h2>
                         <div className=' h-80 '>
                         {children}
                         </div>
@@ -68,8 +68,10 @@ export default function List() {
         )
     }
 
+    const coreCategories = ['inbox', 'tasks', 'missions', 'events', 'references']
 
-    switch(title){
+
+    switch(category){
         case MISSIONS:
             if (view === DETAILS){
                 if (sort === true){
@@ -117,9 +119,10 @@ export default function List() {
                         {listItems}
                     </Scroll>
                     <br />
-                    <Grid item sx={{border: '2px solid white', padding: '5px 7px', color: 'white', textAlign: 'center' }} onClick={() => navigate(`/new/${title}`)} >
+                    {coreCategories.includes(category)? 
+                    <Grid item sx={{border: '2px solid white', padding: '5px 7px', color: 'white', textAlign: 'center' }} onClick={() => navigate(`/new/${category}`)} >
                         <Typography variant='p'>Add new +</Typography>
-                    </Grid>
+                    </Grid>: <></>}
                 </ListContainer>
                 </>
             );

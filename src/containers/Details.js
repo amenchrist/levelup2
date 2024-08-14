@@ -20,8 +20,8 @@ import { Grid, Typography } from '@mui/material';
 export default function Details( { touchFunction, updateExp, missionID  }){
     
     const itemID = useParams().id;
-    const title = useParams().category.toUpperCase();
-    const content = useMyStore(store => store[title.toLowerCase()]);
+    const category = useParams().category.toUpperCase();
+    const content = useMyStore(store => store[category.toLowerCase()]);
     const { player } = useMyStore();
 
     // FIND ITEM
@@ -58,7 +58,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
           <div className='flex justify-between items-center'>
             <BackButton id={0} />
             <h2 className='tc b gold f3'>{category}</h2>
-            <TrashButton id={itemID} title={category} />
+            <TrashButton id={itemID} category={category} />
           </div>
           <div className='h-70'>
               {children}
@@ -74,62 +74,62 @@ export default function Details( { touchFunction, updateExp, missionID  }){
     }
     // CHOOSE DETAILS FORMAT FOR DIFFERENT LIST OR ITEM TYPES
     switch(true) {
-        case title === MISSIONS:
+        case category === MISSIONS:
             return (
-                <DetailsContainer category={title} >
+                <DetailsContainer category={category} >
                     <MissionDetails mission={item} id={itemID} updateExp={updateExp}/>
                 </DetailsContainer>
             )
-        case title === TASKS:
+        case category === TASKS:
             return (
-                <DetailsContainer category={title} >
+                <DetailsContainer category={category} >
                     <TaskDetails id={itemID} />
                 </DetailsContainer>
             )
-        case title === MISSION_TASKS:
+        case category === MISSION_TASKS:
             return (
-                <DetailsContainer category={title} >
+                <DetailsContainer category={category} >
                     <TaskDetails id={itemID} />
                 </DetailsContainer>
             )
-        case title === INBOX:
+        case category === INBOX:
             return (
-                <DetailsContainer category={title} >
+                <DetailsContainer category={category} >
                     <ItemDetails id={itemID} />
                 </DetailsContainer>
             )
-        case title === PROCESSED:
+        case category === PROCESSED:
             return (
-                <DetailsContainer category={title} >
+                <DetailsContainer category={category} >
                     <h5 className='white b pb2'>Name: {item.name}</h5>
                     <h5 className='white pb2'>Processed: {(new Date(item.processedDate)).toLocaleString()} </h5>
                 </DetailsContainer>
             )
-        case title === REFERENCES:
+        case category === REFERENCES:
             return (
-                <DetailsContainer category={title} >
+                <DetailsContainer category={category} >
                     <ReferenceDetails id={itemID} reference={item} />
                 </DetailsContainer>
             )
-        case title === EVENTS:
+        case category === EVENTS:
             return (
-                <DetailsContainer category={title} >
+                <DetailsContainer category={category} >
                     <EventDetails id={itemID} item={item} />
                 </DetailsContainer>
             )
-        case title === COMPLETED:
+        case category === COMPLETED:
             return (
-                <DetailsContainer category={title} >
+                <DetailsContainer category={category} >
                     <CompletedItemDetails item={item} MissionsList={content}/>
                 </DetailsContainer>
             )
-        case title === TRASH:
+        case category === TRASH:
         return (
-            <DetailsContainer category={title} >
+            <DetailsContainer category={category} >
                 <TrashedItemDetails item={item} />
             </DetailsContainer>
         )
-        case title === TODAY || title === SOMEDAY:
+        case category === TODAY || category === SOMEDAY:
             if (item.type === TASK){
                 return (
                     <DetailsContainer category={TASK} >
@@ -144,9 +144,9 @@ export default function Details( { touchFunction, updateExp, missionID  }){
                 )
             }
             break;
-        case title === DAILY:
+        case category === DAILY:
             return (
-                <DetailsContainer category={title} >
+                <DetailsContainer category={category} >
                     <TaskDetails id={itemID} />
                 </DetailsContainer>
             )

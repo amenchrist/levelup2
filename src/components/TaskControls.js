@@ -1,10 +1,15 @@
 import React from 'react';
-//import { TaskList } from '../TaskList';
 import { DONE, ACTIVE, PAUSED, PENDING, UPDATE, ADD, REMOVE, COMPLETED } from '../constants';
-import { pushChanges  } from '../functions';
+import { useMyStore } from '../store';
+import Player from '../classes/Player';
+import { useNavigate } from 'react-router-dom';
 
 
-export default function TaskControls({ task, position, changeNav, updateExp, changeItemID, setActiveTask, activeSince, activeTask, shipItems, db, timerOn }){
+export default function TaskControls({ task, updateExp, timerOn }){
+
+    const { updateItem, activeTask, setActiveTask, } = useMyStore()
+    const player = useMyStore( store => new Player(store.player));
+    const navigate = useNavigate();
 
     if( task.status === ACTIVE && timerOn === false){
         startTimer();
@@ -12,7 +17,7 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
     }
 
     function updateTask(){
-        pushChanges(UPDATE, task, "Tasks", shipItems);
+        updateItem(task)
     }
     
     let prevTimeSpent = parseInt(task.timeSpent);
@@ -22,37 +27,33 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
             task.activeSince = new Date().getTime();
         }
         setActiveTask(task);
-        updateTask();
+        updateItem(task);
     }
 
     function pauseTask(){
-        const dateNow = new Date().getTime();
-        task.timeSpent = prevTimeSpent + (dateNow - parseInt(activeSince));
-        setActiveTask({});
-        task.status = PAUSED;
-        task.activeSince = 0;
-        timerOn = false;
-        updateTask();
+        // const dateNow = new Date().getTime();
+        // task.timeSpent = prevTimeSpent + (dateNow - parseInt(activeSince));
+        // setActiveTask({});
+        // task.status = PAUSED;
+        // task.activeSince = 0;
+        // timerOn = false;
+        // updateTask();
 
     }
 
     function markAsDone(){
-        const dateNow = new Date().toISOString().substr(0, 10);
+        const dateNow = new Date().toString()
         task.doneDate = dateNow;
         if (task.status === ACTIVE) {
             pauseTask();
         }
         task.status = DONE;
         setActiveTask({});
-        updateExp(task.exp);
-        updateTask();
+        player.updateExp(20);
+        updateItem(task);
+        updateItem({...player})
 
-        const nav = {
-            title: COMPLETED,
-            view: "DETAILS",
-            ID: task.id
-        }
-        changeNav(nav);
+        navigate(`/completed/${task.id}`)
     }
 
     function rescheduleTask () {
@@ -78,13 +79,14 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
                     </div>
                 )
             }
+            break;
         case PENDING:
             if(activeTask?.id === undefined) {
                 return (
                     <>
                         <div className='flex justify-center'>
                             <button className="button" onClick={startTimer}>START</button>
-                            <button className="button" onClick={pauseTask}>PAUSE</button>
+                            {/* <button className="button" onClick={pauseTask}>PAUSE</button> */}
                         </div>
                         <br />
                         <div className='flex justify-center'>
@@ -97,7 +99,7 @@ export default function TaskControls({ task, position, changeNav, updateExp, cha
                 return (
                     <div>
                     </div>)
-            }   
+            }
         default:
             return <div></div>
     }

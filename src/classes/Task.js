@@ -22,45 +22,46 @@ export class Task{
           timeRequired: 15, //in multiples of 5 minutes
           requirements: '',
           associatedMissionID: 0,
-          exp: 20,
+          exp:10,
           details: '',
           isTrashed: false,
           trashedDate: "N/A",
           timeSpent: 0,
           activeSince: 0,
-          doneDate: "N/A",
+          doneDate: null,
           order: 0,
           collection: "task",
           playerId: '',
           startDate: null,// 
           startTime: '00:00', // Time 
           scheduledDate: null, // Assigned by agent or system at creation
+          scheduledTime: '00:00',
         }
 
         constructorHelper.call(this, data, defaultObj)
     }
 
-    async update(taskUpdate) {
-      try {
-        await updateDoc(doc(db, `task`, this.id), taskUpdate);
-        const updatedTask = new Task({...this, id: this.id, ...taskUpdate})
-        console.log('task Updated successfully')
-        return updatedTask;
-      } catch (err) {
-        console.log('Error updating task')
-        console.log(err);
-        return false
-      }
-    }
+    // async update(taskUpdate) {
+    //   try {
+    //     await updateDoc(doc(db, `task`, this.id), taskUpdate);
+    //     const updatedTask = new Task({...this, id: this.id, ...taskUpdate})
+    //     console.log('task Updated successfully')
+    //     return updatedTask;
+    //   } catch (err) {
+    //     console.log('Error updating task')
+    //     console.log(err);
+    //     return false
+    //   }
+    // }
 
-    async uploadTask(task) {
-      try {
-          await setDoc(doc(db, `task`, task.id), {...task});
-          return true
-      } catch (err) {
-        console.log('Error uploading task')
-        console.log(err);
-        return false
-      }
-    }
+    // async uploadTask(task) {
+    //   try {
+    //       await setDoc(doc(db, `task`, task.id), {...task});
+    //       return true
+    //   } catch (err) {
+    //     console.log('Error uploading task')
+    //     console.log(err);
+    //     return false
+    //   }
+    // }
 }

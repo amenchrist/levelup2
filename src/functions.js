@@ -45,27 +45,6 @@ export function trashFilter(array){
 }
 
 //////////////////////
-export function passTitleAndID(e, ChangeTitleFunction, changeIDFunction) {
-    let targ = e.target;
-    checkForTitle(targ)
-    function checkForTitle (t) {
-        if (t.title) {
-            ChangeTitleFunction(t.title);
-        } else {
-            t = t.parentNode;
-            checkForTitle (t);   
-        }
-    }
-    checkForID(targ);
-    function checkForID (t) {
-        if (t.id) {
-            changeIDFunction(t.id);
-        } else {
-            t = t.parentNode;
-            checkForID (t);   
-        }
-    }
-}
 
 export function setNavValues(e, navChanger, state){
     let targ = e.target;

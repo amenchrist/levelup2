@@ -88,7 +88,9 @@ export async function GetAll(setFunc, category, currentList) {
 
 //Update ANY Item
 export async function UpdateItem(item){
-    const itemRef = doc(db, item.collection, item.id )
+    let id;
+    item.collection === 'player' ? id = item.handle : id = item.id;
+    const itemRef = doc(db, item.collection, id )
     try{
         await updateDoc(itemRef, {...item})
         return true
@@ -101,8 +103,10 @@ export async function UpdateItem(item){
 
 //Upload ANY Item
 export async function UploadItem(item){
+    let id;
+    item.collection === 'player' ? id = item.handle : id = item.id;
     try{
-        await setDoc(doc(db, item.collection, item.id), {...item});
+        await setDoc(doc(db, item.collection, id), {...item});
         return true
     } catch(e){
         console.log(`Something went wrong UPLOADING to firestore ${item.collection} collection`, e)
@@ -112,14 +116,18 @@ export async function UploadItem(item){
 
 //Delete ANY Item
 export async function DeleteItem(item){
+    let id;
+    item.collection === 'player' ? id = item.handle : id = item.id;
     try{
-        await deleteDoc(doc(db, item.collection, item.id), {...item});
+        await deleteDoc(doc(db, item.collection, id ), {...item});
         return true
     } catch(e){
         console.log(`Something went wrong DELETING to firestore ${item.collection} collection`, e)
         return false
     }
 }
+
+//Get current player
 
 export const getPlayer = async (handle, setFunc) => {
 

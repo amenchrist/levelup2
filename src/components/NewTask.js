@@ -6,10 +6,15 @@ import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import { Task } from '../classes/Task';
 import Player from '../classes/Player';
+import { Grid, TextField } from '@mui/material';
+import dayjs from 'dayjs';
+import FormDialog from './Dialog';
 
 export default function NewTask({  shipItems, itemID, db, title }) {
 
-    const { addItem, player } = useMyStore();
+    const { addItem, updateItem } = useMyStore();
+    const player = useMyStore(store => new Player(store.player));
+
     const navigate = useNavigate();
 
     const [ name, setName ] = useState('');
@@ -23,30 +28,29 @@ export default function NewTask({  shipItems, itemID, db, title }) {
     const [ frequency, setFrequency ] = useState('NONE');
     const [ requirements, setRequirements ] = useState('');
     const [ associatedMissionID, setAssociatedMissionID ] = useState(itemID || null);
+    const [ date, setDate ] = useState(null);
+    const [ time, setTime ] = useState(null);
+
+    const [openScheduledDateDialog, setOpenScheduledDateDialog] = useState(false);
+
 
     function submitNewItem(event) {
         event.preventDefault();
 
-        let t = new Task({name, outcome, requiredContext, associatedMissionID, dueDate, frequency, details});
+        let t = new Task({name, 
+            outcome,  
+            dueDate, frequency, details, requirements, 
+            scheduledDate: dayjs(`${date}`).toDate().toString(),
+            scheduledTime: time
+        });
         console.log(t)
 
-        // updateExp(5);
-        const taskUploaded = t.uploadTask({...t})
-        if(taskUploaded){
-
-            let p = new Player({...player})
-            p.updateExp(5)
-
-
-
-            // addItem(t);
-    
-            if(title === MISSIONS){
-               addToMissionTasks(t, associatedMissionID);
-            }
-        
-            navigate(`/Tasks/${t.id}`);        
-        }
+        addItem(t);
+        updateItem(player.updateExp(5))
+        if(title === MISSIONS){
+            addToMissionTasks(t, associatedMissionID);
+         }     
+         navigate(`/tasks/${t.id}`);
     }
 
     function addToMissionTasks(task, projID){
@@ -66,6 +70,23 @@ export default function NewTask({  shipItems, itemID, db, title }) {
         }
     }
 
+    function setScheduledDate () {
+        return
+    }
+
+      const DateAndTimePicker = () => {
+        return (
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+                <TextField required fullWidth type="date" id="date" label="Date" value={date} onChange={(e) => setDate(e.target.value)} />
+            </Grid>
+            <Grid item xs={12} sm={6} >
+                <TextField required fullWidth type="time" id="time" label="Time" value={time} onChange={(e) => setTime(e.target.value)} />
+            </Grid>
+          </Grid>
+        )
+      }
+
     return (
         <div className='h-100 w-100 center br1 pa3 ba b--black-10 '>
             <h1 className='tc b gold f3'>NEW TASK</h1>
@@ -73,11 +94,14 @@ export default function NewTask({  shipItems, itemID, db, title }) {
                 <input className='pa2 mb1' type='text' autoFocus placeholder='Name' value={name} onChange={(e)=> setName(e.target.value)} />
                 <input  className='pa2 mb1'type='text' placeholder='Outcome' value={outcome} onChange={(e) => setOutcome(e.target.value)} />
                 <textarea  className='pa2 mb1' placeholder='Details' value={details} onChange={(e) => setDetails(e.target.value)} />
-                <textarea  className='pa2 mb1' placeholder='Required Context' value={requiredContext} onChange={(e) => setRequiredContext(e.target.value)} />
+                {/* <textarea  className='pa2 mb1' placeholder='Required Context' value={requiredContext} onChange={(e) => setRequiredContext(e.target.value)} /> */}
                 {/* <label className='fw4 white' htmlFor="due date" >Due Date:</label> */}
-                <div className='pa2' style={{padding: '5px 0', display: 'flex', }}>
-                    <p style={{color: 'white'}}>Due Date: </p>
-                    <DatePicker item={{}} date={dueDate} setDate={setDueDate} />
+                <div className='pa2' style={{padding: '15px 0', display: 'flex', }}>
+                    <p style={{color: 'white'}} onClick={() => setOpenScheduledDateDialog(true)}>Due Date: {dayjs(`${date} ${time}`).format('dddd, MMMM DD @ hh:mm a')} </p>
+                    <FormDialog open={openScheduledDateDialog} setOpen={setOpenScheduledDateDialog} 
+                    title={'Scheduled Date'} msg={'When would you like to do this task?'} Content={<DateAndTimePicker />} actionText={'Save'} action={setScheduledDate}
+                    />
+                    {/* <DatePicker item={{}} date={dueDate} setDate={setDueDate} /> */}
                 </div>
                 {/* <input className='pa2 mb1' id='due date' type='date' min={today} value={dueDate} onChange={(e) => setDueDate(e.target.value)} /> */}
                 <select className='pa2 mb1' id="priority" value={frequency} onChange={(e)=> setFrequency(e.target.value)}>
@@ -86,7 +110,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
                     <option value={DAILY}>DAILY</option>
                 </select>
                 <textarea className='pa2 mb1' placeholder='Requirements' value={requirements} onChange={(e) => setRequirements(e.target.value)} />
-                <input className='pa2 mb1' type='text' placeholder='Assigned Agent' value={agent} onChange={(e)=> setAgent(e.target.value)} />
+                {/* <input className='pa2 mb1' type='text' placeholder='Assigned Agent' value={agent} onChange={(e)=> setAgent(e.target.value)} /> */}
                 {/* <input type='text' placeholder='Frequency' value={frequency} onChange={(e) => setFrequency(e.target.value)} />
                 <input type='text' placeholder='Associated Mission name' value={associatedMission} onChange={(e) => setAssociatedMission(e.target.value)} /> */}
                 <input className='pa2 mb1' type='submit' value='submit' />

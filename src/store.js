@@ -13,6 +13,9 @@ function store(set) {
         isLoggedIn: true,
         setIsLoggedIn: value => set(() => ({isLoggedIn: value})),
 
+        activeTask: {},
+        setActiveTask: task => set(() => ({activeTask: task})),
+
         allInbox: [],
         allTasks: [],
         allMissions: [],
@@ -63,6 +66,8 @@ function store(set) {
                 return {allEvents: [item, ...store.allEvents], dbUploadPending: [...store.dbUploadPending, item]}
                 case 'reference':
                 return {allReferences: [item, ...store.allReferences], dbUploadPending: [...store.dbUploadPending, item]}
+                case 'player':
+                return {player: item, dbUploadPending: [...store.dbUploadPending, item]}
                 default: 
                 return {allInbox: store.allInbox}
             }
@@ -84,6 +89,8 @@ function store(set) {
                 return {allEvents: store.allEvents.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
                 case 'reference':
                 return {allReferences: store.allReferences.map( i => i.id === item.id ? item : i ), dbUpdatePending: [...store.dbUpdatePending, item]}
+                case 'player':
+                return {player: item, dbUpdatePending: [...store.dbUpdatePending, item]}
                 default: 
                 return {allInbox: store.allInbox}
             }

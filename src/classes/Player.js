@@ -23,6 +23,7 @@ export default class Player {
             primaryPage: null,
             church: null,
             allowsMarketing: true,
+            collection: 'player',
         }
         constructorHelper.call(this, data, defaultUser) 
     }
@@ -38,15 +39,20 @@ export default class Player {
       }
     }
 
-    async updateExp(exp) {
-      try {
-        await updateDoc(doc(db, `player`, this.handle), {exp: this.exp + exp});
-        const updatedPlayer = new Player({...this, id: this.id, exp: this.exp + exp })
-        return updatedPlayer;
-      } catch (err) {
-        console.log('Error updating player exp')
-        console.log(err);
-        return false
-      }
+    updateExp(exp) {
+      this.exp = this.exp + exp;
+      return this
     }
+
+    // async updateExp(exp) {
+    //   try {
+    //     await updateDoc(doc(db, `player`, this.handle), {exp: this.exp + exp});
+    //     const updatedPlayer = new Player({...this, id: this.id, exp: this.exp + exp })
+    //     return updatedPlayer;
+    //   } catch (err) {
+    //     console.log('Error updating player exp')
+    //     console.log(err);
+    //     return false
+    //   }
+    // }
 }

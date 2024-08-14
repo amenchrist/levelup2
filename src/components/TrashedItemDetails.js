@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMyStore } from '../store';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, } from 'react-router-dom';
 
 export default function TrashedItemDetails({ changeNav, item, db, shipItems }) {
 

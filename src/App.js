@@ -92,8 +92,8 @@ export default function App() {
 
     //Completed
     useEffect(() => {
-        setCompleted(completedFilter(tasks.concat(missions)));
-    }, [tasks, missions, setCompleted]);
+        setCompleted(completedFilter(allTasks.concat(missions)));
+    }, [tasks, allTasks, missions, setCompleted]);
 
     //Processed
     useEffect(() => {
@@ -118,8 +118,7 @@ export default function App() {
           //find and update current item
           if(UpdateItem(dbUpdatePending[0])){
             const tempArray = [...dbUpdatePending]
-            console.log(tempArray.shift())
-
+            tempArray.shift()
             updateDbUpdatePending(tempArray)
           }
         }
@@ -132,8 +131,7 @@ export default function App() {
            //find and update current item
            if(UploadItem(dbUploadPending[0])){
              const tempArray = [...dbUploadPending]
-             console.log(tempArray.shift())
- 
+             tempArray.shift()
              updateDbUploadPending(tempArray)
            }
          }
@@ -147,8 +145,7 @@ export default function App() {
            //find and update current item
            if(DeleteItem(dbDeletePending[0])){
              const tempArray = [...dbDeletePending]
-             console.log(tempArray.shift())
- 
+             tempArray.shift()
              updateDbDeletePending(tempArray)
            }
          }
@@ -162,5 +159,3 @@ export default function App() {
         </div>
     );
 }
-
-//https://cdn.internetmultimediaonline.org/241F21/loveworldlive/ixilrao9.m3u8
