@@ -19,19 +19,20 @@ export default function NewTask({  shipItems, itemID, db, title }) {
 
     const [ name, setName ] = useState('');
     const [ outcome, setOutcome ] = useState('');
-    const [ requiredContext, setRequiredContext ] = useState('');
     const [ details, setDetails ] = useState('');
     const [ dueDate, setDueDate ] = useState(null);
-    const [ agent, setAgent ] = useState('');
     const [ agentId, setAgentId ] = useState('');
     const [ priority, setPriority ] = useState('');
     const [ frequency, setFrequency ] = useState('NONE');
     const [ requirements, setRequirements ] = useState('');
     const [ associatedMissionID, setAssociatedMissionID ] = useState(itemID || null);
-    const [ date, setDate ] = useState(null);
-    const [ time, setTime ] = useState(null);
+    const [ date, setDate ] = useState(dayjs().format('YYYY-MM-DD'));
+    const [ time, setTime ] = useState(dayjs().format('hh:mm'));
 
     const [openScheduledDateDialog, setOpenScheduledDateDialog] = useState(false);
+    console.log(dayjs())
+
+    console.log(dayjs(`${date} ${time}`).format('dddd, MMMM DD @ hh:mm a'))
 
 
     function submitNewItem(event) {
@@ -97,7 +98,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
                 {/* <textarea  className='pa2 mb1' placeholder='Required Context' value={requiredContext} onChange={(e) => setRequiredContext(e.target.value)} /> */}
                 {/* <label className='fw4 white' htmlFor="due date" >Due Date:</label> */}
                 <div className='pa2' style={{padding: '15px 0', display: 'flex', }}>
-                    <p style={{color: 'white'}} onClick={() => setOpenScheduledDateDialog(true)}>Due Date: {dayjs(`${date} ${time}`).format('dddd, MMMM DD @ hh:mm a')} </p>
+                    <p style={{color: 'white'}} onClick={() => setOpenScheduledDateDialog(true)}>Scheduled Date: {dayjs(`${date} ${time}`).format('dddd, MMMM DD @ hh:mm')} </p>
                     <FormDialog open={openScheduledDateDialog} setOpen={setOpenScheduledDateDialog} 
                     title={'Scheduled Date'} msg={'When would you like to do this task?'} Content={<DateAndTimePicker />} actionText={'Save'} action={setScheduledDate}
                     />
