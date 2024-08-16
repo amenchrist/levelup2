@@ -55,7 +55,7 @@ export default function ListItem( { item, title }){
             } else {
               const date = dayjs(item.scheduledDate).format('YYYY-MM-DD')
                 return (
-                  <ListWrapper suffix={item.status} >
+                  <ListWrapper suffix={item.priority} >
                       <p className='fw3 white'>{dayjs(`${date} ${item.scheduledTime}`).format('dddd, MMMM DD @ hh:mm a')}</p>
                   </ListWrapper>
                 )

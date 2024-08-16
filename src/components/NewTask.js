@@ -37,6 +37,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
 
     function submitNewItem(event) {
         event.preventDefault();
+        if(name.trim().length === 0) return
 
         let t = new Task({name, 
             outcome,  
@@ -105,10 +106,16 @@ export default function NewTask({  shipItems, itemID, db, title }) {
                     {/* <DatePicker item={{}} date={dueDate} setDate={setDueDate} /> */}
                 </div>
                 {/* <input className='pa2 mb1' id='due date' type='date' min={today} value={dueDate} onChange={(e) => setDueDate(e.target.value)} /> */}
-                <select className='pa2 mb1' id="priority" value={frequency} onChange={(e)=> setFrequency(e.target.value)}>
+                {/* <select className='pa2 mb1' id="priority" value={frequency} onChange={(e)=> setFrequency(e.target.value)}>
                     <option value="" disabled defaultValue>Frequency</option>
                     <option value={NONE}>ONE-TIME</option>
                     <option value={DAILY}>DAILY</option>
+                </select> */}
+                <select className='pa2 mb1' id="priority" value={priority} onChange={(e)=> setPriority(e.target.value)}>
+                    <option value="" disabled defaultValue>LOW</option>
+                    <option value={NONE}>MEDIUM</option>
+                    <option value={DAILY}>HIGH</option>
+                    <option value={DAILY}>URGENT</option>
                 </select>
                 <textarea className='pa2 mb1' placeholder='Requirements' value={requirements} onChange={(e) => setRequirements(e.target.value)} />
                 {/* <input className='pa2 mb1' type='text' placeholder='Assigned Agent' value={agent} onChange={(e)=> setAgent(e.target.value)} /> */}

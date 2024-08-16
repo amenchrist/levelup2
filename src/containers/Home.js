@@ -15,7 +15,8 @@ export default function Home() {
 	const navigate = useNavigate();
     
     if(content){
-      listItems = content.map((entry,i) => {
+			const sortedContent = content.sort((a,b) => dayjs(a.scheduledDate).valueOf() - dayjs(b.scheduledDate).valueOf())
+      listItems = sortedContent.map((entry,i) => {
         return <ListItem item={content[i]} key={content[i].id}/>
       })
     }
