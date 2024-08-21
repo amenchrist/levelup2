@@ -226,8 +226,12 @@ export function reSchedule(task, taskList) {
     //takes a task and changes the scheduled date
     
     //For tasks of low priority, it checks the task list by and looks for the next free slot in your calendar
-    // to do this, it looks for the task scheduled soonest, checks the assumed end time based on how long the task requires, then it checks  for the next task scheduled after it,
-    // if the gap between the two tasks is large enough to accommodate the task in question based on the estimated time required plus 10 minutes, the task is scheduled for that time slot between the existing tasks
+    // to do this, it looks for the task scheduled soonest, checks the assumed end time based on how long the task requires, 
+    // then it checks  for the next task scheduled after it,
+    // if the gap between the two tasks is large enough to accommodate the task in question based on the estimated time required plus 10 minutes, 
+    // the task is scheduled for that time slot between the existing tasks
+
+    //if the task being scheduled has a higher priority it is scheduled immediately after the current task if there's one
 
 
     // it looks at all the tasks scheduled for the day
