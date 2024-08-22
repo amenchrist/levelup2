@@ -41,6 +41,14 @@ export class Task{
         constructorHelper.call(this, data, defaultObj)
     }
 
+    setScheduledTime (time) {
+      this.scheduledTime = time
+    }
+
+    setScheduledDate (date) {
+      this.scheduledDate = date
+    }
+
     // async update(taskUpdate) {
     //   try {
     //     await updateDoc(doc(db, `task`, this.id), taskUpdate);

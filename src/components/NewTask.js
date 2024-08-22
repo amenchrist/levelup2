@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PENDING, LOW, TASK, MEDIUM, HIGH, MISSIONS, ADD, DAILY, NONE, SOMEDAY } from '../constants';
-import { pushChanges } from '../functions';
+import { pushChanges, reSchedule } from '../functions';
 import DatePicker from './DatePicker';
 import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ import FormDialog from './Dialog';
 
 export default function NewTask({  shipItems, itemID, db, title }) {
 
-    const { addItem, updateItem } = useMyStore();
+    const { addItem, updateItem, tasks } = useMyStore();
     const player = useMyStore(store => new Player(store.player));
 
     const navigate = useNavigate();
@@ -41,11 +41,15 @@ export default function NewTask({  shipItems, itemID, db, title }) {
 
         let t = new Task({name, 
             outcome,  
-            dueDate, frequency, details, requirements, 
-            scheduledDate: dayjs(`${date}`).toDate().toString(),
+            dueDate, frequency, details, requirements, priority,
+            scheduledDate: dayjs(`${date}`).toDate().toString(), // r
             scheduledTime: time
         });
-        console.log(t)
+
+        const recommendedTime = reSchedule(t, tasks)
+
+        t.setScheduledDate(recommendedTime.date);
+        t.setScheduledTime(recommendedTime.time);
 
         addItem(t);
         updateItem(player.updateExp(5))
@@ -93,8 +97,8 @@ export default function NewTask({  shipItems, itemID, db, title }) {
         <div className='h-100 w-100 center br1 pa3 ba b--black-10 '>
             <h1 className='tc b gold f3'>NEW TASK</h1>
             <form onSubmit={submitNewItem} className='flex flex-column' title={TASK}>
-                <input className='pa2 mb1' type='text' autoFocus placeholder='Name' value={name} onChange={(e)=> setName(e.target.value)} />
                 <input  className='pa2 mb1'type='text' placeholder='Outcome' value={outcome} onChange={(e) => setOutcome(e.target.value)} />
+                <input className='pa2 mb1' type='text' autoFocus placeholder='Name' value={name} onChange={(e)=> setName(e.target.value)} />
                 <textarea  className='pa2 mb1' placeholder='Details' value={details} onChange={(e) => setDetails(e.target.value)} />
                 {/* <textarea  className='pa2 mb1' placeholder='Required Context' value={requiredContext} onChange={(e) => setRequiredContext(e.target.value)} /> */}
                 {/* <label className='fw4 white' htmlFor="due date" >Due Date:</label> */}

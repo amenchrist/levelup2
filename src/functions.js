@@ -1,6 +1,7 @@
 /// For all the extra functions required in multiple places
 
 // import { ShipItems } from "./actions";
+import dayjs from "dayjs";
 import { ADD, ASAP, COMPLETED, INBOX, PROCESSED, MISSIONS, REFERENCES, EVENTS, REMOVE, SOMEDAY, TASKS, TRASH, UPDATE, DONE, DAILY } from "./constants";
 
 
@@ -223,7 +224,8 @@ export function amendList(db, list, item, action, shippingFunction, expObj){
 
 
 export function reSchedule(task, taskList) {
-    //takes a task and changes the scheduled date
+    
+    //takes a task and RETURNS a recommended scheduled date for it
     
     //For tasks of low priority, it checks the task list by and looks for the next free slot in your calendar
     // to do this, it looks for the task scheduled soonest, checks the assumed end time based on how long the task requires, 
@@ -235,4 +237,9 @@ export function reSchedule(task, taskList) {
 
 
     // it looks at all the tasks scheduled for the day
+
+    const date = dayjs().format('YYYY-MM-DD');
+    const time = dayjs().format('hh:mm')
+
+    return { date: dayjs(`${date}`).toDate().toString(), time, }
 }
