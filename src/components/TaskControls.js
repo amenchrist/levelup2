@@ -3,6 +3,7 @@ import { DONE, ACTIVE, PAUSED, PENDING, UPDATE, ADD, REMOVE, COMPLETED } from '.
 import { useMyStore } from '../store';
 import Player from '../classes/Player';
 import { useNavigate } from 'react-router-dom';
+import { reSchedule } from '../functions';
 
 
 export default function TaskControls({ task, updateExp, timerOn }){
@@ -10,6 +11,8 @@ export default function TaskControls({ task, updateExp, timerOn }){
     const { updateItem, activeTask, setActiveTask, } = useMyStore()
     const player = useMyStore( store => new Player(store.player));
     const navigate = useNavigate();
+
+    
 
     if( task.status === ACTIVE && timerOn === false){
         startTimer();
@@ -90,7 +93,7 @@ export default function TaskControls({ task, updateExp, timerOn }){
                         </div>
                         <br />
                         <div className='flex justify-center'>
-                            <button className="button" onClick={rescheduleTask}>RESCHEDULE</button>
+                            <button className="button" onClick={() => reSchedule(task, updateItem)}>RESCHEDULE</button>
                             <button className="button" onClick={markAsDone}>COMPLETED</button>
                         </div>
                     </>

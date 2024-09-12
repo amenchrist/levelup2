@@ -36,9 +36,17 @@ export class Task{
           startTime: '00:00', // Time 
           scheduledDate: null, // Assigned by agent or system at creation
           scheduledTime: '00:00',
+          scheduledEndDate: null,
         }
 
         constructorHelper.call(this, data, defaultObj)
+
+        this.scheduledEndDate = new Date(this?.scheduledDate).getTime() + (this.timeRequired * 60*1000)
+
+    }
+
+    setScheduledEndDate () {
+      this.scheduledEndDate = new Date(this.scheduledDate).getTime() + (this.timeRequired * 60*1000)
     }
 
     setScheduledTime (time) {

@@ -3,6 +3,8 @@
 // import { ShipItems } from "./actions";
 import dayjs from "dayjs";
 import { ADD, ASAP, COMPLETED, INBOX, PROCESSED, MISSIONS, REFERENCES, EVENTS, REMOVE, SOMEDAY, TASKS, TRASH, UPDATE, DONE, DAILY } from "./constants";
+import { useMyStore } from './store';
+
 
 
 export function removeTrash(arr){
@@ -223,8 +225,45 @@ export function amendList(db, list, item, action, shippingFunction, expObj){
 }
 
 
-export function reSchedule(task, taskList) {
+
+
+
+export function reSchedule(task, updateFunc) {
+
+    const tasks = JSON.parse(localStorage.getItem('store')).state.tasks;
     
+    
+    //Create an array of elements where each element represents 5 mins
+    //If a task is 15 minutes long, it'd take up 3 spaces etc.
+    //The first index is based on the current time rounded to the nearest multiple of 5
+    //Every blank space is filled with a variable: 'BLANK'
+    //If a task is 20 minutes from now, it would be at index 4 and it's id would be replicated according to the number that results from the task duration divided by 5
+    //A rescheduled task will be placed at the index of the first blank series that has enough blanks for the duration of the task
+    
+    const BLANK = 'BLANK';
+    
+    
+    const getNearest5 = (date = '') => Math.ceil(((new Date(date).getTime()/1000)/60)/5)*5 
+    const now = getNearest5(new Date())
+    console.log(tasks.map(t=> getNearest5(t.scheduledDate)).sort((a,b)=> a-b));
+
+    //take a task
+    //get the nearest time divisible by 5, call it next 5 time or next5
+    //find from the existing tasks the first task that comes before next5. Call it prevTask
+    //Get prevTask's suggested end time 
+    //if next5 is greater than prevTask's end time + 5 minutes, or no prevTask found, let suggestedTime be next 5
+    //then,
+    //from the existing tasks, find the first task that comes after next5. Call it nextTask
+    //if there is no next task, schedule the current task at next5. 
+    //if next task exists, Check if the end time for the current task plus buffer(5 mins) is before (or less than) the start time of the next task
+    //if the end time + buffer (5 mins) is less than the start, schedule current task at next5
+
+
+    const schedule = ['current 5 mins', 'task1', 'task2'];
+    
+    // const schedule = tasks.map(t => ())
+
+
     //takes a task and RETURNS a recommended scheduled date for it
     
     //For tasks of low priority, it checks the task list by and looks for the next free slot in your calendar
@@ -237,6 +276,8 @@ export function reSchedule(task, taskList) {
 
 
     // it looks at all the tasks scheduled for the day
+
+    let hasPriority = false
 
     const date = dayjs().format('YYYY-MM-DD');
     const time = dayjs().format('hh:mm')
