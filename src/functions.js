@@ -257,6 +257,16 @@ export function reSchedule(task, updateFunc) {
     //if there is no next task, schedule the current task at next5. 
     //if next task exists, Check if the end time for the current task plus buffer(5 mins) is before (or less than) the start time of the next task
     //if the end time + buffer (5 mins) is less than the start, schedule current task at next5
+    //if the current task duration plus buffer (let's call the sum taskPeriod) is greater than the next task's start time, get the next task's end time
+    //
+
+    //Sort tasks according to start time
+    //filter out any task that ends before next5 (next5 is greater than the end time`)
+    //get the period of the current task
+    //Find the first element that has an end time greater than next5 the difference between its end time + 5 minutes  and the start time of the task that follows it is greater than the period of the current task
+    //if no element meets that criteria
+    //Check if last task 's period (end time plus buffer) is before next5
+    //if it's before, schedule 
 
 
     const schedule = ['current 5 mins', 'task1', 'task2'];
