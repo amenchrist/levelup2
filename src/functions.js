@@ -230,7 +230,49 @@ export function amendList(db, list, item, action, shippingFunction, expObj){
 
 export function reSchedule(task, updateFunc) {
 
-    const tasks = JSON.parse(localStorage.getItem('store')).state.tasks;
+    const getNearest5 = (date = '') => Math.ceil(((new Date(date).getTime()/1000)/60)/5)*5 
+    const next5 = getNearest5(new Date())
+    const buffer = 5 //5 minutes of buffer time minimum between tasks
+
+    //Get all the tasks that have a period that ends after next5 ie the nearest time that is a multiple of 5
+    const allUndoneTasks = JSON.parse(localStorage.getItem('store')).state.tasks
+    const getTime = (d) => { return new Date(d).getTime()}
+    const tasks = allUndoneTasks.filter(t => getNearest5(t.scheduledEndDate)+buffer >= next5).sort((a,b)=> getTime(a.scheduledEndDate) - getTime(b.scheduledEndDate))
+    // console.log(tasks);
+
+    let date = dayjs().format('YYYY-MM-DD');
+    let time = dayjs().format('hh:mm');
+
+    
+    //Find the first task with a period that ends earlier than next 5 AND 
+    //also has a difference between the period end time and the following task's start time (if following tasks exists) that is greater or equal to the current task's period
+    const preciseBuffer = buffer*60*1000;
+
+    const recommendedPredecessor = tasks.find((t,i) => {
+        if(i === tasks.length-1) return t
+        console.log('Searching for valid predecessor')
+        return new Date(tasks[i+1].scheduledDate).getTime() - (new Date(t.scheduledEndDate).getTime()+preciseBuffer) >= (task.timeRequired*60*1000 + preciseBuffer)
+        
+    })
+
+    // console.log(recommendedPredecessor)
+
+    if(tasks.length === 0 ) {
+        date = new Date(next5*60*1000).toString();
+        time = dayjs(date).format('HH:mm')
+        task.setScheduledDate(date);
+        task.setScheduledTime(time);
+        updateFunc(task);
+    } else if (recommendedPredecessor) {
+        const scheduledDate = new Date(recommendedPredecessor.scheduledEndDate).getTime()+preciseBuffer
+        date = new Date(scheduledDate).toString();
+        time = dayjs(date).format('HH:mm')
+        task.setScheduledDate(date);
+        task.setScheduledTime(time);
+        updateFunc(task);
+    }
+
+
     
     
     //Create an array of elements where each element represents 5 mins
@@ -240,15 +282,15 @@ export function reSchedule(task, updateFunc) {
     //If a task is 20 minutes from now, it would be at index 4 and it's id would be replicated according to the number that results from the task duration divided by 5
     //A rescheduled task will be placed at the index of the first blank series that has enough blanks for the duration of the task
     
-    const BLANK = 'BLANK';
-    
-    
-    const getNearest5 = (date = '') => Math.ceil(((new Date(date).getTime()/1000)/60)/5)*5 
-    const now = getNearest5(new Date())
-    console.log(tasks.map(t=> getNearest5(t.scheduledDate)).sort((a,b)=> a-b));
+    // console.log(task);
 
     //take a task
-    //get the nearest time divisible by 5, call it next 5 time or next5
+    //get the nearest time divisible by 5, call it next5
+    //Get the list of existing tasks that end after next5
+    //Find the first task with a period that ends earlier than next 5 AND 
+    //also has a difference between the period end time and the following task's start time (if following tasks exists) that is greater or equal to the current task's period
+
+
     //find from the existing tasks the first task that comes before next5. Call it prevTask
     //Get prevTask's suggested end time 
     //if next5 is greater than prevTask's end time + 5 minutes, or no prevTask found, let suggestedTime be next 5
@@ -267,9 +309,6 @@ export function reSchedule(task, updateFunc) {
     //if no element meets that criteria
     //Check if last task 's period (end time plus buffer) is before next5
     //if it's before, schedule 
-
-
-    const schedule = ['current 5 mins', 'task1', 'task2'];
     
     // const schedule = tasks.map(t => ())
 
@@ -287,10 +326,8 @@ export function reSchedule(task, updateFunc) {
 
     // it looks at all the tasks scheduled for the day
 
-    let hasPriority = false
+    // let hasPriority = false
 
-    const date = dayjs().format('YYYY-MM-DD');
-    const time = dayjs().format('hh:mm')
 
-    return { date: dayjs(`${date}`).toDate().toString(), time, }
+    return //{ date: dayjs(`${date} ${time}`).toDate().toString(), time, }
 }

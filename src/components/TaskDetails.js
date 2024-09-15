@@ -75,7 +75,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
     function updateDB( obj, property, newVal) {
 
         if (obj[property] !== newVal){
-            console.log(`old value (${obj[property]}) !== new value (${newVal})`)
+            // console.log(`old value (${obj[property]}) !== new value (${newVal})`)
             obj[property] = newVal;
 
             updateItem(obj)
@@ -84,7 +84,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
         }
     }
 
-    console.log(dueDate)
+    // console.log(dueDate)
 
     function saveDate(date){
       updateDB( task, "dueDate", date )
@@ -94,7 +94,6 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
     }
     function updateScheduledDate(){
       const newDate = dayjs(`${date}`).toDate().toString()
-      console.log(newDate)
       updateDB( task, "scheduledTime", time );
       updateDB( task, "scheduledDate", newDate );
     }
@@ -111,6 +110,8 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
         </Grid>
       )
     }
+
+    // console.log(task)
 
     switch (title){
       case COMPLETED:

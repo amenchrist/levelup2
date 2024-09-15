@@ -30,9 +30,9 @@ export default function NewTask({  shipItems, itemID, db, title }) {
     const [ time, setTime ] = useState(dayjs().format('hh:mm'));
 
     const [openScheduledDateDialog, setOpenScheduledDateDialog] = useState(false);
-    console.log(dayjs())
+    // console.log(dayjs())
 
-    console.log(dayjs(`${date} ${time}`).format('dddd, MMMM DD @ hh:mm a'))
+    // console.log(dayjs(`${date} ${time}`).format('dddd, MMMM DD @ hh:mm a'))
 
 
     function submitNewItem(event) {
@@ -42,16 +42,12 @@ export default function NewTask({  shipItems, itemID, db, title }) {
         let t = new Task({name, 
             outcome,  
             dueDate, frequency, details, requirements, priority,
-            scheduledDate: dayjs(`${date}`).toDate().toString(), // r
+            scheduledDate: dayjs(`${date} ${time}`).toDate().toString(), // r
             scheduledTime: time
         });
 
-        const recommendedTime = reSchedule(t, tasks)
-
-        t.setScheduledDate(recommendedTime.date);
-        t.setScheduledTime(recommendedTime.time);
-
         addItem(t);
+        reSchedule(t, updateItem)
         updateItem(player.updateExp(5))
         if(title === MISSIONS){
             addToMissionTasks(t, associatedMissionID);

@@ -37,24 +37,29 @@ export class Task{
           scheduledDate: null, // Assigned by agent or system at creation
           scheduledTime: '00:00',
           scheduledEndDate: null,
+          scheduledEndTime: null,
         }
 
         constructorHelper.call(this, data, defaultObj)
+        const scheduledEndDate = new Date(this?.scheduledDate).getTime() + (this.timeRequired * 60*1000)
 
-        this.scheduledEndDate = new Date(this?.scheduledDate).getTime() + (this.timeRequired * 60*1000)
+        this.scheduledEndDate = new Date(scheduledEndDate).toString()
 
     }
 
     setScheduledEndDate () {
-      this.scheduledEndDate = new Date(this.scheduledDate).getTime() + (this.timeRequired * 60*1000)
+      this.scheduledEndDate = new Date(new Date(this.scheduledDate).getTime() + (this.timeRequired * 60*1000)).toString();
     }
 
     setScheduledTime (time) {
-      this.scheduledTime = time
+      this.scheduledTime = time;
+
     }
 
     setScheduledDate (date) {
-      this.scheduledDate = date
+      this.scheduledDate = date;
+      this.scheduledEndDate = new Date(new Date(this.scheduledDate).getTime() + (this.timeRequired * 60*1000)).toString()
+
     }
 
     // async update(taskUpdate) {
