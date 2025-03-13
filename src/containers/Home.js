@@ -22,7 +22,7 @@ export default function Home() {
 	if(content){
 		const sortedContent = content.sort((a,b) => dayjs(a.scheduledDate).valueOf() - dayjs(b.scheduledDate).valueOf());
 		outstandingTasks = sortedContent.filter(t => new Date(t.scheduledEndDate).getTime() < timeNow)
-		const pendingTasks = sortedContent.filter(t => new Date(t.scheduledEndDate).getTime() > timeNow)
+		const pendingTasks = sortedContent.filter(t => new Date(t.scheduledEndDate).getTime() > timeNow).sort((a,b) => dayjs(a.scheduledDate).valueOf() - dayjs(b.scheduledDate).valueOf())
 		listItems = pendingTasks.map((entry,i) => {
 			return <ListItem item={content[i]} key={content[i].id}/>
 		})
