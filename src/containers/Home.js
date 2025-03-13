@@ -1,29 +1,43 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
 import Scroll from '../components/Scroll';
 import { useMyStore } from '../store';
 import ListItem from '../components/ListItem';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
+import Popup from '../components/Popup';
+
 
 export default function Home() {
 	let content = useMyStore(store => store['tasks']);
 	const { completed } = useMyStore()
 	const { player } = useMyStore()
-	let listItems;
+	let listItems, outstandingTasks = [];
 	const navigate = useNavigate();
-    
-    if(content){
-			const sortedContent = content.sort((a,b) => dayjs(a.scheduledDate).valueOf() - dayjs(b.scheduledDate).valueOf())
-      listItems = sortedContent.map((entry,i) => {
-        return <ListItem item={content[i]} key={content[i].id}/>
-      })
-    }
 
-		const today = dayjs().format('DD-MM-YYYY')
-		
-		const doneToday = completed.filter(t => dayjs(t.doneDate).format('DD-MM-YYYY') === today)
+	const [ outstandingTaskExists, setOutstandingTaskExists ] = useState(false)
+
+	const timeNow = new Date().getTime();
+    
+	if(content){
+		const sortedContent = content.sort((a,b) => dayjs(a.scheduledDate).valueOf() - dayjs(b.scheduledDate).valueOf());
+		outstandingTasks = sortedContent.filter(t => new Date(t.scheduledEndDate).getTime() < timeNow)
+		const pendingTasks = sortedContent.filter(t => new Date(t.scheduledEndDate).getTime() > timeNow)
+		listItems = pendingTasks.map((entry,i) => {
+			return <ListItem item={content[i]} key={content[i].id}/>
+		})
+	}
+
+	if(!outstandingTaskExists && outstandingTasks.length > 0 ){
+		console.log('Outstanding Task Exists')
+		setOutstandingTaskExists(true)
+	} else if(outstandingTaskExists && outstandingTasks.length === 0 ){
+		setOutstandingTaskExists(false)
+
+	}
+
+		const today = dayjs().format('DD-MM-YYYY');		
+		const doneToday = completed.filter(t => dayjs(t.doneDate).format('DD-MM-YYYY') === today);		
    
     return (
 			<div className='h-100 pa1' >
@@ -77,6 +91,7 @@ export default function Home() {
 									<Typography variant='p'>+</Typography>
 								</Grid>
 							</Grid>
+							{outstandingTaskExists? <Popup tasks={outstandingTasks} outstandingTaskExists setOutstandingTaskExists={setOutstandingTaskExists} /> : <></>}
 							<Scroll>
 									{listItems}
 							</Scroll>

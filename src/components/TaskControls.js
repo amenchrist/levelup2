@@ -59,10 +59,6 @@ export default function TaskControls({ task, updateExp, timerOn }){
         navigate(`/completed/${task.id}`)
     }
 
-    function rescheduleTask () {
-
-    }
-
     switch(task.status){
         case ACTIVE:
             //console.log(activeTask.id === true)
