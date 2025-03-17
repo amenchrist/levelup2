@@ -13,16 +13,8 @@ export default function App() {
     const [ eventsFS, setEventsFS ] = useState([]);
     const [ referencesFS, setReferencesFS ] = useState([]);
     const [ playerFS, setPlayerFS ] = useState({})
-
-    const { setPlayer } = useMyStore();
-    const { setAllInbox, setAllTasks, setAllMissions, setAllEvents, setAllReferences } = useMyStore();
-    const { setInbox, setTasks, setMissions, setEvents, setReferences } = useMyStore();
-    const { setTodaysMission, setDailyExercises, setCompleted, setProcessed, setSomeday, setTrash } = useMyStore();
-
-    const { allInbox, allTasks, allMissions, allEvents, allReferences, } = useMyStore();
-    const { inbox, tasks, missions, events, dbUpdatePending, updateDbUpdatePending, dbUploadPending, updateDbUploadPending, dbDeletePending, updateDbDeletePending } = useMyStore();
     
-    const store = useMyStore();
+    //Retrieve Content from Database
     useEffect(() => {
         getPlayer('thechristamen', setPlayerFS);
         GetAll(setInboxFS, 'inbox');
@@ -31,7 +23,18 @@ export default function App() {
         GetAll(setEventsFS, 'event');
         GetAll(setReferencesFS, 'reference');
     }, []);
+    //Database content retrieved
 
+    const { setPlayer } = useMyStore();
+    const { setAllInbox, setAllTasks, setAllMissions, setAllEvents, setAllReferences } = useMyStore();
+    const { setInbox, setTasks, setMissions, setEvents, setReferences } = useMyStore();
+    const { setTodaysMission, setDailyExercises, setCompleted, setProcessed, setSomeday, setTrash } = useMyStore();
+
+    const { allInbox, allTasks, allMissions, allEvents, allReferences, } = useMyStore();
+    const { inbox, tasks, missions, events, } = useMyStore();
+    const { dbUpdatePending, updateDbUpdatePending, dbUploadPending, updateDbUploadPending, dbDeletePending, updateDbDeletePending } = useMyStore();
+
+    //Transfer Database content to local store
     useEffect(() => {
         setPlayer(playerFS);
     }, [playerFS, setPlayer]);
@@ -55,11 +58,13 @@ export default function App() {
     useEffect(() => {
         setAllReferences(referencesFS);
     }, [referencesFS, setAllReferences]);
+    //Database content transferred to local store
 
 //---------------------------------------//
 
     //HANDLING LOCAL UPDATES
 
+    //Filter store content into relevant categories
     useEffect(() => {
         setInbox(inboxFilter(allInbox));
     }, [allInbox, setInbox]);
@@ -109,9 +114,11 @@ export default function App() {
     useEffect(() => {
         setTrash(trashFilter(allInbox.concat(allTasks, allMissions, allEvents, allReferences)));
     }, [allInbox, allTasks, allMissions, allEvents, allReferences,  setTrash]);
+    //STORE CONTENT FILTERED INTO RELEVANT CATEGORIES
 
     //---------------------------------------///
 
+    //PRIMARILY TO AID WITH OFFLINE MODE. QUEUE UPDATES TILL THERE'S A DATABASE CONNECTION
     useEffect(() => {        
        if (dbUpdatePending.length > 0) {
             console.log('running db syncer')
@@ -125,6 +132,7 @@ export default function App() {
     
       }, [dbUpdatePending, updateDbUpdatePending]);
 
+      //PRIMARILY TO AID WITH OFFLINE MODE. QUEUE UPLOADS TILL THERE'S A DATABASE CONNECTION
       useEffect(() => {        
         if (dbUploadPending.length > 0) {
              console.log('running db syncer')
@@ -138,7 +146,8 @@ export default function App() {
      
        }, [dbUploadPending, updateDbUploadPending ]);
 
-       
+    
+       //PRIMARILY TO AID WITH OFFLINE MODE. QUEUE DELETES TILL THERE'S A DATABASE CONNECTION
       useEffect(() => {        
         if (dbDeletePending.length > 0) {
              console.log('running db syncer')

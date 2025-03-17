@@ -48,8 +48,8 @@ export class Task{
     }
 
     setScheduledEndDate () {
-      this.scheduledEndDate = new Date(new Date(this.scheduledDate).getTime() + (this.timeRequired * 60*1000)).toString();
-    }
+      this.scheduledEndDate = new Date(new Date(this.scheduledDate).getTime() + (this.timeRequired * 60*1000)).toString(); 
+    } 
 
     setScheduledTime (time) {
       this.scheduledTime = time;
