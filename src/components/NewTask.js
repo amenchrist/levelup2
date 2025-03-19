@@ -49,6 +49,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
         addItem(t);
         reSchedule(t, updateItem)
         updateItem(player.updateExp(5))
+        
         if(title === MISSIONS){
             addToMissionTasks(t, associatedMissionID);
          }     

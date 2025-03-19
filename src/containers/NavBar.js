@@ -1,6 +1,6 @@
 import React from 'react';
 import { HOME, INBOX, LIST, MISSIONS, OVERVIEW, STATS, TASKS } from '../constants';
-import { Home, Inbox, List, PieChart, Target } from 'react-feather';
+import { Home, Inbox, List, PieChart, Target, Plus } from 'react-feather';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -24,9 +24,9 @@ export default function NavBar() {
             {/* <HomeButton touchFunction={handleEvent} /> */}
             <NavButton Icon={Home} data-view={OVERVIEW}  title={HOME} endpoint={'/'}/>
             <NavButton Icon={Inbox} data-view={LIST}  title={INBOX} endpoint={'/Inbox'}/>
+            <NavButton Icon={Plus} data-view={OVERVIEW}  title={STATS} endpoint={'/new/task'}/>
             <NavButton Icon={List} data-view={LIST}  title={TASKS} endpoint={'Tasks'}/>
             <NavButton Icon={Target} data-view={LIST}  title={MISSIONS} endpoint={'/Missions'}/>
-            <NavButton Icon={PieChart} data-view={OVERVIEW}  title={STATS} endpoint={'/Stats'}/>
         </div>       
     )
 }

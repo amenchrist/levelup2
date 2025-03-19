@@ -42,7 +42,7 @@ export default function Home() {
     return (
 			<div className='h-100 pa1' >
 					<Container component="main" maxWidth="xs" sx={{paddingBottom: '10px'}}>
-						<Box sx={{ marginTop: 3, display: 'flex', flexDirection: 'column',height:'80%' }} color={'white'}>
+						<Box sx={{ marginTop: 3, display: 'flex', flexDirection: 'column',height:'80%' }} color={'white'} onClick={() => navigate(`/Stats`)}>
 							<Typography component="h1" variant="h5" sx={{ fontWeight: 'bold' }}>{player.name}</Typography>
 							<Grid container justifyContent="space-between" >
 								<Box >
