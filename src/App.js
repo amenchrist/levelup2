@@ -4,24 +4,25 @@ import Router from './routes';
 import { useMyStore } from './store';
 import { UpdateItem, GetAll, UploadItem, DeleteItem, getPlayer } from './api';
 import { completedFilter, dailyFilter, inboxFilter, missionFilter, processedFilter, removeTrash, somedayFilter, taskFilter, todayFilter, trashFilter } from './functions';
+import dayjs from 'dayjs';
 
 export default function App() {
 
-    const [ inboxFS, setInboxFS ] = useState([]);
-    const [ tasksFS, setTasksFS ] = useState([]);
-    const [ missionsFS, setMissionsFS ] = useState([]);
-    const [ eventsFS, setEventsFS ] = useState([]);
-    const [ referencesFS, setReferencesFS ] = useState([]);
-    const [ playerFS, setPlayerFS ] = useState({})
+    const [ inboxFDB, setInboxFDB ] = useState([]);
+    const [ tasksFDB, setTasksFDB ] = useState([]);
+    const [ missionsFDB, setMissionsFDB ] = useState([]);
+    const [ eventsFDB, setEventsFDB ] = useState([]);
+    const [ referencesFDB, setReferencesFDB ] = useState([]);
+    const [ playerFDB, setPlayerFDB ] = useState({})
     
     //Retrieve Content from Database
     useEffect(() => {
-        getPlayer('thechristamen', setPlayerFS);
-        GetAll(setInboxFS, 'inbox');
-        GetAll(setTasksFS, 'task');
-        GetAll(setMissionsFS, 'mission');
-        GetAll(setEventsFS, 'event');
-        GetAll(setReferencesFS, 'reference');
+        getPlayer('thechristamen', setPlayerFDB);
+        GetAll(setInboxFDB, 'inbox');
+        GetAll(setTasksFDB, 'task');
+        GetAll(setMissionsFDB, 'mission');
+        GetAll(setEventsFDB, 'event');
+        GetAll(setReferencesFDB, 'reference');
     }, []);
     //Database content retrieved
 
@@ -34,30 +35,30 @@ export default function App() {
     const { inbox, tasks, missions, events, } = useMyStore();
     const { dbUpdatePending, updateDbUpdatePending, dbUploadPending, updateDbUploadPending, dbDeletePending, updateDbDeletePending } = useMyStore();
 
-    //Transfer Database content to local store
+    //Transfer Database content to local store //FDB means From Database
     useEffect(() => {
-        setPlayer(playerFS);
-    }, [playerFS, setPlayer]);
+        setPlayer(playerFDB);
+    }, [playerFDB, setPlayer]);
 
     useEffect(() => {
-        setAllInbox(inboxFS);
-    }, [inboxFS, setAllInbox]);
+        setAllInbox(inboxFDB);
+    }, [inboxFDB, setAllInbox]);
 
     useEffect(() => {
-        setAllTasks(tasksFS);
-    }, [tasksFS, setAllTasks]);
+        setAllTasks(tasksFDB);
+    }, [tasksFDB, setAllTasks]);
 
     useEffect(() => {
-        setAllMissions(missionsFS);
-    }, [missionsFS, setAllMissions]);
+        setAllMissions(missionsFDB);
+    }, [missionsFDB, setAllMissions]);
 
     useEffect(() => {
-        setAllEvents(eventsFS);
-    }, [eventsFS, setAllEvents]);
+        setAllEvents(eventsFDB.sort((a,b) => dayjs(a.scheduledEndDate) - dayjs(b.scheduledEndDate) ));
+    }, [eventsFDB, setAllEvents]);
 
     useEffect(() => {
-        setAllReferences(referencesFS);
-    }, [referencesFS, setAllReferences]);
+        setAllReferences(referencesFDB);
+    }, [referencesFDB, setAllReferences]);
     //Database content transferred to local store
 
 //---------------------------------------//

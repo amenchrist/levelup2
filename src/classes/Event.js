@@ -1,23 +1,27 @@
 import { EVENT } from "../constants";
 import { v4 as uuid } from 'uuid';
+import { constructorHelper } from "./helpers";
 
 export class Event{
-  constructor(name, date = new Date().toISOString().substr(0, 10), time = "", location ='', frequency = "") {
+  constructor(data) {
       const d= new Date();
-      this.type = EVENT;
-      this.id = uuid();
-      this.entryDate = d.getTime();
-      this.name = name;
-      this.date = date;
-      this.time = time;
-      this.location = "";
-      this.frequency = frequency;
-      this.exp = 5;
-      this.note = "";
-      this.isTrashed = false;
-      this.trashedDate = "";
+      const defaultObj = {
+        type: EVENT,
+        id: uuid(),
+        entryDate: d.getTime(),
+        name: "",
+        date: "",
+        time: "",
+        location: "",
+        frequency: "",
+        exp: 5,
+        note: "",
+        isTrashed: false,
+        trashedDate: "",
+        scheduledEndDate: "",
+        collection: "event",
+      }
 
-      this.collection = "event";
-
+      constructorHelper.call(this, data, defaultObj);
   }
 }

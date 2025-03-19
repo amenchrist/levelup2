@@ -4,12 +4,20 @@ import { amendList } from '../functions';
 import DatePicker from './DatePicker';
 import { useParams } from 'react-router-dom';
 import { useMyStore } from '../store';
+import dayjs from 'dayjs';
+import { Box, Grid, TextField } from '@mui/material';
+import FormDialog from './Dialog';
+import Player from '../classes/Player';
 
 
 export default function EventDetails({ shipItems, db, exp }) {
 
     const id = useParams().id;
-    const { events } = useMyStore();
+    const { events, updateItem } = useMyStore();
+    const player = useMyStore(store => new Player(store.player));
+
+    const [openDialog, setOpenDialog] = useState(false);
+    const [openScheduledDateDialog, setOpenScheduledDateDialog] = useState(false);
 
     let item = {};
 
@@ -23,7 +31,8 @@ export default function EventDetails({ shipItems, db, exp }) {
 
     const [ name, setName ] = useState(item.name);
     const [ date, setDate ] = useState(item.date);
-    const [ time, setTime ] = useState(item.time);
+    const [ scheduledEndDate, setScheduledEndDate ] = useState(item.scheduledEndDate);
+    const [ time, setTime ] = useState(dayjs(item.time).format('hh:mm'));
     const [ location, setLocation ] = useState(item.location);
     const [ frequency, setFrequency ] = useState(item.frequency);
     const [ note, setNote ] = useState(item.note);
@@ -31,29 +40,61 @@ export default function EventDetails({ shipItems, db, exp }) {
     useEffect(() => {
         setName(item.name);
         setDate(item.date);
-        setTime(item.time);
+        setScheduledEndDate(item.scheduledEndDate)
+        setTime(dayjs(item.time).format('hh:mm'));
         setLocation(item.location);
         setFrequency(item.frequency);
         setNote(item.note);
         
-    }, [ item.name, item.date, item.time, item.location, item.frequency, item.note])
+    }, [ item.name, item.date, item.time, item.location, item.frequency, item.note, item.scheduledEndDate])
 
     function updateDB( obj, property, newVal) {
 
         if (obj[property] !== newVal){
-
-            console.log(`old value (${obj[property]}) !== new value (${newVal})`)
-
+            // console.log(`old value (${obj[property]}) !== new value (${newVal})`)
             obj[property] = newVal;
-            amendList(db, EVENTS, item, UPDATE, shipItems, exp)
-          
-        }
 
+            updateItem(obj)
+            updateItem(player.updateExp(1))
+            
+        }
     }
+
+    // function updateDB( obj, property, newVal) {
+
+    //     if (obj[property] !== newVal){
+
+    //         console.log(`old value (${obj[property]}) !== new value (${newVal})`)
+
+    //         obj[property] = newVal;
+    //         amendList(db, EVENTS, item, UPDATE, shipItems, exp)
+          
+    //     }
+
+    // }
 
     function saveDate(date){
         updateDB( item, "date", date )
     }
+
+    const DateAndTimePicker = () => {
+        return (
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+                <TextField required fullWidth type="date" id="date" label="Date" value={dayjs(date).format('YYYY-MM-DD')} onChange={(e) => setDate(dayjs(`${e.target.value} ${time}`).toDate().toString())} />
+            </Grid>
+            <Grid item xs={12} sm={6} >
+                <TextField required fullWidth type="time" id="time" label="Time" value={time} onChange={(e) => setTime(e.target.value)} />
+            </Grid>
+          </Grid>
+        )
+      }
+
+      function updateScheduledDate(){
+        const newDate = dayjs(`${date}`).toDate().toString()
+        updateDB( item, "time", time );
+        updateDB( item, "scheduledDate", newDate );
+      }
 
     return (
         <div className='' >
@@ -65,9 +106,17 @@ export default function EventDetails({ shipItems, db, exp }) {
                     <input type='text' onChange={(e)=> {setName(e.target.value);} } onBlur={() => { updateDB(item, "name", name ) } } 
                     value={name} className='bn fw9 b white bg-transparent' />
 
-                <div className='w-100 pb3 flex justify-between'>
-                    <DatePicker item={item} dueDate={date} updateFunc={saveDate} />
-                 </div>
+                    <div className='w-100flex justify-between'>
+                    <h5 className='fw3 white pb1' onClick={() => setOpenScheduledDateDialog(true)}>Starts: {dayjs(`${date}`).format('dddd, MMMM DD @ hh:mm a')} </h5>
+                    <h5 className='fw3 white pb1' onClick={() => setOpenScheduledDateDialog(true)}>Ends: {dayjs(`${scheduledEndDate}`).format('dddd, MMMM DD @ hh:mm a')} </h5>
+                  <FormDialog open={openScheduledDateDialog} setOpen={setOpenScheduledDateDialog} 
+                    title={'Scheduled Date'} msg={'When would you like to do this task?'} Content={<DateAndTimePicker />} actionText={'Save'} action={updateScheduledDate}
+                    />
+                  {/* <h5 className='fw3 white pb2'>Time: {task.scheduledTime} </h5> */}
+                </div>
+                {/* <div className='w-100 pb3 flex justify-between'>
+                    <DatePicker item={item} date updateFunc={saveDate} />
+                 </div> */}
                 </div>
 
                 <div className='w-100 pl2 pb3'>

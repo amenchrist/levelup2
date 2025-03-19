@@ -9,13 +9,6 @@ export default function ListItem( { item, title }){
     
     let nextTitle;
     const navigate = useNavigate();
-    // let category = item.collection + 's';
-    // switch(item.collection){
-    //   case 'inbox':
-    //     category = 'inbox';
-    //   break;
-    //   default: 
-    // }
 
     let { category } = useParams();
     if(category === undefined){
@@ -62,10 +55,9 @@ export default function ListItem( { item, title }){
             }
         case item.type === EVENT && !item.isTrashed:
             nextTitle = EVENTS;
-            console.log(nextTitle);
             return (
               <ListWrapper suffix={'REM'} >
-                <p className='fw3 white'>{new Date(item.date).toDateString()}</p>
+                <p className='fw3 white'>{dayjs(`${item.date}`).format('dddd, MMMM DD @ hh:mm a')}</p>
               </ListWrapper>
             )
         case item.type === REFERENCE && !item.isTrashed:

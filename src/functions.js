@@ -235,15 +235,16 @@ export function reSchedule(task, updateFunc) {
     const buffer = 5 //5 minutes of buffer time minimum between tasks
 
     //Get all the tasks that have a period that ends after next5 ie the nearest time that is a multiple of 5
-    const allUndoneTasks = JSON.parse(localStorage.getItem('store')).state.tasks
+    const store = JSON.parse(localStorage.getItem('store')).state
+    const allUndoneTasks = store.tasks
+    const events = store.events
     const getTime = (d) => { return new Date(d).getTime()}
-    const tasks = allUndoneTasks.filter(t => getNearest5(t.scheduledEndDate)+buffer >= next5).sort((a,b)=> getTime(a.scheduledEndDate) - getTime(b.scheduledEndDate))
+    const tasks = allUndoneTasks.concat(events).filter(t => getNearest5(t.scheduledEndDate)+buffer >= next5).sort((a,b)=> getTime(a.scheduledEndDate) - getTime(b.scheduledEndDate))
     // console.log(tasks);
 
     let date = dayjs().format('YYYY-MM-DD');
     let time = dayjs().format('hh:mm');
 
-    
     //Find the first task with a period that ends earlier than next 5 AND 
     //also has a difference between the period end time and the following task's start time (if following tasks exists) that is greater or equal to the current task's period
     const preciseBuffer = buffer*60*1000;

@@ -25,8 +25,8 @@ export default function TrashButton({ shipItems, changeNav, id }) {
     }
 
     function trashItem() {
-        console.log('trash button clicked');
-        console.log("current trash item: ", currentItem)
+        // console.log('trash button clicked');
+        // console.log("current trash item: ", currentItem)
         if (currentItem.status === "ACTIVE"){currentItem.status = PAUSED }
         currentItem.isTrashed = true;
         currentItem.trashedDate = new Date().toISOString().substr(0, 10);
