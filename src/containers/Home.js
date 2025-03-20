@@ -10,8 +10,7 @@ import Popup from '../components/Popup';
 
 export default function Home() {
 	let content = useMyStore(store => store['tasks']);
-	const { completed } = useMyStore()
-	const { player } = useMyStore()
+	const { completed, player, events } = useMyStore()
 	let listItems, outstandingTasks = [];
 	const navigate = useNavigate();
 
@@ -22,9 +21,9 @@ export default function Home() {
 	if(content){
 		const sortedContent = content.sort((a,b) => dayjs(a.scheduledDate).valueOf() - dayjs(b.scheduledDate).valueOf());
 		outstandingTasks = sortedContent.filter(t => new Date(t.scheduledEndDate).getTime() < timeNow)
-		const pendingTasks = sortedContent.filter(t => new Date(t.scheduledEndDate).getTime() > timeNow).sort((a,b) => dayjs(a.scheduledDate).valueOf() - dayjs(b.scheduledDate).valueOf())
+		const pendingTasks = sortedContent.concat(events).filter(t => new Date(t.scheduledEndDate).getTime() > timeNow).sort((a,b) => dayjs(a.scheduledDate).valueOf() - dayjs(b.scheduledDate).valueOf())
 		listItems = pendingTasks.map((entry,i) => {
-			return <ListItem item={content[i]} key={content[i].id}/>
+			return <ListItem item={entry} key={entry.id}/>
 		})
 	}
 

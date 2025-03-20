@@ -114,18 +114,18 @@ export default function EventDetails({ shipItems, db, exp }) {
                     <h4 className='fw5 white' onClick={() => {
                         if(task.associatedMissionID != 0){changeNavigation(task.associatedMissionID, MISSIONS)}}} >{associatedMission.name}</h4> */}
                 </div>
-                    <input className=' fw4 white bg-transparent pa2 mb1' id='time' type='time' value={time} onChange={(e) => {setTime(e.target.value); console.log(time)}} onBlur={() => { updateDB(item, "time", time ) } }/>
-                <div className='w-100 pl2 pb3'>
-                {/* <label className='fw4 white' htmlFor="frequency" >Frequency:</label> */}
-                <select className=' fw4 white bg-transparent mb1' id="priority" value={frequency} onChange={(e)=> setFrequency(e.target.value)} onBlur={() => { updateDB(item, "frequency", frequency ) } }>
-                    <option value={frequency} disabled>{frequency}</option>
-                    <option value={NONE}>ONE-TIME</option>
-                    <option value={DAILY}>DAILY</option>
-                    <option value={WEEKLY}>WEEKLY</option>
-                    <option value={MONTHLY}>MONTHLY</option>
-                    <option value={YEARLY}>YEARLY</option>
-                </select>
-                </div>
+                {/* <input className=' fw4 white bg-transparent pa2 mb1' id='time' type='time' value={time} onChange={(e) => {setTime(e.target.value); console.log(time)}} onBlur={() => { updateDB(item, "time", time ) } }/> */}
+                {/* <div className='w-100 pl2 pb3'>
+                    <label className='fw4 white' htmlFor="frequency" >Frequency:</label>
+                    <select className=' fw4 white bg-transparent mb1' id="priority" value={frequency} onChange={(e)=> setFrequency(e.target.value)} onBlur={() => { updateDB(item, "frequency", frequency ) } }>
+                        <option value={frequency} disabled>{frequency}</option>
+                        <option value={NONE}>ONE-TIME</option>
+                        <option value={DAILY}>DAILY</option>
+                        <option value={WEEKLY}>WEEKLY</option>
+                        <option value={MONTHLY}>MONTHLY</option>
+                        <option value={YEARLY}>YEARLY</option>
+                    </select>
+                </div> */}
                 <div className='pa2'>
                     {/* <p className='fw3 white'>{task.note}</p> */}
                     <textarea rows="4" cols="45" onChange={(e)=> {setNote(e.target.value);} } onBlur={ () =>{ updateDB(item, "note", note )}} value={note} className='fw3 white bn bg-transparent' />

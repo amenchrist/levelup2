@@ -264,6 +264,12 @@ export function reSchedule(task, updateFunc) {
         task.setScheduledDate(date);
         task.setScheduledTime(time);
         updateFunc(task);
+    } else if (new Date(tasks[0].scheduledDate).getTime() - next5+buffer >= (task.timeRequired*60*1000 + buffer) ) {
+        date = new Date(next5+buffer).toString();
+        time = dayjs(date).format('HH:mm')
+        task.setScheduledDate(date);
+        task.setScheduledTime(time);
+        updateFunc(task);
     } else if (recommendedPredecessor) {
         const scheduledDate = new Date(recommendedPredecessor.scheduledEndDate).getTime()+buffer
         date = new Date(scheduledDate).toString();
