@@ -30,12 +30,11 @@ export default function NewEvent({ item, processorSubmit }) {
 
         let e = new Event(
             {
-                name, date: dayjs(`${date} ${time}`).toDate().toString(), 
+                name, scheduledDate: dayjs(`${date} ${time}`).toDate().toString(), 
                 time, location, frequency, 
                 scheduledEndDate: dayjs(`${endDate} ${endTime}`).toDate().toString(),
             });
         addItem(e);
-        console.log(e)
         
         if (frequency === DAILY ){
             const recurrenceLimit = 5;
@@ -43,7 +42,7 @@ export default function NewEvent({ item, processorSubmit }) {
                 let nextDate = dayjs(`${date} ${time}`).add(i, 'day').toDate().toString();
                 let nextEnd = dayjs(`${endDate} ${endTime}`).add(i, 'day').toDate().toString();
 
-                const e1 =  {name, date: nextDate, scheduledEndDate: nextEnd, time, location, frequency};
+                const e1 =  {name, scheduledDate: nextDate, scheduledEndDate: nextEnd, time, location, frequency};
                 addItem({...new Event(e1)});
             }
         } 

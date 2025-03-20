@@ -10,7 +10,7 @@ export class Event{
         id: uuid(),
         entryDate: d.getTime(),
         name: "",
-        date: "",
+        scheduledDate: "",
         time: "",
         location: "",
         frequency: "",

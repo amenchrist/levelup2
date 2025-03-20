@@ -230,42 +230,42 @@ export function amendList(db, list, item, action, shippingFunction, expObj){
 
 export function reSchedule(task, updateFunc) {
 
-    const getNearest5 = (date = '') => Math.ceil(((new Date(date).getTime()/1000)/60)/5)*5 
-    const next5 = getNearest5(new Date())
-    const buffer = 5 //5 minutes of buffer time minimum between tasks
+    //The Schedule is comprised of 5 minute blocks
 
-    //Get all the tasks that have a period that ends after next5 ie the nearest time that is a multiple of 5
-    const store = JSON.parse(localStorage.getItem('store')).state
+    const getNearest5 = (date = '') => Math.ceil(((new Date(date).getTime()/1000)/60)/5)*5*60*1000;
+    const next5 = getNearest5(new Date()); //Next 5 is the next timestamp from a given time that is divisible by 5 minutes
+    const buffer = 5*60*1000; //5 minutes of buffer time minimum between tasks
+
+    //Get all the tasks that ends after next5 (plus a 5 minute buffer)
+    const store = JSON.parse(localStorage.getItem('store')).state;
     const allUndoneTasks = store.tasks
     const events = store.events
     const getTime = (d) => { return new Date(d).getTime()}
     const tasks = allUndoneTasks.concat(events).filter(t => getNearest5(t.scheduledEndDate)+buffer >= next5).sort((a,b)=> getTime(a.scheduledEndDate) - getTime(b.scheduledEndDate))
-    // console.log(tasks);
 
     let date = dayjs().format('YYYY-MM-DD');
     let time = dayjs().format('hh:mm');
 
-    //Find the first task with a period that ends earlier than next 5 AND 
-    //also has a difference between the period end time and the following task's start time (if following tasks exists) that is greater or equal to the current task's period
-    const preciseBuffer = buffer*60*1000;
+    //Find the first task that ends before next5 AND is followed by a task that starts later than the current tasks required period plus buffer
+    //the difference between the task's end time and the following task's start time (if following tasks exists) must be greater or equal to the current task's period
 
     const recommendedPredecessor = tasks.find((t,i) => {
-        if(i === tasks.length-1) return t
-        console.log('Searching for valid predecessor')
-        return new Date(tasks[i+1].scheduledDate).getTime() - (new Date(t.scheduledEndDate).getTime()+preciseBuffer) >= (task.timeRequired*60*1000 + preciseBuffer)
+        if(i === tasks.length-1) return t; // t is the last task on the schedule
+        console.log('Searching for valid predecessor');
+        const nextTask = tasks[i+1];
+        return new Date(nextTask.scheduledDate).getTime() - (new Date(t.scheduledEndDate).getTime()+buffer) >= (task.timeRequired*60*1000 + buffer)
         
     })
 
-    // console.log(recommendedPredecessor)
 
     if(tasks.length === 0 ) {
-        date = new Date(next5*60*1000).toString();
+        date = new Date(next5).toString();
         time = dayjs(date).format('HH:mm')
         task.setScheduledDate(date);
         task.setScheduledTime(time);
         updateFunc(task);
     } else if (recommendedPredecessor) {
-        const scheduledDate = new Date(recommendedPredecessor.scheduledEndDate).getTime()+preciseBuffer
+        const scheduledDate = new Date(recommendedPredecessor.scheduledEndDate).getTime()+buffer
         date = new Date(scheduledDate).toString();
         time = dayjs(date).format('HH:mm')
         task.setScheduledDate(date);

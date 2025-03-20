@@ -30,7 +30,7 @@ export default function EventDetails({ shipItems, db, exp }) {
     }
 
     const [ name, setName ] = useState(item.name);
-    const [ date, setDate ] = useState(item.date);
+    const [ date, setDate ] = useState(item.scheduledDate);
     const [ scheduledEndDate, setScheduledEndDate ] = useState(item.scheduledEndDate);
     const [ time, setTime ] = useState(dayjs(item.time).format('hh:mm'));
     const [ location, setLocation ] = useState(item.location);
@@ -39,14 +39,14 @@ export default function EventDetails({ shipItems, db, exp }) {
 
     useEffect(() => {
         setName(item.name);
-        setDate(item.date);
+        setDate(item.scheduledDate);
         setScheduledEndDate(item.scheduledEndDate)
         setTime(dayjs(item.time).format('hh:mm'));
         setLocation(item.location);
         setFrequency(item.frequency);
         setNote(item.note);
         
-    }, [ item.name, item.date, item.time, item.location, item.frequency, item.note, item.scheduledEndDate])
+    }, [ item.name, item.scheduledDate, item.time, item.location, item.frequency, item.note, item.scheduledEndDate])
 
     function updateDB( obj, property, newVal) {
 
@@ -59,19 +59,6 @@ export default function EventDetails({ shipItems, db, exp }) {
             
         }
     }
-
-    // function updateDB( obj, property, newVal) {
-
-    //     if (obj[property] !== newVal){
-
-    //         console.log(`old value (${obj[property]}) !== new value (${newVal})`)
-
-    //         obj[property] = newVal;
-    //         amendList(db, EVENTS, item, UPDATE, shipItems, exp)
-          
-    //     }
-
-    // }
 
     function saveDate(date){
         updateDB( item, "date", date )

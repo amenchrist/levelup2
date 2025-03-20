@@ -57,7 +57,7 @@ export default function ListItem( { item, title }){
             nextTitle = EVENTS;
             return (
               <ListWrapper suffix={'REM'} >
-                <p className='fw3 white'>{dayjs(`${item.date}`).format('dddd, MMMM DD @ hh:mm a')}</p>
+                <p className='fw3 white'>{dayjs(`${item.scheduledDate}`).format('dddd, MMMM DD @ hh:mm a')}</p>
               </ListWrapper>
             )
         case item.type === REFERENCE && !item.isTrashed:
