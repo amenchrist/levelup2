@@ -71,7 +71,7 @@ export default function NewEvent({ item, processorSubmit }) {
                 <input className='pa2 mb1' id='time' type='time' value={endTime} onChange={(e) => {setEndTime(e.target.value)}} />
 
                 <label className='fw4 white' htmlFor="location" >Location:</label>
-                <input className='pa2 mb1' autoFocus type='text' placeholder='Location' value={location} onChange={(e) => setLocation(e.target.value)} />
+                <input className='pa2 mb1' type='text' placeholder='Location' value={location} onChange={(e) => setLocation(e.target.value)} />
                 <label className='fw4 white' htmlFor="frequency" >Frequency:</label>
                 <select className='pa2 mb1' id="priority" value={frequency} onChange={(e)=> setFrequency(e.target.value)}>
                     {/* <option value="" disabled >Frequency</option> */}
