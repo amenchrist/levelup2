@@ -6,11 +6,12 @@ import { Box, Container, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Popup from '../components/Popup';
+import { rescheduleAll } from '../functions';
 
 
 export default function Home() {
 	let content = useMyStore(store => store['tasks']);
-	const { completed, player, events } = useMyStore()
+	const { completed, player, events, updateItem } = useMyStore()
 	let listItems, outstandingTasks = [];
 	const navigate = useNavigate();
 
@@ -76,8 +77,12 @@ export default function Home() {
 						</Box>
 					</Container>
           <hr/>
-					<div className='h-70 w-100 center pa2'>
+					<div className='h-70 w-100 center pa2' >
+						<div style={{display: 'flex', justifyContent:'space-between'}}>
 						<h2 className='b gold f3'>Next Tasks</h2>
+						<button className="button" onClick={() => rescheduleAll(updateItem)}>RESCHEDULE ALL</button>
+						</div>
+						
 						<div className=' h-80 '>
 							<Grid container justifyContent="space-between" alignItems={'center'} color={'white'} sx={{padding: '20px 0 10px 0'}}>
 								<Grid item>

@@ -4,6 +4,7 @@
 import dayjs from "dayjs";
 import { ADD, ASAP, COMPLETED, INBOX, PROCESSED, MISSIONS, REFERENCES, EVENTS, REMOVE, SOMEDAY, TASKS, TRASH, UPDATE, DONE, DAILY } from "./constants";
 import { useMyStore } from './store';
+import { Task } from "./classes/Task";
 
 
 
@@ -225,13 +226,8 @@ export function amendList(db, list, item, action, shippingFunction, expObj){
 }
 
 
-
-
-
-export function reSchedule(task, updateFunc) {
-
-    //The Schedule is comprised of 5 minute blocks
-
+export function rescheduleAll(updateFunc) {
+    
     const getNearest5 = (date = '') => Math.ceil(((new Date(date).getTime()/1000)/60)/5)*5*60*1000;
     const next5 = getNearest5(new Date()); //Next 5 is the next timestamp from a given time that is divisible by 5 minutes
     const buffer = 5*60*1000; //5 minutes of buffer time minimum between tasks
@@ -239,10 +235,12 @@ export function reSchedule(task, updateFunc) {
     //Get all the tasks that ends after next5 (plus a 5 minute buffer)
     const store = JSON.parse(localStorage.getItem('store')).state;
     const allUndoneTasks = store.tasks
-    const events = store.events
     const getTime = (d) => { return new Date(d).getTime()}
-    const tasks = allUndoneTasks.concat(events).filter(t => getNearest5(t.scheduledEndDate)+buffer >= next5).sort((a,b)=> getTime(a.scheduledEndDate) - getTime(b.scheduledEndDate))
+    const tasks = allUndoneTasks.filter(t => getNearest5(t.scheduledEndDate)+buffer >= next5).sort((a,b)=> getTime(a.scheduledEndDate) - getTime(b.scheduledEndDate))
 
+    tasks.forEach((t,i) => {
+        let task = new Task(t)
+        
     let date = dayjs().format('YYYY-MM-DD');
     let time = dayjs().format('hh:mm');
 
@@ -266,9 +264,66 @@ export function reSchedule(task, updateFunc) {
         task.setScheduledDate(date);
         task.setScheduledTime(time);
         updateFunc(task);
+    } else if (firstActivityTime - next5+buffer >= (task.timeRequired*60*1000 + buffer)) {
+        date = new Date(next5+buffer).toString();
+        time = dayjs(date).format('HH:mm')
+        task.setScheduledDate(date);
+        task.setScheduledTime(time);
+        updateFunc(task);
     } else if (recommendedPredecessor) {
         const scheduledDate = new Date(recommendedPredecessor.scheduledEndDate).getTime()+buffer
         date = new Date(scheduledDate).toString();
+        time = dayjs(date).format('HH:mm')
+        task.setScheduledDate(date);
+        task.setScheduledTime(time);
+        updateFunc(task);
+    }
+    })
+
+    
+}
+
+
+
+export function reSchedule(task, updateFunc) {
+
+    //The Schedule is comprised of 5 minute blocks
+
+    const getNearest5 = (date = '') => Math.ceil(((new Date(date).getTime()/1000)/60)/5)*5*60*1000;
+    const next5 = getNearest5(new Date()); //Next 5 is the next timestamp from a given time that is divisible by 5 minutes
+    const buffer = 5*60*1000; //5 minutes of buffer time minimum between tasks
+
+    //Get all the tasks that ends after next5 (plus a 5 minute buffer)
+    const store = JSON.parse(localStorage.getItem('store')).state;
+    const allUndoneTasks = store.tasks
+    const events = store.events
+    const getTime = (d) => { return new Date(d).getTime()}
+    const tasks = allUndoneTasks.concat(events).filter(t => getNearest5(t.scheduledEndDate)+buffer >= next5).sort((a,b)=> getTime(a.scheduledEndDate) - getTime(b.scheduledEndDate))
+
+    let date = dayjs().format('YYYY-MM-DD');
+    let time = dayjs().format('hh:mm');
+
+    console.log(tasks)
+
+
+    //
+
+    //Find the first task that ends before next5 AND is followed by a task that starts later than the current tasks required period plus buffer
+    //the difference between the task's end time and the following task's start time (if following tasks exists) must be greater or equal to the current task's period
+
+    const recommendedPredecessor = tasks.find((t,i) => {
+        if(i === tasks.length-1) return t; // t is the last task on the schedule
+        console.log('Searching for valid predecessor');
+        const nextTask = tasks[i+1];
+        return new Date(nextTask.scheduledDate).getTime() - (new Date(t.scheduledEndDate).getTime()+buffer) >= (task.timeRequired*60*1000 + buffer)
+        
+    })
+
+    const firstActivityTime = new Date(tasks[0].scheduledDate).getTime()
+
+
+    if(tasks.length === 0 ) {
+        date = new Date(next5).toString();
         time = dayjs(date).format('HH:mm')
         task.setScheduledDate(date);
         task.setScheduledTime(time);
@@ -279,8 +334,14 @@ export function reSchedule(task, updateFunc) {
         task.setScheduledDate(date);
         task.setScheduledTime(time);
         updateFunc(task);
+    } else if (recommendedPredecessor) {
+        const scheduledDate = new Date(recommendedPredecessor.scheduledEndDate).getTime()+buffer
+        date = new Date(scheduledDate).toString();
+        time = dayjs(date).format('HH:mm')
+        task.setScheduledDate(date);
+        task.setScheduledTime(time);
+        updateFunc(task);
     }
-
 
     
     
