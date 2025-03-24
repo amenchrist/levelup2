@@ -22,7 +22,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
     const [ details, setDetails ] = useState('');
     const [ dueDate, setDueDate ] = useState(null);
     const [ agentId, setAgentId ] = useState('');
-    const [ priority, setPriority ] = useState('');
+    const [ priority, setPriority ] = useState(0);
     const [ frequency, setFrequency ] = useState('NONE');
     const [ requirements, setRequirements ] = useState('');
     const [ associatedMissionID, setAssociatedMissionID ] = useState(itemID || null);
@@ -112,12 +112,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
                     <option value={NONE}>ONE-TIME</option>
                     <option value={DAILY}>DAILY</option>
                 </select> */}
-                <select className='pa2 mb1' id="priority" value={priority} onChange={(e)=> setPriority(e.target.value)}>
-                    <option value="" disabled defaultValue>LOW</option>
-                    <option value={NONE}>MEDIUM</option>
-                    <option value={DAILY}>HIGH</option>
-                    <option value={DAILY}>URGENT</option>
-                </select>
+                <input className='pa2 mb1' id="priority" type='number' placeholder='Priority Level' value={priority} onChange={(e)=> setPriority(e.target.value)}/>
                 <textarea className='pa2 mb1' placeholder='Requirements' value={requirements} onChange={(e) => setRequirements(e.target.value)} />
                 {/* <input className='pa2 mb1' type='text' placeholder='Assigned Agent' value={agent} onChange={(e)=> setAgent(e.target.value)} /> */}
                 {/* <input type='text' placeholder='Frequency' value={frequency} onChange={(e) => setFrequency(e.target.value)} />

@@ -12,7 +12,7 @@ export class Task{
           id: uuid(),
           entryDate: d.getTime(),
           status: PENDING,
-          priority: 'NONE',
+          priority: 0,
           frequency: 'NONE',
           outcomeRecordID: 0,
           name: '',
@@ -53,13 +53,15 @@ export class Task{
 
     setScheduledTime (time) {
       this.scheduledTime = time;
-
     }
 
     setScheduledDate (date) {
       this.scheduledDate = date;
-      this.scheduledEndDate = new Date(new Date(this.scheduledDate).getTime() + (this.timeRequired * 60*1000)).toString()
+      this.scheduledEndDate = new Date(new Date(this.scheduledDate).getTime() + (this.timeRequired * 60*1000)).toString();
+    }
 
+    setPriority (p = 0) {
+      this.priority = p;
     }
 
     // async update(taskUpdate) {
