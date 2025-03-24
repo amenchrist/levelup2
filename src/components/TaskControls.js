@@ -3,7 +3,7 @@ import { DONE, ACTIVE, PAUSED, PENDING, UPDATE, ADD, REMOVE, COMPLETED } from '.
 import { useMyStore } from '../store';
 import Player from '../classes/Player';
 import { useNavigate } from 'react-router-dom';
-import { reSchedule } from '../functions';
+import { reSchedule, rescheduleAll } from '../functions';
 
 
 export default function TaskControls({ task, updateExp, timerOn }){
@@ -55,8 +55,9 @@ export default function TaskControls({ task, updateExp, timerOn }){
         player.updateExp(20);
         updateItem(task);
         updateItem({...player})
-
+        
         navigate(`/completed/${task.id}`)
+        rescheduleAll(updateItem)
     }
 
     switch(task.status){

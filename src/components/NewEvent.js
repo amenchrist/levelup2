@@ -5,6 +5,7 @@ import { useMyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Player from '../classes/Player';
+import { rescheduleAll } from '../functions';
 
 export default function NewEvent({ item, processorSubmit }) {
 
@@ -51,8 +52,9 @@ export default function NewEvent({ item, processorSubmit }) {
             processorSubmit(e.id)
         }
         updateItem(player.updateExp(5))
-
+        
         navigate(`/Events/${e.id}`);
+        rescheduleAll(updateItem);
     }
 
     return (

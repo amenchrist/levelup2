@@ -237,11 +237,13 @@ export function rescheduleAll(updateFunc) {
     const allUndoneTasks = store.tasks;
     const events = store.events;
     const getTime = (d) => { return new Date(d).getTime()}
-    const schedule = events.filter(e => new Date(e.scheduledEndDate).getTime() >= next5).sort((a,b)=> a.scheduledEndDate - b.scheduledEndDate); 
+    const schedule = events.filter(e => new Date(e.scheduledEndDate).getTime() >= new Date().getTime()).sort((a,b)=> a.scheduledDate - b.scheduledDate); 
     const tasks = allUndoneTasks.filter(t => getNearest5(t.scheduledEndDate)+buffer >= next5).sort((a,b)=> b.priority - a.priority); 
-    console.log(events)
-    console.log(tasks)
     console.log(schedule)
+    console.log(schedule.length)
+
+    let tempSchedule = [...schedule]
+
 
 
     //FOR EDGE CONDITIONS
@@ -255,7 +257,7 @@ export function rescheduleAll(updateFunc) {
         let endTime = next5
         tasks.forEach(t => {
             const task = new Task(t);
-            const scheduledDate = new Date(endTime).getTime()+buffer
+            const scheduledDate = new Date(getNearest5(endTime)).getTime()+buffer
             date = new Date(scheduledDate).toString();
             time = dayjs(date).format('HH:mm')
             task.setScheduledDate(date);
@@ -266,8 +268,8 @@ export function rescheduleAll(updateFunc) {
             endTime = task.scheduledEndDate;
         })
     } else {
-        const firstActivityStartTime = new Date(schedule[0]?.scheduledDate).getTime();
         tasks.forEach((item,i) => {
+            const firstActivityStartTime = new Date(schedule[0]?.scheduledDate).getTime();
             let task = new Task(item);
             if (firstActivityStartTime - next5+buffer >= (task.timeRequired*60*1000 + buffer)) {
                 //There's enough time between NOW and the first task on the schedule for this task
@@ -295,7 +297,7 @@ export function rescheduleAll(updateFunc) {
                 if (recommendedPredecessor) {
                     //A task has been found that this task can be scheduled right after
                     console.log("A preceding activity has been found: ", recommendedPredecessor.name)
-                    const scheduledDate = new Date(recommendedPredecessor.scheduledEndDate).getTime()+buffer
+                    const scheduledDate = new Date(getNearest5(recommendedPredecessor.scheduledEndDate)).getTime()+buffer
                     date = new Date(scheduledDate).toString();
                     time = dayjs(date).format('HH:mm')
                     task.setScheduledDate(date);
@@ -304,6 +306,7 @@ export function rescheduleAll(updateFunc) {
                     schedule.sort((a,b)=> getTime(a.scheduledEndDate) - getTime(b.scheduledEndDate));
                     updateFunc(task);
                     console.log(schedule);
+                    return
 
                 }
 
