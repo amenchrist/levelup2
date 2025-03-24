@@ -1,0 +1,36 @@
+[debug] [2025-03-24T12:06:36.669Z] ----------------------------------------------------------------------
+[debug] [2025-03-24T12:06:36.671Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\lwtv3\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2025-03-24T12:06:36.672Z] CLI Version:   13.10.1
+[debug] [2025-03-24T12:06:36.672Z] Platform:      win32
+[debug] [2025-03-24T12:06:36.672Z] Node Version:  v20.13.1
+[debug] [2025-03-24T12:06:36.672Z] Time:          Mon Mar 24 2025 12:06:36 GMT+0000 (Greenwich Mean Time)
+[debug] [2025-03-24T12:06:36.672Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-03-24T12:06:36.675Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2025-03-24T12:06:36.796Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-03-24T12:06:36.796Z] > authorizing via signed-in user (amenphronesis@gmail.com)
+[debug] [2025-03-24T12:06:36.797Z] [iam] checking project level-up-cdf58 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2025-03-24T12:06:36.798Z] > refreshing access token with scopes: []
+[debug] [2025-03-24T12:06:36.798Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-03-24T12:06:36.799Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-03-24T12:06:36.875Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2025-03-24T12:06:36.875Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-03-24T12:06:36.875Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/level-up-cdf58:testIamPermissions [none]
+[debug] [2025-03-24T12:06:36.875Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/level-up-cdf58:testIamPermissions x-goog-quota-user=projects/level-up-cdf58
+[debug] [2025-03-24T12:06:36.875Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/level-up-cdf58:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2025-03-24T12:06:37.058Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2025-03-24T12:06:37.058Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2025-03-24T12:06:37.487Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/level-up-cdf58:testIamPermissions 401
+[debug] [2025-03-24T12:06:37.487Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/level-up-cdf58:testIamPermissions {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"ACCESS_TOKEN_TYPE_UNSUPPORTED","metadata":{"method":"google.cloudresourcemanager.v1.Projects.TestIamPermissions","service":"cloudresourcemanager.googleapis.com"}}]}}
+[debug] [2025-03-24T12:06:37.488Z] [iam] error while checking permissions, command may fail: FirebaseError: HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2025-03-24T12:06:37.489Z] > refreshing access token with scopes: []
+[debug] [2025-03-24T12:06:37.489Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-03-24T12:06:37.489Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-03-24T12:06:37.525Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2025-03-24T12:06:37.525Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-03-24T12:06:37.525Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/level-up-cdf58 [none]
+[debug] [2025-03-24T12:06:37.601Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/level-up-cdf58 401
+[debug] [2025-03-24T12:06:37.601Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/level-up-cdf58 {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED"}}
+[debug] [2025-03-24T12:06:37.602Z] HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[error] 
+[error] Error: Assertion failed: resolving hosting target of a site with no site name or target name. This should have caused an error earlier

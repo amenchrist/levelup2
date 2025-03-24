@@ -49,6 +49,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
         addItem(t);
         reSchedule(t, updateItem)
         updateItem(player.updateExp(5))
+        console.log(t)
         
         if(title === MISSIONS){
             addToMissionTasks(t, associatedMissionID);
@@ -112,7 +113,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
                     <option value={NONE}>ONE-TIME</option>
                     <option value={DAILY}>DAILY</option>
                 </select> */}
-                <input className='pa2 mb1' id="priority" type='number' placeholder='Priority Level' value={priority} onChange={(e)=> setPriority(e.target.value)}/>
+                <input className='pa2 mb1' id="priority" type='number' placeholder='Priority Level' min={0} value={priority} onChange={(e)=> setPriority(parseInt(e.target.value))}/>
                 <textarea className='pa2 mb1' placeholder='Requirements' value={requirements} onChange={(e) => setRequirements(e.target.value)} />
                 {/* <input className='pa2 mb1' type='text' placeholder='Assigned Agent' value={agent} onChange={(e)=> setAgent(e.target.value)} /> */}
                 {/* <input type='text' placeholder='Frequency' value={frequency} onChange={(e) => setFrequency(e.target.value)} />

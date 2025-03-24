@@ -51,6 +51,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
     const [ name, setName ] = useState(task.name);
     const [ scheduledDate, setScheduledDate ] = useState(task.scheduledDate);
     const [ outcome, setOutcome ] = useState(task.outcome);
+    const [ priority, setPriority ] = useState(task.priority);
     const [ dueDate, setDueDate ] = useState(dayjs(task.dueDate).format('YYYY-MM-DD'));
     const [ timeRequired, setTimeRequired ] = useState(task.timeRequired);
     const [ details, setDetails ] = useState(task.details);
@@ -70,6 +71,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
         setDetails(task.details);
         setDueDate(dayjs(task.dueDate).format('YYYY-MM-DD'));
         setRequirements(task.requirements)
+        setPriority(task.priority)
     }, [task.name, task.scheduledDate, task.outcome, task.details, task.dueDate, task.timeSpent, activeSince, activeTask, task.id, db?.lastUpdated, task.requirements ])
 
     function updateDB( obj, property, newVal) {
@@ -96,6 +98,10 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
       const newDate = dayjs(`${date}`).toDate().toString()
       updateDB( task, "scheduledTime", time );
       updateDB( task, "scheduledDate", newDate );
+    }
+
+    function updatePriority(){
+      updateDB( task, "priority", parseInt(priority) );
     }
 
     const DateAndTimePicker = () => {
@@ -153,7 +159,14 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
                     actionText={'Save'} action={saveDueDate}
                     />
                     {/* <DatePicker item={task} date={dueDate} setDate={saveDate} /> */}
-                  </div>                    
+                  </div>
+                  <div className='w-100 1 flex items-center'>
+                    <h5 className='fw3 white'>Priority Rating:</h5>
+                    <input className='pl2 bn white bg-transparent'style={{width:50}} type='number' min={0} value={priority} 
+                    onChange={(e) => setPriority(e.target.value)} onBlur={updatePriority}
+                    />
+                  </div>  
+                             
               </div>
               {/* <div className='w-100 pb3'>
                 <h5 className='fw3 white'>Mission: </h5>
