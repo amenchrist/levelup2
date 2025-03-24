@@ -57,7 +57,7 @@ export default function TaskControls({ task, updateExp, timerOn }){
         updateItem({...player})
         
         navigate(`/completed/${task.id}`)
-        rescheduleAll(updateItem)
+        // rescheduleAll(updateItem)
     }
 
     switch(task.status){
