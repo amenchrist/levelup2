@@ -17,23 +17,27 @@ export default function NewEvent({ item, processorSubmit }) {
 
     const [ name, setName ] = useState(() => item? item.name : '');
     const [ date, setDate ] = useState(dayjs().format('YYYY-MM-DD'));
-    const [ time, setTime ] = useState(dayjs().format('hh:mm'));
+    const [ time, setTime ] = useState(dayjs().format('HH:mm'));
     const [ endDate, setEndDate ] = useState(dayjs().format('YYYY-MM-DD'));
     const [ endTime, setEndTime ] = useState('');
     const [ location, setLocation ] = useState("");
     const [ frequency, setFrequency ] = useState("");
     const [ note, setNote ] = useState('');
+    const [ duration, setDuration ] = useState('');
 
 
 
     function submitNewItem(event) {
         event.preventDefault();
 
+        const startDate = dayjs(`${date} ${time}`).toDate().toString();
+        const end = new Date(startDate).getTime()+(duration*60000)
+
         let e = new Event(
             {
-                name, scheduledDate: dayjs(`${date} ${time}`).toDate().toString(), 
+                name, scheduledDate: startDate, 
                 time, location, frequency, 
-                scheduledEndDate: dayjs(`${endDate} ${endTime}`).toDate().toString(),
+                scheduledEndDate: dayjs(end).toDate().toString(),
             });
         addItem(e);
         
@@ -66,11 +70,14 @@ export default function NewEvent({ item, processorSubmit }) {
                 <input className='pa2 mb1' id='date' type='date' value={date} onChange={(e) => setDate(e.target.value)} />
                 <label className='fw4 white' htmlFor="time" >Start Time:</label>
                 <input className='pa2 mb1' id='time' type='time' value={time} onChange={(e) => {setTime(e.target.value)}} />
+
+                <label className='fw4 white' htmlFor="duration" >Duration (mins):</label>
+                <input className='pa2 mb1' id='duration' type='number' min={1} value={duration} onChange={(e) => setDuration(parseInt(e.target.value))} />
                 
-                <label className='fw4 white' htmlFor="date" >End Date:</label>
+                {/* <label className='fw4 white' htmlFor="date" >End Date:</label>
                 <input className='pa2 mb1' id='date' type='date' min={today} value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                 <label className='fw4 white' htmlFor="time" >End Time:</label>
-                <input className='pa2 mb1' id='time' type='time' value={endTime} onChange={(e) => {setEndTime(e.target.value)}} />
+                <input className='pa2 mb1' id='time' type='time' value={endTime} onChange={(e) => {setEndTime(e.target.value)}} /> */}
 
                 <label className='fw4 white' htmlFor="location" >Location:</label>
                 <input className='pa2 mb1' type='text' placeholder='Location' value={location} onChange={(e) => setLocation(e.target.value)} />

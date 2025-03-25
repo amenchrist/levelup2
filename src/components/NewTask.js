@@ -115,7 +115,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
                 </select> */}
                 <label className='fw4 white' htmlFor="priority" >Priority: {priority}</label>
                 {/* <input className='pa2 mb1' id="priority" type='number' placeholder='Priority Level' min={0} value={priority} onChange={(e)=> setPriority(parseInt(e.target.value))}/> */}
-                <input className='pa2 mb2' type="range" min={0} max="10" value={priority} class="slider" onChange={(e)=> setPriority(parseInt(e.target.value))}></input>
+                <input className='pa2 mb2' id="priority" type="range" min={0} max="10" value={priority} class="slider" onChange={(e)=> setPriority(parseInt(e.target.value))}></input>
                 <textarea className='pa2 mb1' placeholder='Requirements' value={requirements} onChange={(e) => setRequirements(e.target.value)} />
                 {/* <input className='pa2 mb1' type='text' placeholder='Assigned Agent' value={agent} onChange={(e)=> setAgent(e.target.value)} /> */}
                 {/* <input type='text' placeholder='Frequency' value={frequency} onChange={(e) => setFrequency(e.target.value)} />
