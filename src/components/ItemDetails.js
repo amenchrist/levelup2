@@ -3,6 +3,7 @@ import Processor from '../containers/Processor'
 import NewItemButton from '../components/NewItemButton';
 import { useMyStore } from '../store';
 import { useParams } from 'react-router-dom';
+import { Item } from '../classes/Item';
 
 
 export default function ItemDetails() {
@@ -21,11 +22,11 @@ export default function ItemDetails() {
     for (let i=0; i<inbox.length; i++){
 
         if (inbox[i].id === id){
-           item = inbox[i];
+           item = new Item(inbox[i]);
 
            indx = i;
            if (inbox[i+1]) {
-               nextItemID = inbox[i+1].id;
+               nextItemID = new Item(inbox[i+1].id);
            } else {
             nextItemID = 0;
            }
@@ -34,6 +35,7 @@ export default function ItemDetails() {
     }
 
     if (item.name) {
+        console.log(item)
         return (
             <div className='h-100' >
                 <h5 className='white b pb2'>{item.name}</h5>

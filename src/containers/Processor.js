@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import QuestionAndOptions from '../components/QuestionAndOptions';
 import QuestionAndInput from '../components/QuestionAndInput';
-import { Task, Mission, Reference, Event } from '../classes';
+import { Task } from '../classes/Task';
+import { Mission } from '../classes/Mission';
+import Event from '../classes/Event';
+import Reference from '../classes/Reference';
 import {  PROCESSED, TASK, PENDING, UNPROCESSED, REFERENCE, ADD, UPDATE, REMOVE, REFERENCES, SOMEDAY, MISSIONS, TASKS, DETAILS, EVENTS, INBOX } from '../constants';
 import DatePicker from '../components/DatePicker';
 import { pushChanges  } from '../functions';
@@ -13,8 +16,6 @@ import NewReference from '../components/NewReference';
 import NewEvent from '../components/NewEvent';
 import NewTask from '../components/NewTask';
 import Scroll from '../components/Scroll';
-
-
 
 export default function Processor({ nextItemID, item }) {
 
@@ -44,6 +45,8 @@ export default function Processor({ nextItemID, item }) {
     const [ newEvent, setNewEvent ] = useState(null);
     const [ dialogOn, setDialogOn ] = useState(false);
 
+    const [ processing, setProcessing ] = useState(false)
+
 
     function endProcessing(obj) {
         if(obj){
@@ -67,11 +70,11 @@ export default function Processor({ nextItemID, item }) {
             asProjID = newMissionID;
         }
 
-        let task = new Task(name, theOutcome, requiredContext, asProjID);
+        let task = new Task({name, theOutcome, requiredContext, asProjID});
         setNewTask(task);
         console.log("new task = ",task);
-        setNextID(task.id);  
-        setNewTaskID(task.id);  
+        setNextID(task.id);
+        setNewTaskID(task.id);
     }
 
     function updateStatus() {
@@ -162,6 +165,8 @@ export default function Processor({ nextItemID, item }) {
 
     }, [item, setProcessorStage])
 
+    
+
     console.log('Processor Stage:', processorStage)
 
     function specialSubmit (id) {
@@ -177,6 +182,7 @@ export default function Processor({ nextItemID, item }) {
 
     }
 
+    
     switch(processorStage) {
         case ( 1 ): //Is this item actionable?
             return (

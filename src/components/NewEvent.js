@@ -22,7 +22,7 @@ export default function NewEvent({ item, processorSubmit }) {
     const [ endDate, setEndDate ] = useState(dayjs().format('YYYY-MM-DD'));
     const [ endTime, setEndTime ] = useState('');
     const [ location, setLocation ] = useState("");
-    const [ frequency, setFrequency ] = useState("ONE-TIME");
+    const [ frequency, setFrequency ] = useState("");
     const [ note, setNote ] = useState('');
     const [ duration, setDuration ] = useState('');
 
@@ -40,7 +40,7 @@ export default function NewEvent({ item, processorSubmit }) {
             let e = new Event(
                 {
                     name, scheduledDate: start, 
-                    time, location, frequency: recurring? frequency : 'ONE-TIME', 
+                    time, location, frequency: recurring? frequency : '', 
                     scheduledEndDate: dayjs(end).toDate().toString(),
                 });
             addItem(e);
@@ -83,28 +83,28 @@ export default function NewEvent({ item, processorSubmit }) {
                 //   break;
                 case 'WEEKLY':
                   if(current.getDay() === start.getDay()){
-                    dates.push(dayjs(new Date(current)).format('YYYY-MM-DD'))
+                    dates.push(dayjs(new Date(current)).toDate())
                   }
                   current.setDate(current.getDate()+ 1)
                   break;
                 case 'MONTHLY':
                   //SAME Day EVERY MONTH
                   if(current.getDate() === start.getDate()){
-                    dates.push(dayjs(new Date(current)).format('YYYY-MM-DD'))
+                    dates.push(dayjs(new Date(current)).toDate())
                   }
                   current.setMonth(current.getMonth() + 1);
                   current.setDate(1);
                   break;
                 default:
                   //Every day till end date
-                  dates.push(dayjs(new Date(current)).format('YYYY-MM-DD'))
+                  dates.push(dayjs(new Date(current)).toDate())
                   current.setDate(current.getDate()+ 1)
               }
             }
       
+            // console.log(dates)
             dates.forEach(d => {
               createEvent(d)
-            // console.log(d)
             } )
 
             navigate(`/Events`);
@@ -135,11 +135,6 @@ export default function NewEvent({ item, processorSubmit }) {
 
                 <label className='fw4 white' htmlFor="duration" >Duration (mins):</label>
                 <input className='pa2 mb1' id='duration' type='number' min={1} value={duration} onChange={(e) => setDuration(parseInt(e.target.value))} />
-                
-                {/* <label className='fw4 white' htmlFor="date" >End Date:</label>
-                <input className='pa2 mb1' id='date' type='date' min={today} value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-                <label className='fw4 white' htmlFor="time" >End Time:</label>
-                <input className='pa2 mb1' id='time' type='time' value={endTime} onChange={(e) => {setEndTime(e.target.value)}} /> */}
 
                 <label className='fw4 white' htmlFor="location" >Location:</label>
                 <input className='pa2 mb1' type='text' placeholder='Location' value={location} onChange={(e) => setLocation(e.target.value)} />

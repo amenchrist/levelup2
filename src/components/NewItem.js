@@ -26,7 +26,7 @@ export default function NewItem({  updateExp }) {
     function submitNewItem(event) {
         if(name !== '' ){
             event.preventDefault();
-            let i = new Item(name);
+            let i = new Item({name});
             addItem(i);
             reset();
             // updateExp(5);
