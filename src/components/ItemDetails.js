@@ -32,9 +32,6 @@ export default function ItemDetails() {
            }
            break;
         }  
-        
-      	console.log(nextItem)
-
     }
 
     if (item.name) {

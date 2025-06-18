@@ -17,6 +17,9 @@ export default function Stats( { changeNav}) {
                 <h1 className='tc'>STATS</h1>
             </div>
             <div className=' pt2 '>
+                <div className='whiteB h3 flex items-center justify-center' onClick={() => navigate('/Missions')}>
+                    <h1 className=' white b f8 fw9 ma0'>Projects</h1>
+                </div>
                 <div className='whiteB h3 flex items-center justify-center' onClick={() => navigate('/Completed')}>
                     <h1 className=' white b f8 fw9 ma0'>Completed</h1>
                 </div>
@@ -25,6 +28,9 @@ export default function Stats( { changeNav}) {
                 </div>
                 <div className='whiteB h3 flex items-center justify-center' onClick={() => navigate('/Trash')}>
                     <h1 className=' white b f8 fw9 ma0'>Trash</h1>
+                </div>
+                <div className='whiteB h3 flex items-center justify-center' onClick={() => navigate('/Someday')}>
+                    <h1 className=' white b f8 fw9 ma0'>Someday</h1>
                 </div>
                 <div className='whiteB h3 flex items-center justify-center' onClick={() => {logout()}}>
                     <h1 className=' white b f8 fw9 ma0'>Logout</h1>

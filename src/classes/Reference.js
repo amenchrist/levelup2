@@ -2,7 +2,7 @@ import { REFERENCE } from "../constants";
 import { v4 as uuid } from 'uuid';
 
 
-export class Reference{
+export default class Reference{
   constructor(name, details='') {
       const d= new Date();
       this.type = REFERENCE;

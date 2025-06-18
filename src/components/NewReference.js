@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ADD, DETAILS, REFERENCES, REFERENCE } from '../constants';
-import { Reference } from '../classes';
+import Reference from '../classes/Reference';
 import { pushChanges, convertDateToMilliseconds  } from '../functions';
 import { useMyStore } from '../store';
 import { UploadItem, uploadNewReference } from '../api';

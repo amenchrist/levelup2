@@ -44,6 +44,7 @@ export default function NewEvent({ item, processorSubmit }) {
                     scheduledEndDate: dayjs(end).toDate().toString(),
                 });
             addItem(e);
+            processorSubmit()
             return e
         }
 
