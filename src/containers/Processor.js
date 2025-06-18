@@ -17,7 +17,7 @@ import NewEvent from '../components/NewEvent';
 import NewTask from '../components/NewTask';
 import Scroll from '../components/Scroll';
 
-export default function Processor({ nextItemID, item }) {
+export default function Processor({ nextItem, item }) {
 
     const { setDbUpdatePending, updateItem } = useMyStore();
     const { addTask, addMission, addEvent, addReference, addItem,  } = useMyStore();
@@ -29,11 +29,11 @@ export default function Processor({ nextItemID, item }) {
     const [ requiredContext, setRequiredContext ] = useState('');
     const [ isActionable, setIsActionable ] = useState(null);
     const [ isMultistep, setIsMultistep ] = useState(null);
-    const [ isDoneInFive, setIsDoneInFive ] = useState(null);
-    const [ isDelegatable, setIsDelegatable ] = useState(null);
+    // const [ isDoneInFive, setIsDoneInFive ] = useState(null);
+    // const [ isDelegatable, setIsDelegatable ] = useState(null);
     const [ step, setStep ] = useState(0);
     const [ nextID, setNextID ] = useState(0);
-    const [ isDoneInaYear, setIsDoneInaYear ] = useState(null);
+    // const [ isDoneInaYear, setIsDoneInaYear ] = useState(null);
     const [ newMissionID, setNewMissionID ] = useState(0);
     const [ newTaskID, setNewTaskID ] = useState(0);
     const [ newMission, setNewMission ] = useState(null);
@@ -85,8 +85,8 @@ export default function Processor({ nextItemID, item }) {
     }
     
     function processNextItem(e){
-        setStep(0);
-        navigate(`/Inbox/${nextItemID}`);
+        // setStep(0);
+        navigate(`/Inbox/${nextItem?.id}`);
     }
 
     function proceed(value = 1) {
@@ -140,9 +140,9 @@ export default function Processor({ nextItemID, item }) {
     const EndOptions = ({object}) => {
 			return (
 				<>
-					<button className="button" id={nextItemID} onClick={() => viewItem(object)} >VIEW ITEM</button>
-					<button className="button" id={nextItemID} onClick={processNextItem} >PROCESS NEXT ITEM</button>
-					<button className="button" id={nextItemID} onClick={() => {endProcessing(object); navigate('/')}}>BACK TO DASHBOARD</button>
+					<button className="button" id={nextItem?.id} onClick={() => {endProcessing(object); viewItem(object); }} >VIEW ITEM</button>
+					<button className="button" id={nextItem?.id} onClick={() => {endProcessing(object) ;processNextItem()}} >PROCESS NEXT ITEM</button>
+					<button className="button" id={nextItem?.id} onClick={() => {endProcessing(object); navigate('/')}}>BACK TO DASHBOARD</button>
 				</>
 			)
     }  
@@ -275,6 +275,13 @@ export default function Processor({ nextItemID, item }) {
 					}
 				</ProcessorWrapper>
 			)
+		}else if (isDelegatable === false){
+			return (
+				<ProcessorWrapper>
+					<h3 className='white tc pb2'>A new Task has been added</h3>
+          <EndOptions object={task} />
+				</ProcessorWrapper>
+			)
 		}
 	}
 
@@ -293,144 +300,144 @@ export default function Processor({ nextItemID, item }) {
 			return (
 				<TaskChecker />
 			)
-		case (6):
-				return (
-						<></>
-				)
-            //---------------------NEW TASK---------------------//
-            //-------------------------------------------------//
-        case (7):
-            return (
-							<ProcessorWrapper>
-									{!newTask? 
-									<QuestionAndInput question="What's the task?" submitFunction={(answer) => { makeNewTask(answer); }} />
-									:
-									!isDoneInaYear? 
-									<QuestionAndOptions question='Can the outcome be reached within the next 12 months?' 
-									yes={() => { setIsDoneInaYear(true); }} no={() => { newTask.dueDate = SOMEDAY; endProcessing(newTask); navigate(`/Task/${nextID}`) }} />
-									:<></>
-									}
-							</ProcessorWrapper>
-            )
-        case ( isMultistep === false && step === 6 && isDoneInaYear === false ):
-            return (
-                <ProcessorWrapper>
-                    <h3 className='white tc pb2'>A new Task has been added to the Someday List</h3>
-                    <EndOptions object={newTask} />
-                </ProcessorWrapper>
-            )
-        case ( isMultistep === false && step === 6 && isDoneInaYear === true ):
-            console.log("step 5. new task: ", newTask);
-            return (
-                <ProcessorWrapper>
-                    <QuestionAndOptions question='Can it be done now in 5 minutes or less?' 
-                    yes={() => { 
-                        setIsDoneInFive(true); 
-                        proceed();
-                    }} 
-                    no={() => { setIsDoneInFive(false); proceed() }} />
-                </ProcessorWrapper>
-            )
-        case (isDoneInFive === true && step === 7):
-            return (
-                <ProcessorWrapper>
-                    <h2 className='fw8 b white pb2'>LET'S DO IT!</h2>
-                    <div className='w-100 pa2 pb3' >
-                        <h3 className='fw7 b white pb2'>{newTask.name}</h3>
-                    </div>
-                    <button className="button" onClick={() => { endProcessing(newTask);  navigate(`/Tasks/${newTaskID}`) }} >GO TO TASK </button>
-                </ProcessorWrapper>
-            )
-        case ( isDoneInFive === false && step === 7 ):
-            return (
-                <ProcessorWrapper>
-                    <QuestionAndOptions question='Can this task be delegated?' 
-                    yes={() => { setIsDelegatable(true); proceed(); }} 
-                    no={() => { setIsDelegatable(false); proceed(); }} />
-                </ProcessorWrapper>
-            )
-        case ( isDelegatable === true && step === 8 ):
-            return (
-                <ProcessorWrapper>
-                    <QuestionAndInput question="Who would you like to assign this task to?" 
-                    submitFunction={(answer) => { setAssignedAgent(answer); newTask.agent = assignedAgent; proceed() }} />
-                </ProcessorWrapper>
-            )
-        case ( isDelegatable === true && step === 9 ):
-            return (
-                <ProcessorWrapper>
-                    <h3 className='white tc pb2'>A new Task has been added</h3>
-                    <EndOptions object={newTask} />
-                </ProcessorWrapper>
-            )
-        case ( isDelegatable === false && step === 8 ):
-            return (
-                <ProcessorWrapper>
-                    <h2 className='fw4 white'>By when should this task be done</h2>
-                    <DatePicker item={newTask} dueDate={newTask.dueDate} updateFunc={ (date) => newTask.dueDate = date} />
-                    <div>
-                        <button className="button" onClick={() => { setDueDate(newTask.dueDate); proceed(); }} >CONTINUE</button>
-                    </div>
-                </ProcessorWrapper>
-            )
-        case ( isDelegatable === false && step === 9 ):
-            return (
-                <ProcessorWrapper>
-                    <QuestionAndInput question="Where should this task be done?" 
-                    submitFunction={(answer) => { setRequiredContext(answer); newTask.requiredContext = answer; proceed(); }} />
-                </ProcessorWrapper>
-            )
-        case ( step === 10 ):
-            return (
-                <ProcessorWrapper>
-                    <h3 className='white tc pb2'>A new Task has been added</h3>
-                    <EndOptions object={newTask} />
-                </ProcessorWrapper>
-            )
+		// case (6):
+		// 		return (
+		// 				<></>
+		// 		)
+    //         //---------------------NEW TASK---------------------//
+    //         //-------------------------------------------------//
+    //     case (7):
+    //         return (
+		// 					<ProcessorWrapper>
+		// 							{!newTask? 
+		// 							<QuestionAndInput question="What's the task?" submitFunction={(answer) => { makeNewTask(answer); }} />
+		// 							:
+		// 							!isDoneInaYear? 
+		// 							<QuestionAndOptions question='Can the outcome be reached within the next 12 months?' 
+		// 							yes={() => { setIsDoneInaYear(true); }} no={() => { newTask.dueDate = SOMEDAY; endProcessing(newTask); navigate(`/Task/${nextID}`) }} />
+		// 							:<></>
+		// 							}
+		// 					</ProcessorWrapper>
+    //         )
+    //     case ( isMultistep === false && step === 6 && isDoneInaYear === false ):
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <h3 className='white tc pb2'>A new Task has been added to the Someday List</h3>
+    //                 <EndOptions object={newTask} />
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( isMultistep === false && step === 6 && isDoneInaYear === true ):
+    //         console.log("step 5. new task: ", newTask);
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <QuestionAndOptions question='Can it be done now in 5 minutes or less?' 
+    //                 yes={() => { 
+    //                     setIsDoneInFive(true); 
+    //                     proceed();
+    //                 }} 
+    //                 no={() => { setIsDoneInFive(false); proceed() }} />
+    //             </ProcessorWrapper>
+    //         )
+    //     case (isDoneInFive === true && step === 7):
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <h2 className='fw8 b white pb2'>LET'S DO IT!</h2>
+    //                 <div className='w-100 pa2 pb3' >
+    //                     <h3 className='fw7 b white pb2'>{newTask.name}</h3>
+    //                 </div>
+    //                 <button className="button" onClick={() => { endProcessing(newTask);  navigate(`/Tasks/${newTaskID}`) }} >GO TO TASK </button>
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( isDoneInFive === false && step === 7 ):
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <QuestionAndOptions question='Can this task be delegated?' 
+    //                 yes={() => { setIsDelegatable(true); proceed(); }} 
+    //                 no={() => { setIsDelegatable(false); proceed(); }} />
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( isDelegatable === true && step === 8 ):
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <QuestionAndInput question="Who would you like to assign this task to?" 
+    //                 submitFunction={(answer) => { setAssignedAgent(answer); newTask.agent = assignedAgent; proceed() }} />
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( isDelegatable === true && step === 9 ):
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <h3 className='white tc pb2'>A new Task has been added</h3>
+    //                 <EndOptions object={newTask} />
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( isDelegatable === false && step === 8 ):
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <h2 className='fw4 white'>By when should this task be done</h2>
+    //                 <DatePicker item={newTask} dueDate={newTask.dueDate} updateFunc={ (date) => newTask.dueDate = date} />
+    //                 <div>
+    //                     <button className="button" onClick={() => { setDueDate(newTask.dueDate); proceed(); }} >CONTINUE</button>
+    //                 </div>
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( isDelegatable === false && step === 9 ):
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <QuestionAndInput question="Where should this task be done?" 
+    //                 submitFunction={(answer) => { setRequiredContext(answer); newTask.requiredContext = answer; proceed(); }} />
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( step === 10 ):
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <h3 className='white tc pb2'>A new Task has been added</h3>
+    //                 <EndOptions object={newTask} />
+    //             </ProcessorWrapper>
+    //         )
 
-        //------------NEW MISSION ----------------//
-        //---------------------------------------//
+    //     //------------NEW MISSION ----------------//
+    //     //---------------------------------------//
 
-        case ( isMultistep === true && step === 4 ):
-            return (
-                <ProcessorWrapper>
-                    <QuestionAndInput question="What's the first task?" 
-                    submitFunction={(answer) => { makeNewTask(answer); proceed(); }} />
-                </ProcessorWrapper>
-            )
-        case ( isMultistep === true && step === 5 ):
-            newMission.taskList.unshift(newTask.id);
-            return (
-                <ProcessorWrapper>
-                    <QuestionAndOptions question='Can the desired outcome be reached within the next 12 months?' 
-                    yes={() => { 
-                        setIsDoneInaYear(true); 
-                        proceed();
-                    }} 
-                    no={() => { 
-                        setIsDoneInaYear(false); 
-                        newMission.dueDate = SOMEDAY
-                        proceed();
-                    }} />
-                </ProcessorWrapper>
-            )
-        case ( isMultistep === true && step === 6 && isDoneInaYear === true ):
-            // New mission was added and page refreshed
-            return (
-                <ProcessorWrapper>
-                    <h3 className='white tc pb2'>A new Mission has been added</h3>
-                    <EndOptions object={newMission} />
-                </ProcessorWrapper>
-            )
-        case ( isMultistep === true && step === 6 && isDoneInaYear === false ):
-            // New mission was added and page refreshed
-            return (
-                <ProcessorWrapper>
-                    <h3 className='white tc pb2'>A new Mission has been added to the Someday List</h3>
-                    <EndOptions object={newMission} />
+    //     case ( isMultistep === true && step === 4 ):
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <QuestionAndInput question="What's the first task?" 
+    //                 submitFunction={(answer) => { makeNewTask(answer); proceed(); }} />
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( isMultistep === true && step === 5 ):
+    //         newMission.taskList.unshift(newTask.id);
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <QuestionAndOptions question='Can the desired outcome be reached within the next 12 months?' 
+    //                 yes={() => { 
+    //                     setIsDoneInaYear(true); 
+    //                     proceed();
+    //                 }} 
+    //                 no={() => { 
+    //                     setIsDoneInaYear(false); 
+    //                     newMission.dueDate = SOMEDAY
+    //                     proceed();
+    //                 }} />
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( isMultistep === true && step === 6 && isDoneInaYear === true ):
+    //         // New mission was added and page refreshed
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <h3 className='white tc pb2'>A new Mission has been added</h3>
+    //                 <EndOptions object={newMission} />
+    //             </ProcessorWrapper>
+    //         )
+    //     case ( isMultistep === true && step === 6 && isDoneInaYear === false ):
+    //         // New mission was added and page refreshed
+    //         return (
+    //             <ProcessorWrapper>
+    //                 <h3 className='white tc pb2'>A new Mission has been added to the Someday List</h3>
+    //                 <EndOptions object={newMission} />
 
-                </ProcessorWrapper>
-            )
+    //             </ProcessorWrapper>
+    //         )
         default:
             return (
                 <ProcessorWrapper>

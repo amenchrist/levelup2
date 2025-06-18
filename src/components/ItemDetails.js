@@ -16,7 +16,7 @@ export default function ItemDetails() {
     const id = useParams().id;
 
     let item = {};
-    let nextItemID = null;
+    let nextItem = null;
     let indx;
 
     for (let i=0; i<inbox.length; i++){
@@ -26,12 +26,15 @@ export default function ItemDetails() {
 
            indx = i;
            if (inbox[i+1]) {
-               nextItemID = new Item(inbox[i+1].id);
+               nextItem = new Item(inbox[i+1]);
            } else {
-            nextItemID = 0;
+            nextItem = 0;
            }
            break;
-        }    
+        }  
+        
+      	console.log(nextItem)
+
     }
 
     if (item.name) {
@@ -41,7 +44,7 @@ export default function ItemDetails() {
                 <h5 className='white pb2'>Entry Date: {(new Date(item.entryDate)).toISOString().substr(0, 10)} </h5>
                 <h5 className='white pb2'>Status: {item.status} </h5>
                 <br />
-                <Processor item={item} nextItemID={nextItemID} itemIndex={indx} />
+                <Processor item={item} nextItem={nextItem} itemIndex={indx} />
                 <NewItemButton />
                 {/* <div className='h-80 w-100 center br1 pa3 ba b--black-10 flex items-center flex-column ' >
                     <button onClick={()=> setProcessorOn(true)} >PROCESS THIS</button>
