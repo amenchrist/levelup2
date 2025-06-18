@@ -114,7 +114,7 @@ export default function List() {
             return (
                 <>
                 <ListContainer>
-                    <p className='white'>Total: {content.length}</p>
+                    <p className='white'>Total: {content?.length}</p>
                     <Scroll>
                         {listItems}
                     </Scroll>

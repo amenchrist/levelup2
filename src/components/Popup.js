@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TaskControls from './TaskControls';
 import { Task } from '../classes/Task';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -24,6 +25,8 @@ export default function Popup({tasks, outstandingTaskExists, setOutstandingTaskE
   const [open, setOpen] = React.useState(outstandingTaskExists);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const navigate = useNavigate();
+  
 
   return (
     <div>
@@ -34,7 +37,7 @@ export default function Popup({tasks, outstandingTaskExists, setOutstandingTaskE
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={style} onClick={() => navigate(`/Tasks/${task?.id}`)}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {task?.name}
           </Typography>

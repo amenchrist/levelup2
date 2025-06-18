@@ -50,13 +50,13 @@ export default function NewItem({  updateExp }) {
                     </div>
                 )
             case MISSION:
-                return <NewMission updateExp={updateExp} />
+                return <NewMission />
             case REFERENCE:
-                return <NewReference updateExp={updateExp} />
+                return <NewReference />
             case EVENT:
-                return <NewEvent updateExp={updateExp} />
+                return <NewEvent />
             case TASK:
-                return <NewTask updateExp={updateExp} />
+                return <NewTask />
             default:
                 return (
                     <Grid item sx={{ padding: '5px 7px', color: 'white', textAlign: 'center' }}  >

@@ -6,44 +6,45 @@ import { constructorHelper } from './helpers';
 
 export class Task{
     constructor(data) {
-        const d = new Date();
-        const defaultObj = {
-          type: TASK,
-          id: uuid(),
-          entryDate: d.getTime(),
-          status: PENDING,
-          priority: 0,
-          frequency: 'NONE',
-          outcomeRecordID: 0,
-          name: '',
-          outcome: '',
-          requiredContext: '',
-          dueDate: null,//(new Date()).toISOString().substr(0, 10);
-          timeRequired: 15, //in multiples of 5 minutes
-          requirements: '',
-          associatedMissionID: 0,
-          exp:10,
-          details: '',
-          isTrashed: false,
-          trashedDate: "N/A",
-          timeSpent: 0,
-          activeSince: 0,
-          doneDate: null,
-          order: 0,
-          collection: "task",
-          playerId: '',
-          startDate: null,// 
-          startTime: '00:00', // Time 
-          scheduledDate: null, // Assigned by agent or system at creation
-          scheduledTime: '00:00',
-          scheduledEndDate: null,
-          scheduledEndTime: null,
-        }
+      const d = new Date();
+      const defaultObj = {
+        type: TASK,
+        id: uuid(),
+        entryDate: d.getTime(),
+        status: PENDING,
+        priority: 0,
+        frequency: 'NONE',
+        outcomeRecordID: 0,
+        name: '',
+        outcome: '',
+        requiredContext: '',
+        dueDate: null,//(new Date()).toISOString().substr(0, 10);
+        timeRequired: 15, //in multiples of 5 minutes
+        requirements: '',
+        associatedMissionID: 0,
+        exp:10,
+        details: '',
+        isTrashed: false,
+        trashedDate: "N/A",
+        timeSpent: 0,
+        activeSince: 0,
+        doneDate: null,
+        order: 0,
+        collection: "task",
+        playerId: '',
+        startDate: null,// 
+        startTime: '00:00', // Time 
+        scheduledDate: null, // Assigned by agent or system at creation
+        scheduledTime: '00:00',
+        scheduledEndDate: null,
+        scheduledEndTime: null,
+        assignedTo: null
+      }
 
-        constructorHelper.call(this, data, defaultObj)
-        const scheduledEndDate = new Date(this?.scheduledDate).getTime() + (this.timeRequired * 60*1000)
+      constructorHelper.call(this, data, defaultObj)
+      const scheduledEndDate = new Date(this?.scheduledDate).getTime() + (this.timeRequired * 60*1000)
 
-        this.scheduledEndDate = new Date(scheduledEndDate).toString()
+      this.scheduledEndDate = new Date(scheduledEndDate).toString()
 
     }
 
@@ -62,6 +63,10 @@ export class Task{
 
     setPriority (p = 0) {
       this.priority = p;
+    }
+
+    setAssignedTo (player) {
+      this.assignedTo = player;
     }
 
     // async update(taskUpdate) {

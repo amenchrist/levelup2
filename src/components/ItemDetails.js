@@ -35,7 +35,6 @@ export default function ItemDetails() {
     }
 
     if (item.name) {
-        console.log(item)
         return (
             <div className='h-100' >
                 <h5 className='white b pb2'>{item.name}</h5>

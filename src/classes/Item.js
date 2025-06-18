@@ -23,14 +23,14 @@ export class Item {
 
     constructorHelper.call(this, data, defaultObj)
 
-    this.updateStatus = (status, updateFunc) => {
-        this.status = status;
-        updateFunc(this);
-    }
-    this.markAsProcessed = (updateFunc) => {
-        this.status = PROCESSED;
-        this.processedDate = new Date().toISOString().substr(0, 10);
-        // updateFunc(this);
-    }
-  }
+}
+updateStatus(status, updateFunc) {
+    this.status = status;
+    // updateFunc(this);
+}
+markAsProcessed (updateFunc) {
+    this.status = PROCESSED;
+    this.processedDate = new Date().toISOString().substr(0, 10);
+    // updateFunc(this);
+}
 }

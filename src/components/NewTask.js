@@ -10,17 +10,18 @@ import { Grid, TextField } from '@mui/material';
 import dayjs from 'dayjs';
 import FormDialog from './Dialog';
 
-export default function NewTask({  shipItems, itemID, db, title }) {
+export default function NewTask({  shipItems, itemID, db, title, task }) {
 
     const { addItem, updateItem, tasks } = useMyStore();
     const player = useMyStore(store => new Player(store.player));
 
     const navigate = useNavigate();
 
-    const [ name, setName ] = useState('');
-    const [ outcome, setOutcome ] = useState('');
+    const [ name, setName ] = useState(task?.name || '');
+    const [ outcome, setOutcome ] = useState(task?.outcome || '');
     const [ details, setDetails ] = useState('');
     const [ dueDate, setDueDate ] = useState(null);
+    const [ assignedTo, setAssignedTo ] = useState(player?.name || '');
     const [ agentId, setAgentId ] = useState('');
     const [ priority, setPriority ] = useState(0);
     const [ frequency, setFrequency ] = useState('NONE');
@@ -43,7 +44,7 @@ export default function NewTask({  shipItems, itemID, db, title }) {
             outcome,  
             dueDate, frequency, details, requirements, priority,
             scheduledDate: dayjs(`${date} ${time}`).toDate().toString(), // r
-            scheduledTime: time
+            scheduledTime: time, assignedTo
         });
 
         addItem(t);
@@ -116,6 +117,10 @@ export default function NewTask({  shipItems, itemID, db, title }) {
                 <label className='fw4 white' htmlFor="priority" >Priority: {priority}</label>
                 {/* <input className='pa2 mb1' id="priority" type='number' placeholder='Priority Level' min={0} value={priority} onChange={(e)=> setPriority(parseInt(e.target.value))}/> */}
                 <input className='pa2 mb2' id="priority" type="range" min={0} max="10" value={priority} class="slider" onChange={(e)=> setPriority(parseInt(e.target.value))}></input>
+                <br />
+                <label className='fw4 white' htmlFor="assignedTo">Assigned to: (Delegate if Possible)</label>
+                <br />
+                <input className='pa2 mb1' type='text' id='assignedTo' placeholder='Assigned to' value={assignedTo} onChange={(e)=> setAssignedTo(e.target.value)} />
                 <textarea className='pa2 mb1' placeholder='Requirements' value={requirements} onChange={(e) => setRequirements(e.target.value)} />
                 {/* <input className='pa2 mb1' type='text' placeholder='Assigned Agent' value={agent} onChange={(e)=> setAgent(e.target.value)} /> */}
                 {/* <input type='text' placeholder='Frequency' value={frequency} onChange={(e) => setFrequency(e.target.value)} />
