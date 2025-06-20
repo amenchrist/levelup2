@@ -8,6 +8,9 @@ import NewItemButton from './NewItemButton';
 import Scroll from './Scroll';
 import { Task } from '../classes';
 import { useMyStore } from '../store';
+import FormDialog from './Dialog';
+import { Grid, TextField } from '@mui/material';
+import dayjs from 'dayjs';
 
 export default function MissionDetails({ id }) {
 
@@ -88,6 +91,9 @@ export default function MissionDetails({ id }) {
 
     const [ taskList, setTaskList ] = useState(mission.taskList);
 
+    const [openDialog, setOpenDialog] = useState(false);
+    
+
 
     //purpose, principles, description, components, skillsRequired, infoRequired, abilityRequired, timeRequired, tasks
 
@@ -162,6 +168,10 @@ export default function MissionDetails({ id }) {
         getTasks();
     }
 
+    function saveDueDate(){
+        updateDB( mission, "dueDate", dayjs(`${dueDate}`).toDate().toString() )
+    }
+
     switch (true){
         case mission.status === UNPLANNED && openPlanner === false:
             return (
@@ -177,11 +187,19 @@ export default function MissionDetails({ id }) {
                             <h4 className='fw1 white'>{displayDays(mission.dueDate)}</h4>
                         </div>
                         <div className='h-70'>
-                            <div className='w-100 pl2 pb2'>
-                                {/* <h5 className='fw3 white'>Due: {mission.dueDate} </h5> */}
-                                <DatePicker item={mission} dueDate={dueDate} updateFunc={saveDate} />
-                                {/* <h5 className='fw3 white'>Time Required: {mission.timeRequired}</h5> */}
+                            <div className='flex justify-between' >
+                                <h5 className='fw3 white' onClick={() => setOpenDialog(true)}>DUE: {dayjs(`${dueDate}`).format('dddd, MMMM DD @ hh:mm a')}</h5>
+                                <FormDialog open={openDialog} setOpen={setOpenDialog} 
+                                title={'Due Date'} msg={'What day is this due?'} 
+                                Content={<Grid item xs={12} sm={6}><TextField required fullWidth type="date" id="date" label="Date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} /></Grid>} 
+                                actionText={'Save'} action={saveDueDate}
+                                />
                             </div>
+                            {/* <div className='w-100 pl2 pb2'>
+                            </div> */}
+                                {/* <h5 className='fw3 white'>Due: {mission.dueDate} </h5> */}
+                                {/* <h5 className='fw3 white'>Time Required: {mission.timeRequired}</h5> */}
+                                {/* <DatePicker item={mission} dueDate={dueDate} updateFunc={saveDate} /> */}
                             <div className='w-100 pl2 pb2'>
                                 <h5 className='fw3 white'>Status: {status}</h5>
                                 {/* <h5 className='fw3 white'>Time Remaining: 12:34:50 </h5> */}
@@ -247,10 +265,18 @@ export default function MissionDetails({ id }) {
                                 />
 
                             </div>
-                            <div className='w-100 pl2 pb2 flex justify-between'>
+                            {/* <div className='w-100 pl2 pb2 flex justify-between'>
+                            </div> */}
                                 {/* <h5 className='fw3 white'>Due: {mission.dueDate} </h5> */}
-                                <DatePicker item={mission} dueDate={dueDate} updateFunc={saveDate} />
+                                {/* <DatePicker item={mission} dueDate={dueDate} updateFunc={saveDate} /> */}
                                 {/* <h5 className='fw3 white'>Time Required: {mission.timeRequired}</h5> */}
+                            <div className='flex justify-between' >
+                                <h5 className='fw3 white' onClick={() => setOpenDialog(true)}>DUE: {dayjs(`${dueDate}`).format('dddd, MMMM DD @ hh:mm a')}</h5>
+                                <FormDialog open={openDialog} setOpen={setOpenDialog} 
+                                title={'Due Date'} msg={'What day is this due?'} 
+                                Content={<Grid item xs={12} sm={6}><TextField required fullWidth type="date" id="date" label="Date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} /></Grid>} 
+                                actionText={'Save'} action={saveDueDate}
+                                />
                             </div>
                             <div className='w-100pl2 pl2 pb3 flex justify-between'>
                                 <h5 className='fw3 white'>Status: {mission.status}</h5>
@@ -389,6 +415,7 @@ export default function MissionDetails({ id }) {
                     )
 
                 }
+                default:
             
     }
 }

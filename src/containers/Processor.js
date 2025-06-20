@@ -128,69 +128,96 @@ export default function Processor({ nextItem, item }) {
 	const [ timeBound, setTimeBound ] = useState(null);
 	const [ isAProject, setIsAProject ] = useState(null);
 	const [ task, setTask ] = useState(null)
+	const [ project, setProject ] = useState(null)
 	const [ isDoneInFive, setIsDoneInFive ] = useState(null);
 	const [ isDelegatable, setIsDelegatable ] = useState(null);
 	const [ taskDelegated, setTaskDelegated ] = useState(null);
+	const [ hasFirstTask, setHasFirstTask ] = useState(null);
+	const [ readyToSave, setReadyToSave ] = useState(null);
 
 	return (
 		<>
-		{isActionable === null? <QuestionAndOptions question='Is this Actionable?' yes={() => { setIsActionable(true) }} no={() => { setIsActionable(false) }} /> : <></> }
-		{isActionable === false && addToReference === null && addToEvents === null ? 
-			<ProcessorWrapper>
-				<button className="button" onClick={() => {setAddToReference(true)}} >ADD TO REFERENCES</button>
-				<button className="button" onClick={() => {setAddToEvents(true)}} >ADD TO EVENTS</button>
-				<button className="button" onClick={() => {trashItem()}} >TRASH</button>
-			</ProcessorWrapper> : <></> 
-		}
-		{addToReference? <ProcessorWrapper><NewReference item={item} processorSubmit={specialSubmit} /></ProcessorWrapper>: <></>}
-		{addToEvents? <ProcessorWrapper><NewEvent item={item} processorSubmit={specialSubmit} /></ProcessorWrapper>: <></>}
-		{isActionable && outcome === null? <QuestionAndInput question="What's the desired outcome?" submitFunction={(answer) => setOutcome(answer)} />: <></>}
+			{isActionable === null? <QuestionAndOptions question='Is this Actionable?' yes={() => { setIsActionable(true) }} no={() => { setIsActionable(false) }} /> : <></> }
+			{isActionable === false && addToReference === null && addToEvents === null ? 
+				<ProcessorWrapper>
+					<button className="button" onClick={() => {setAddToReference(true)}} >ADD TO REFERENCES</button>
+					<button className="button" onClick={() => {setAddToEvents(true)}} >ADD TO EVENTS</button>
+					<button className="button" onClick={() => {trashItem()}} >TRASH</button>
+				</ProcessorWrapper> : <></> 
+			}
+			{addToReference? <ProcessorWrapper><NewReference item={item} processorSubmit={specialSubmit} /></ProcessorWrapper>: <></>}
+			{addToEvents? <ProcessorWrapper><NewEvent item={item} processorSubmit={specialSubmit} /></ProcessorWrapper>: <></>}
+			{isActionable && outcome === null? <QuestionAndInput question="What's the desired outcome?" submitFunction={(answer) => setOutcome(answer)} />: <></>}
 
-		{outcome && timeBound === null? 
-			<QuestionAndOptions question='Must the outcome be reached within the next 12 months?' 
-				yes={() => { setTimeBound(true); }} 
-				no={() => { newTask.dueDate = SOMEDAY; endProcessing(newTask); navigate(`/Task/${nextID}`) }} 
-			/> : <></>
-		}
-		{timeBound && isAProject === null? 
-			<QuestionAndOptions question='Can the outcome be reached with just one task?' 
-				yes={() => { setIsAProject(false) } } 
-				no={() => { setIsAProject(true); makeNewMission(); }} 
-			/>: <></>
-		}
-		{isAProject === false && task === null? <QuestionAndInput question="What's the task?" submitFunction={(name) => { setTask(new Task({name, outcome})) }} />: <></>}
-		{task && isDoneInFive === null? 
-			<QuestionAndOptions question='Can it be done now in 5 minutes or less?' 
-				yes={() => { setIsDoneInFive(true); }} 
-				no={() => { setIsDoneInFive(false); }} 
-			/>: <></>
-		}
-		{isDoneInFive? 
-			<ProcessorWrapper>
-				<h2 className='fw8 b white pb2'>LET'S DO IT!</h2>
-				<div className='w-100 pa2 pb3' >
-					<h3 className='fw7 b white pb2'>{task.name}</h3>
-				</div>
-				<button className="button" onClick={() => { addItem(task); navigate(`/Tasks/${task.id}`); updateStatus() }} >GO TO TASK </button>
-				{/* <button className="button" onClick={() => { endProcessing(newTask);  navigate(`/Tasks/${task.id}`) }} >GO TO TASK </button> */}
-			</ProcessorWrapper>: <></>
-		}
-		{isDoneInFive === false && isDelegatable === null? 
-			<QuestionAndOptions question='Can this task be delegated?' 
-				yes={() => { setIsDelegatable(true); }} 
-				no={() => { setIsDelegatable(false); }} 
-			/>: <></>
-		}
-		{isDelegatable && !taskDelegated? 
-			<QuestionAndInput question="Who would you like to assign this task to?" 
-				submitFunction={(answer) => { task.setAssignedTo(answer); setTaskDelegated(true); }} 
-			/>: <></>
-		}
-		{taskDelegated? <ProcessorWrapper><NewTask task={task} processorSubmit={specialSubmit} /></ProcessorWrapper>: <></>}
-		{isDelegatable === false? <ProcessorWrapper><NewTask task={task} processorSubmit={specialSubmit} /></ProcessorWrapper>: <></>}
+			{outcome && timeBound === null? 
+				<QuestionAndOptions question='Must the outcome be reached within the next 12 months?' 
+					yes={() => { setTimeBound(true); }} 
+					no={() => { newTask.dueDate = SOMEDAY; endProcessing(newTask); navigate(`/Task/${nextID}`) }} 
+				/> : <></>
+			}
+			{timeBound && isAProject === null? 
+				<QuestionAndOptions question='Can the outcome be reached with just one task?' 
+					yes={() => { setIsAProject(false) } } 
+					no={() => { setIsAProject(true); makeNewMission(); }} 
+				/>: <></>
+			}
+			{isAProject === false && task === null? <QuestionAndInput question="What's the task?" submitFunction={(name) => { setTask(new Task({name, outcome})) }} />: <></>}
+			{isAProject === false && task && isDoneInFive === null? 
+				<QuestionAndOptions question='Can it be done now in 5 minutes or less?' 
+					yes={() => { setIsDoneInFive(true); }} 
+					no={() => { setIsDoneInFive(false); }} 
+				/>: <></>
+			}
+			{isDoneInFive? 
+				<ProcessorWrapper>
+					<h2 className='fw8 b white pb2'>LET'S DO IT!</h2>
+					<div className='w-100 pa2 pb3' >
+						<h3 className='fw7 b white pb2'>{task.name}</h3>
+					</div>
+					<button className="button" onClick={() => { addItem(task); updateStatus(); navigate(`/Tasks/${task.id}`);  }} >GO TO TASK </button>
+					{/* <button className="button" onClick={() => { endProcessing(newTask);  navigate(`/Tasks/${task.id}`) }} >GO TO TASK </button> */}
+				</ProcessorWrapper>: <></>
+			}
+			{isDoneInFive === false && isDelegatable === null? 
+				<QuestionAndOptions question='Can this task be delegated?' 
+					yes={() => { setIsDelegatable(true); }} 
+					no={() => { setIsDelegatable(false); }} 
+				/>: <></>
+			}
+			{isDelegatable && !taskDelegated? 
+				<QuestionAndInput question="Who would you like to assign this task to?" 
+					submitFunction={(answer) => { task.setAssignedTo(answer); setTaskDelegated(true); }} 
+				/>: <></>
+			}
+			{taskDelegated? <ProcessorWrapper><NewTask task={task} processorSubmit={specialSubmit} /></ProcessorWrapper>: <></>}
+			{isDelegatable === false? <ProcessorWrapper><NewTask task={task} processorSubmit={specialSubmit} /></ProcessorWrapper>: <></>}
+			{isAProject && project === null? <QuestionAndInput question="What would you like to name this Project?" submitFunction={(name) => { setProject(new Mission({name, outcome})) }} />: <></>}
+			{project && hasFirstTask === null? 
+				<QuestionAndOptions question='Do you know the first step required to move this project forward?' 
+					yes={() => { setHasFirstTask(true); }} 
+					no={() => { 
+						setTask(new Task({name: `Plan and identify steps for project "${project.name}"`, outcome: `List of next steps towards outcome "${outcome}"`})); 
+						setReadyToSave(true);
+						setHasFirstTask(false);
+					}} 
+				/>: <></>
+			}
+			{hasFirstTask && task === null? <QuestionAndInput question="What's the first task?" submitFunction={(name) => { setTask(new Task({name,})) }} />: <></>}
+			{hasFirstTask && task && readyToSave === null ? <QuestionAndInput question="What's the task's desired outcome?" submitFunction={(out) => { task.outcome = out; setReadyToSave(true) }} />: <></>}
+			{readyToSave ? 
+				<ProcessorWrapper>
+					<h3 className='white tc pb2'>A new Mission has been created</h3>
+					<button className="button" onClick={() => {project.taskList.unshift(task.id); addItem(task);addItem(project); navigate(`/Inbox/`); updateStatus() }} >SAVE PROGRESS</button>
+				</ProcessorWrapper>: <></>
+			}
+
 		</>
 	)
 
+	//WHat would you like to name this mission
+	//Do you know the first step required to move this project forward?
+	//YES - What's the next step to take?
+	//NO - A task to plan this mission has been added. Present button to save progress
 	
 
 	// switch(true) {

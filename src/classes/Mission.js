@@ -1,38 +1,45 @@
 import { ASAP, MISSION, UNPLANNED } from "../constants";
 import { v4 as uuid } from 'uuid';
+import { constructorHelper } from './helpers';
+
 
 
 export class Mission{
-  constructor(outcome ='', purpose ='', dueDate = ASAP, requirements = '', priority = "", frequency = '' ) {
+  constructor(data) {
       const d = new Date();
-      this.type = MISSION;        
-      this.id = uuid();
-      this.entryDate = d.getTime();
-      this.status = UNPLANNED;
-      this.name = outcome;
-      this.purpose = purpose;
-      this.vision = '';
-      this.principles = '';
-      this.toDo = "";
-      this.skillsRequired = "";
-      this.infoRequired = "";
-      this.abilityRequired = "";
-      this.dueDate = dueDate //(new Date(parseInt((d.getTime() + 7776000000)))).toISOString().substr(0, 10); // 3 months from the date the MISSION is planned 
-      this.taskList = [];
-      this.backStory = ""
-      this.outputRef = 0;
-      this.outputRecordUrl = ""
-      this.timeRequired = 7776000000;
-      this.timeSpent = 0;
-      this.requirements = requirements;
-      this.priority = priority;
-      this.frequency = frequency;
-      this.note = '';
-      this.isTrashed = false;
-      this.trashedDate = "";
-      this.doneDate = "";
-      this.exp = 100;
-      this.collection = "mission";
+      const defaultObj = {
+        type : MISSION,        
+        id : uuid(),
+        entryDate : d.getTime(),
+        status : UNPLANNED,
+        name : null,
+        outcome: null,
+        purpose : null,
+        vision : '',
+        principles : '',
+        toDo : "",
+        skillsRequired : "",
+        infoRequired : "",
+        abilityRequired : "",
+        dueDate : ASAP, //,new Date(parseInt((d.getTime() + 7776000000)))).toISOString().substr(0, 10); // 3 months from the date the MISSION is planned 
+        taskList : [],
+        backStory: "",
+        outputRef : 0,
+        outputRecordUrl : "",
+        timeRequired : 7776000000,
+        timeSpent : 0,
+        requirements : '',
+        priority : 0,
+        frequency : '',
+        note : '',
+        isTrashed : false,
+        trashedDate : "",
+        doneDate : "",
+        exp : 100,
+        collection : "mission",
+      }
+
+      constructorHelper.call(this, data, defaultObj)
 
       
   }
