@@ -50,7 +50,9 @@ export default function NewTask({  shipItems, itemID, db, title, task, processor
         addItem(t);
         reSchedule(t, updateItem)
         updateItem(player.updateExp(5))
-        processorSubmit()
+        if(processorSubmit){
+            processorSubmit()
+        }
         
         if(title === MISSIONS){
             addToMissionTasks(t, associatedMissionID);

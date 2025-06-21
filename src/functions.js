@@ -17,7 +17,7 @@ export function inboxFilter(array) {
 }
 
 export function taskFilter(array) {
-    return removeTrash(array).filter(entry => entry.status !== DONE)
+    return removeTrash(array).filter(entry => entry.status !== DONE ).filter(entry => entry.status !== 'SNOOZED' )
 }
 
 export function missionFilter(array) {
@@ -41,7 +41,7 @@ export function processedFilter(array){
 }
 
 export function somedayFilter(array){
-    return removeTrash(array).filter( e => e.dueDate === SOMEDAY )
+    return removeTrash(array).filter( e => e.status === 'SNOOZED' )
 }
 
 export function trashFilter(array){
@@ -313,72 +313,6 @@ export function rescheduleAll(updateFunc) {
     }
 
 }
-
-
-        
-
-        // if( item.type === 'TASK') {
-
-            // if(i === 0 ) {
-            //     console.log('this is the first task on the schedule')
-            //     const scheduledDate = new Date(next5).getTime()+buffer
-            //     date = new Date(scheduledDate).toString();
-            //     time = dayjs(date).format('HH:mm')
-            //     task.setScheduledDate(date);
-            //     task.setScheduledTime(time);
-            //     updateFunc(task);
-            // } else {
-            //     const scheduledDate = new Date(schedule[i-1].scheduledEndDate).getTime()+buffer
-            //     date = new Date(scheduledDate).toString(); 
-            //     console.log(schedule[i-1].scheduledEndDate)
-            //     console.log(date)
-            //     time = dayjs(date).format('HH:mm')
-            //     task.setScheduledDate(date);
-            //     task.setScheduledTime(time);
-
-            //     updateFunc(task);
-            // }
-
-
-        
-
-
-
-        // const firstActivityStartTime = new Date(tempSchedule[0]?.scheduledDate).getTime();
-
-        // //Reschedule Logic
-        // if(schedule.length === 0 ) {
-        //     //Schedule is empty. Schedule this task right away
-        //     date = new Date(next5).toString();
-        //     time = dayjs(date).format('HH:mm')
-        //     task.setScheduledDate(date);
-        //     task.setScheduledTime(time);
-        //     updateFunc(task);
-        // } else if (firstActivityStartTime - next5+buffer >= (task.timeRequired*60*1000 + buffer)) {
-        //     //There's enough time between NOW and the first task on the schedule for this task
-        //     console.log("There's time before the first activity");
-        //     date = new Date(next5+buffer).toString();
-        //     time = dayjs(date).format('HH:mm')
-        //     task.setScheduledDate(date);
-        //     task.setScheduledTime(time);
-        //     updateFunc(task);
-        //     tempSchedule.splice(i,1,task)
-        //     tempSchedule.sort((a,b)=> getTime(a.scheduledDate) - getTime(b.scheduledDate));
-        //     // console.log("temp",tempSchedule)
-        // } else if (recommendedPredecessor) {
-        //     //A task has been found that this task can be scheduled right after
-        //     console.log("A preceding activity has been found: ", recommendedPredecessor.name)
-        //     const scheduledDate = new Date(recommendedPredecessor.scheduledEndDate).getTime()+buffer
-        //     date = new Date(scheduledDate).toString();
-        //     time = dayjs(date).format('HH:mm')
-        //     task.setScheduledDate(date);
-        //     task.setScheduledTime(time);
-        //     updateFunc(task);
-        //     tempSchedule.splice(i,1,task)
-        //     tempSchedule.sort((a,b)=> getTime(a.scheduledDate) - getTime(b.scheduledDate))
-        //     // console.log("temp",tempSchedule)
-        // }
-    // }
 
 
 

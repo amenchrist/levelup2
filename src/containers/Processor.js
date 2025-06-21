@@ -152,7 +152,7 @@ export default function Processor({ nextItem, item }) {
 			{outcome && timeBound === null? 
 				<QuestionAndOptions question='Must the outcome be reached within the next 12 months?' 
 					yes={() => { setTimeBound(true); }} 
-					no={() => { newTask.dueDate = SOMEDAY; endProcessing(newTask); navigate(`/Task/${nextID}`) }} 
+					no={() => { setTask(new Task({name: 'See outcome', status: 'SNOOZED', outcome})); setTimeBound(false); }} 
 				/> : <></>
 			}
 			{timeBound && isAProject === null? 
@@ -175,7 +175,6 @@ export default function Processor({ nextItem, item }) {
 						<h3 className='fw7 b white pb2'>{task.name}</h3>
 					</div>
 					<button className="button" onClick={() => { addItem(task); updateStatus(); navigate(`/Tasks/${task.id}`);  }} >GO TO TASK </button>
-					{/* <button className="button" onClick={() => { endProcessing(newTask);  navigate(`/Tasks/${task.id}`) }} >GO TO TASK </button> */}
 				</ProcessorWrapper>: <></>
 			}
 			{isDoneInFive === false && isDelegatable === null? 
@@ -210,6 +209,14 @@ export default function Processor({ nextItem, item }) {
 					<button className="button" onClick={() => {project.taskList.unshift(task.id); addItem(task);addItem(project); navigate(`/Inbox/`); updateStatus() }} >SAVE PROGRESS</button>
 				</ProcessorWrapper>: <></>
 			}
+			{timeBound === false ? 
+				<ProcessorWrapper>
+					<h3 className='white tc pb2'>A Task has been created and snoozed</h3>
+					<button className="button" onClick={() => {addItem(task);navigate(`/Inbox/`); updateStatus() }} >SAVE PROGRESS</button>
+
+				</ProcessorWrapper>: <></>
+			}
+
 
 		</>
 	)

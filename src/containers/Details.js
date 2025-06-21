@@ -55,7 +55,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
             </Grid>
           </Grid>
           <hr/>
-          <div className='flex justify-between items-center'>
+          <div className='flex justify-between items-center h-15'>
             <BackButton id={0} />
             <h2 className='tc b gold f3'>{category}</h2>
             <TrashButton id={itemID} category={category} />
@@ -63,7 +63,7 @@ export default function Details( { touchFunction, updateExp, missionID  }){
           <div className='h-70'>
               {children}
           </div>
-          <div className='flex justify-between self-end'>
+          <div className='flex justify-between self-end h-15'>
               <PrevItemButton  prevID={prev} currentID={itemID} />
               <NextItemButton nextID={next} currentID={itemID}/>
           </div>

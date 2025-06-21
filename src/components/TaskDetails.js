@@ -6,8 +6,8 @@ import { amendList  } from '../functions';
 import { COMPLETED, DETAILS, SOMEDAY, } from '../constants';
 import Scroll from './Scroll';
 import { useMyStore } from '../store';
-import { useParams } from 'react-router-dom';
-import { Box, Grid, TextField } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Box, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Switch, TextField } from '@mui/material';
 import { Task } from '../classes/Task';
 import Player from '../classes/Player';
 import FormDialog from './Dialog';
@@ -19,6 +19,7 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
     const { tasks, missions, updateItem, } = useMyStore();
     const player = useMyStore(store => new Player(store.player));
     const MissionsList = missions;
+    const navigate = useNavigate();
 
     let task = {};
     let relevantList;
@@ -58,6 +59,8 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
     const [ date, setDate ] = useState(dayjs(task.scheduledDate).format('YYYY-MM-DD'));
     const [ time, setTime ] = useState(task.scheduledTime);
     const [ requirements, setRequirements ] = useState(task.requirements);
+    const [ isSnoozed, setIsSnoozed ] = useState(task.isSnoozed || false);
+    const [ status, setStatus ] = useState(task.status);
 
     const [openDialog, setOpenDialog] = useState(false);
     const [openScheduledDateDialog, setOpenScheduledDateDialog] = useState(false);
@@ -117,7 +120,12 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
       )
     }
 
-    // console.log(task)
+    const changeStatus = (e) => {
+      updateDB(task, "status", e.target.value);  
+      if(e.target.value === 'SNOOZED'){
+        navigate(`/tasks/`)
+      }
+    }
 
     switch (title){
       case COMPLETED:
@@ -200,7 +208,19 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
                   <textarea rows="2" cols="45" onChange={(e)=> {setRequirements(e.target.value);} } onBlur={ () =>{ updateDB(task, "requirements", requirements )}} value={requirements} className='fw3 white bn bg-transparent' />
                 </div>
               </div>
-                  <h5 className='fw3 white'>Status: {task.status}</h5>
+              <FormControl variant="filled" sx={{backgroundColor: 'white', width: '50%', mb: 5}} >
+                <InputLabel >Status</InputLabel>
+                <Select value={status} onChange={changeStatus} >
+                  <MenuItem value={'PENDING'}>PENDING</MenuItem>
+                  <MenuItem value={'PAUSED'}>PAUSED</MenuItem>
+                  <MenuItem value={'READY'}>READY</MenuItem>
+                  <MenuItem value={'ACTIVE'}>ACTIVE</MenuItem>
+                  <MenuItem value={'ONGOING'}>ONGOING</MenuItem>
+                  <MenuItem value={'DONE'}>DONE</MenuItem>
+                  <MenuItem value={'SNOOZED'}>SNOOZED</MenuItem>
+                </Select>
+              </FormControl>
+       
             </Scroll>
             <TaskControls task={task} position={''} />
           </div>

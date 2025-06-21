@@ -108,8 +108,8 @@ export default function App() {
 
     //Someday
     useEffect(() => {
-        setSomeday(somedayFilter(tasks.concat(missions)));
-    }, [tasks, missions, setSomeday]);
+        setSomeday(somedayFilter(allTasks.concat(missions)));
+    }, [allTasks, missions, setSomeday]);
 
     //Trash
     useEffect(() => {
