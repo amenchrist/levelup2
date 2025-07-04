@@ -29,6 +29,8 @@ export default function EventDetails({ shipItems, db, exp }) {
         }
     }
 
+    console.log(item)
+
     const [ name, setName ] = useState(item.name);
     const [ date, setDate ] = useState(item.scheduledDate);
     const [ scheduledEndDate, setScheduledEndDate ] = useState(item.scheduledEndDate);

@@ -53,7 +53,7 @@ export default function App() {
     }, [missionsFDB, setAllMissions]);
 
     useEffect(() => {
-        setAllEvents(eventsFDB.sort((a,b) => dayjs(a.scheduledEndDate) - dayjs(b.scheduledEndDate) ));
+        setAllEvents(eventsFDB.sort((a,b) => dayjs(a.scheduledEndDate).valueOf() - dayjs(b.scheduledEndDate).valueOf() ));
     }, [eventsFDB, setAllEvents]);
 
     useEffect(() => {
@@ -79,7 +79,7 @@ export default function App() {
     }, [allMissions, setMissions]);
 
     useEffect(() => {
-        setEvents(removeTrash(allEvents));
+        setEvents(removeTrash(allEvents).filter(e => dayjs(e.scheduledEndDate).valueOf() > dayjs().valueOf()));
     }, [allEvents, setEvents]);
 
     useEffect(() => {
@@ -90,6 +90,11 @@ export default function App() {
     useEffect(() => {
         setTodaysMission(todayFilter(tasks.concat(missions, events)));
     }, [tasks, missions, events, setTodaysMission]);
+
+    // //Event's list
+    // useEffect(() => {
+    //     setEvents(events.sort((a,b) => dayjs(a.scheduledEndDate).valueOf() - dayjs(b.scheduledEndDate).valueOf() ));
+    // }, [events, setEvents ]);
 
     //Daily Exercises
     useEffect(() => {

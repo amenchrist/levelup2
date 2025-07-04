@@ -12,6 +12,7 @@ import { rescheduleAll } from '../functions';
 export default function Home() {
 	let content = useMyStore(store => store['tasks']);
 	const { completed, player, events, updateItem } = useMyStore()
+	const store = useMyStore()
 	let listItems, outstandingTasks = [];
 	const navigate = useNavigate();
 
@@ -80,7 +81,7 @@ export default function Home() {
 					<div className='h-70 w-100 center pa2' >
 						<div style={{display: 'flex', justifyContent:'space-between'}}>
 						<h2 className='b gold f3'>Next Tasks</h2>
-						<button className="button" onClick={() => rescheduleAll(updateItem)}>RESCHEDULE ALL</button>
+						<button className="button" onClick={() => rescheduleAll(updateItem, store)}>RESCHEDULE ALL</button>
 						</div>
 						
 						<div className=' h-80 '>
