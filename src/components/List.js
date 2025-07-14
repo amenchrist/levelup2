@@ -22,6 +22,7 @@ export default function List() {
         })
     }
 
+
     const [ sortedContent, setSortedContent ] = useState(content);
     const [ sort, setSort ] = useState(false);
 
@@ -120,7 +121,7 @@ export default function List() {
                     </Scroll>
                     <br />
                     {coreCategories.includes(category)? 
-                    <Grid item sx={{border: '2px solid white', padding: '5px 7px', color: 'white', textAlign: 'center' }} onClick={() => navigate(`/new/${category}`)} >
+                    <Grid item sx={{border: '2px solid white', padding: '5px 7px', color: 'white', textAlign: 'center' }} onClick={() => navigate(`/new/${content[0].collection}`)} >
                         <Typography variant='p'>Add new +</Typography>
                     </Grid>: <></>}
                 </ListContainer>
