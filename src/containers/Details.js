@@ -15,6 +15,7 @@ import EventDetails from '../components/EventDetails';
 import { useParams } from 'react-router-dom';
 import { useMyStore } from '../store';
 import { Grid, Typography } from '@mui/material';
+import SnoozedTaskDetails from '../components/SnoozedTaskDetails';
 
 
 export default function Details( { touchFunction, updateExp, missionID  }){
@@ -124,11 +125,26 @@ export default function Details( { touchFunction, updateExp, missionID  }){
                 </DetailsContainer>
             )
         case category === TRASH:
-        return (
-            <DetailsContainer category={category} >
-                <TrashedItemDetails item={item} />
-            </DetailsContainer>
-        )
+            return (
+                <DetailsContainer category={category} >
+                    <TrashedItemDetails item={item} />
+                </DetailsContainer>
+            )
+        case category === SOMEDAY:
+            if (item.type === TASK){
+                return (
+                    <DetailsContainer category={TASK} >
+                        <SnoozedTaskDetails id={itemID} />
+                    </DetailsContainer>
+                )
+            } else if (item.type === MISSION) {
+                return (
+                    <DetailsContainer category={MISSION} >
+                        {/* <MissionDetails mission={item} updateExp={updateExp}/> */}
+                    </DetailsContainer>
+                )
+            }
+            break;
         case category === TODAY || category === SOMEDAY:
             if (item.type === TASK){
                 return (

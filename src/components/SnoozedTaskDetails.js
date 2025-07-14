@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import DatePicker from './DatePicker';
-import Timer from './Timer';
 import TaskControls from './TaskControls';
-import { amendList  } from '../functions';
 import { COMPLETED, DETAILS, SOMEDAY, } from '../constants';
 import Scroll from './Scroll';
 import { useMyStore } from '../store';
@@ -13,19 +10,19 @@ import Player from '../classes/Player';
 import FormDialog from './Dialog';
 import dayjs from 'dayjs';
 
-export default function TaskDetails({ title, activeSince, activeTask, db, shipItems, changeNav, exp }) {
+export default function SnoozedTaskDetails({ title, activeSince, activeTask, db, shipItems, changeNav, exp }) {
 
     const id = useParams().id;
     const category = useParams().category.toUpperCase();
-    const { tasks, missions, updateItem, } = useMyStore();
+    const { tasks, missions, updateItem, someday } = useMyStore();
     const player = useMyStore(store => new Player(store.player));
     const MissionsList = missions;
     const navigate = useNavigate();
 
     let task = {};
-    let relevantList;
+    let relevantList = someday;
 
-    category === SOMEDAY ? relevantList = tasks.concat(missions) : relevantList = tasks;
+    // category === SOMEDAY ? relevantList = tasks.concat(missions) : relevantList = tasks;
 
     for (let i=0; i<relevantList.length; i++){
         if (relevantList[i].id === id){
@@ -125,6 +122,8 @@ export default function TaskDetails({ title, activeSince, activeTask, db, shipIt
       updateDB(task, "status", e.target.value);  
       if(e.target.value === 'SNOOZED'){
         navigate(`/tasks/`)
+      } else {
+        navigate(`/Someday/`)
       }
     }
 
