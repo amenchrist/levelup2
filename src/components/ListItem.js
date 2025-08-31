@@ -15,9 +15,16 @@ const ListItem = forwardRef( ({ item, title, highlight }, ref ) => {
       category = item.collection + 's'
     } 
 
+    const duration = item.scheduledEndDate? dayjs(`${item.scheduledEndDate}`).diff(dayjs(`${item.scheduledDate}`), 'minute') > 60 ? 
+              dayjs(`${item.scheduledEndDate}`).diff(dayjs(`${item.scheduledDate}`), 'minute') / 60 + ' hrs' : 
+              dayjs(`${item.scheduledEndDate}`).diff(dayjs(`${item.scheduledDate}`), 'minute') + ' mins' : '0 mins';
+
     function ListWrapper({ children, suffix }) {
         return (
-            <div ref={ref} style={{ backgroundColor: highlight ? 'midnightblue' : 'transparent' }} className='ba pa2 listItem w-100 flex justify-between h-20 items-center b--grey min-h-50' onClick={() => navigate(`/${category}/${item.id}`)}>
+            <div ref={ref} style={{ backgroundColor: highlight ? 'midnightblue' : 'transparent' }} 
+              className='ba pa2 listItem w-100 flex justify-between h-25 items-center b--grey min-h-50' 
+              onClick={() => navigate(`/${category}/${item.id}`)}
+              >
                 <div className='w-80 '>
                     <p className='fw7 b white pb2'>{item.name}</p>
                     {children}
@@ -49,16 +56,19 @@ const ListItem = forwardRef( ({ item, title, highlight }, ref ) => {
               const date = dayjs(item.scheduledDate).format('YYYY-MM-DD')
                 return (
                   <ListWrapper suffix={item.priority} >
-                      <p className='fw3 white'>{dayjs(`${date} ${item.scheduledTime}`).format('dddd, MMMM DD @ hh:mm a')}</p>
+                      <p className='fw3 white pb2'>{dayjs(`${date} ${item.scheduledTime}`).format('dddd, MMMM DD @ hh:mm a')}</p>
+                      <p className='fw3 white'>Duration: {duration}</p>
+
                   </ListWrapper>
                 )
             }
         case item.type === EVENT && !item.isTrashed:
             nextTitle = EVENTS;
+            
             return (
               <ListWrapper suffix={'REM'} >
-                <p className='fw3 white'>{dayjs(`${item.scheduledDate}`).format('dddd, MMMM DD @ hh:mm a')}</p>
-                <p className='fw3 white'>Duration: {item.duration}</p>
+                <p className='fw3 white pb2'>{dayjs(`${item.scheduledDate}`).format('dddd, MMMM DD @ hh:mm a')}</p>
+                <p className='fw3 white'>Duration: {duration} </p>
               </ListWrapper>
             )
         case item.type === REFERENCE && !item.isTrashed:
