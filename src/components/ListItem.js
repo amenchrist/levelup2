@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { MISSION, TASK, INBOX_ITEM,  MISSIONS, SOMEDAY, EVENT, EVENTS, REFERENCES, REFERENCE, PROCESSED } from '../constants';
 import { displayDays } from '../functions';
 import { useNavigate, useParams, } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 
-export default function ListItem( { item, title }){
-    
+const ListItem = forwardRef( ({ item, title, highlight }, ref ) => {
+
     let nextTitle;
     const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ export default function ListItem( { item, title }){
 
     function ListWrapper({ children, suffix }) {
         return (
-            <div className='ba pa2 listItem w-100 flex justify-between h-20 items-center b--grey min-h-50' onClick={() => navigate(`/${category}/${item.id}`)}>
+            <div ref={ref} style={{ backgroundColor: highlight ? 'midnightblue' : 'transparent' }} className='ba pa2 listItem w-100 flex justify-between h-20 items-center b--grey min-h-50' onClick={() => navigate(`/${category}/${item.id}`)}>
                 <div className='w-80 '>
                     <p className='fw7 b white pb2'>{item.name}</p>
                     {children}
@@ -58,6 +58,7 @@ export default function ListItem( { item, title }){
             return (
               <ListWrapper suffix={'REM'} >
                 <p className='fw3 white'>{dayjs(`${item.scheduledDate}`).format('dddd, MMMM DD @ hh:mm a')}</p>
+                <p className='fw3 white'>Duration: {item.duration}</p>
               </ListWrapper>
             )
         case item.type === REFERENCE && !item.isTrashed:
@@ -93,4 +94,6 @@ export default function ListItem( { item, title }){
                 </div>
             )
     }
-}
+})
+
+export default ListItem

@@ -8,9 +8,9 @@ export class Event{
       const defaultObj = {
         type: EVENT,
         id: uuid(),
-        entryDate: d.getTime(),
+        entryDate: d.getTime(), // The timestamp the event was created
         name: "",
-        scheduledDate: "",
+        scheduledDate: "", //STRING Eg "Mon Mar 24 2025 08:00:00 GMT+0000 (Greenwich Mean Time)"
         time: "",
         location: "",
         frequency: "",
@@ -18,7 +18,7 @@ export class Event{
         note: "",
         isTrashed: false,
         trashedDate: "",
-        scheduledEndDate: "",
+        scheduledEndDate: "", //STRING Eg "Mon Mar 24 2025 08:00:00 GMT+0000 (Greenwich Mean Time)"
         collection: "event",
       }
 

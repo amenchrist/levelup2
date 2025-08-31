@@ -34,13 +34,13 @@ export default function TaskControls({ task, updateExp, timerOn }){
     }
 
     function pauseTask(){
-        // const dateNow = new Date().getTime();
-        // task.timeSpent = prevTimeSpent + (dateNow - parseInt(activeSince));
-        // setActiveTask({});
-        // task.status = PAUSED;
-        // task.activeSince = 0;
-        // timerOn = false;
-        // updateTask();
+        const dateNow = new Date().getTime();
+        task.timeSpent = prevTimeSpent + (dateNow - parseInt(task.activeSince));
+        setActiveTask({});
+        task.status = PAUSED;
+        task.activeSince = 0;
+        timerOn = false;
+        updateTask();
 
     }
 

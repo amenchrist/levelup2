@@ -79,7 +79,7 @@ export default function App() {
     }, [allMissions, setMissions]);
 
     useEffect(() => {
-        setEvents(removeTrash(allEvents).filter(e => dayjs(e.scheduledEndDate).valueOf() > dayjs().valueOf()));
+        setEvents(removeTrash(allEvents).sort((a,b) => dayjs(a.scheduledEndDate).valueOf() - dayjs(b.scheduledEndDate).valueOf() ))//.filter(e => dayjs(e.scheduledEndDate).valueOf() > dayjs().valueOf()));
     }, [allEvents, setEvents]);
 
     useEffect(() => {

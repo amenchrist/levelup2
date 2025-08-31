@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef } from 'react';
 import ListItem from './ListItem';
 import Scroll from './Scroll';
 import { MISSIONS, DETAILS } from '../constants';
@@ -15,13 +15,43 @@ export default function List() {
     let view, listItems;
 
     const navigate = useNavigate();
+
+    const targetRef = useRef(null);
+
+    useEffect(() => {
+        if (targetRef.current) {
+        targetRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+        });
+        }
+    }, []); // runs once on mount
     
     if(content){
         listItems = content.map((entry,i) => {
-            return <ListItem item={content[i]} key={content[i].id}/>
+
+            if(category === 'events'){
+                //From the list of entries, find the first event that ends later than the current time
+                const currentTime = new Date();
+                //if the entry before it ends before the current time and the current entry ends after current time
+                if (content[i-1] && new Date(content[i-1].scheduledEndDate) < currentTime && new Date(content[i].scheduledEndDate) > currentTime){
+                    return <ListItem component="li" item={content[i]} key={content[i].id} ref={targetRef} highlight />
+                }
+            }
+
+            return <ListItem component="li" item={content[i]} key={content[i].id}/>
         })
     }
 
+    
+
+    useEffect(() => {
+        const targetItem = document.getElementById("current");
+        if (targetItem) {
+            console.log("Scrolling to current event:", content.find(event => event.id === "current"));
+            targetItem.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }, [content]);
 
     const [ sortedContent, setSortedContent ] = useState(content);
     const [ sort, setSort ] = useState(false);
@@ -70,7 +100,23 @@ export default function List() {
     }
 
     const coreCategories = ['inbox', 'tasks', 'missions', 'events', 'references']
-
+    let collection = "";
+    switch(category){
+        case "tasks":
+            collection = "task";
+            break;
+        case "missions":
+            collection = "mission";
+            break;
+        case "events":
+            collection = "event";
+            break;
+        case "references":
+            collection = "reference";
+            break;
+        default:
+            collection = "inbox";
+    }
 
     switch(category){
         case MISSIONS:
@@ -121,7 +167,7 @@ export default function List() {
                     </Scroll>
                     <br />
                     {coreCategories.includes(category)? 
-                    <Grid item sx={{border: '2px solid white', padding: '5px 7px', color: 'white', textAlign: 'center' }} onClick={() => navigate(`/new/${content[0].collection}`)} >
+                    <Grid item sx={{border: '2px solid white', padding: '5px 7px', color: 'white', textAlign: 'center' }} onClick={() => navigate(`/new/${collection}`)} >
                         <Typography variant='p'>Add new +</Typography>
                     </Grid>: <></>}
                 </ListContainer>
