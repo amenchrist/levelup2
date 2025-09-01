@@ -21,7 +21,7 @@ export default function List() {
     useEffect(() => {
         if (targetRef.current) {
         targetRef.current.scrollIntoView({
-            behavior: 'smooth',
+            behavior: 'auto',
             block: 'center',
         });
         }

@@ -25,7 +25,6 @@ export default function NewEvent({ item, processorSubmit }) {
     const [ location, setLocation ] = useState("");
     const [ frequency, setFrequency ] = useState("");
     const [ note, setNote ] = useState('');
-    const [ duration, setDuration ] = useState('');
 
     const [ recurring, setRecurring ] = useState(false);
     const [ reEndDate, setReEndDate ] = useState(dayjs().format('YYYY-MM-DD'));
@@ -36,14 +35,17 @@ export default function NewEvent({ item, processorSubmit }) {
       event.preventDefault();
 
       const startDate = dayjs(`${date} ${time}`).toDate();
+      const duration = dayjs(`${endDate} ${endTime}`).diff(dayjs(`${date} ${time}`), 'minute');
       const createEvent = (start) => {
-        const end = dayjs(`${endDate} ${endTime}`).toDate();
+
+        // const end = dayjs(`${endDate} ${endTime}`).toDate();
+        const end = dayjs(start.toString()).add(duration, 'minute').toDate();
         // const end = new Date(start.toString()).getTime()+(duration*60000);
         let e = new Event(
             {
-                name, scheduledDate: start.toString(), 
-                time, location, frequency: recurring? frequency : '', 
-                scheduledEndDate: end.toString() //dayjs(end).toDate().toString(),
+              name, scheduledDate: start.toString(), 
+              time, location, frequency: recurring? frequency : '', 
+              scheduledEndDate: end.toString() //dayjs(end).toDate().toString(),
             });
             console.log(e)
         addItem(e);
